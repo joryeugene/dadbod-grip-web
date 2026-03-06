@@ -66,9 +66,9 @@ Connections persist to `.grip/connections.json` automatically, so you never type
 
 1. Run `:GripConnect` and connect to a database
 2. Navigate the schema sidebar with `j`/`k` and press `<CR>` to open a table
-3. Move to any cell and press `e` to edit it
-4. Your change appears teal (staged). A live SQL float shows the generated DML.
-5. Press `<C-CR>` to preview the full mutation, then `a` to apply
+3. Move to any cell and press `i` or `<CR>` to edit it
+4. Your change appears teal (staged). Press `gl` to toggle the live SQL float showing the DML.
+5. Press `a` to apply all staged changes in one transaction
 
 ## Try the built-in demo
 
@@ -88,7 +88,7 @@ require('dadbod-grip').setup({
   -- AI provider for natural language SQL (optional)
   ai = {
     provider = 'anthropic',  -- 'anthropic' | 'openai' | 'gemini' | 'ollama'
-    model = 'claude-opus-4-5',
+    model = 'claude-opus-4-6',
   },
 
   -- Key to open the grip workspace (default: <leader>db)

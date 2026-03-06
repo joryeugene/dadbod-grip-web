@@ -90,7 +90,7 @@ against a database. Supported for Parquet, CSV, JSON, NDJSON, and TSV.
 Or toggle write mode on any open grid:
 
 ```vim
-gW                                 " toggle write mode
+g!                                 " toggle write mode
 ```
 
 A red **WRITE** badge appears in the grid winbar when write mode is active. Press `a`
@@ -115,4 +115,4 @@ FROM prod.customers
 JOIN enrichment.data ON enrichment.customer_id = prod.customers.id
 ```
 
-See [Cross-Database Federation](/docs/features/federation) for the full picture.
+See the Federation docs in the sidebar for the full picture.

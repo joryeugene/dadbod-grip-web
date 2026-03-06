@@ -7,7 +7,7 @@
 
 	let mobileMenuOpen = $state(false);
 
-	afterNavigate(() => window.scrollTo(0, 0));
+	afterNavigate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
 
 	const navLinks = [
 		{ label: 'Docs', href: `${base}/docs/getting-started` },
