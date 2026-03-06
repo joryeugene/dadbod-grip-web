@@ -1,0 +1,77 @@
+<script lang="ts">
+	import '../app.css';
+	import { base } from '$app/paths';
+
+	let { children } = $props();
+
+	let mobileMenuOpen = $state(false);
+
+	const navLinks = [
+		{ label: 'Docs', href: `${base}/docs/getting-started` },
+		{ label: 'Keymaps', href: `${base}/docs/keymaps` },
+		{ label: 'Demo', href: `${base}/docs/demo` }
+	];
+</script>
+
+<header class="sticky top-0 z-50 border-b border-dark-border bg-dark-bg/90 backdrop-blur-sm">
+	<nav class="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+		<a href={base || '/'} class="flex items-center gap-2 font-mono font-bold text-dark-text hover:text-grip-400 transition-colors">
+			<span class="text-grip-400">dadbod-grip</span><span class="text-dark-muted">.nvim</span>
+		</a>
+
+		<div class="hidden sm:flex items-center gap-6">
+			{#each navLinks as link}
+				<a href={link.href} class="text-sm text-dark-muted hover:text-dark-text transition-colors">
+					{link.label}
+				</a>
+			{/each}
+			<a
+				href="https://github.com/joryeugene/dadbod-grip.nvim"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="flex items-center gap-1.5 text-sm text-dark-muted hover:text-dark-text transition-colors"
+			>
+				<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+					<path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+				</svg>
+				GitHub
+			</a>
+		</div>
+
+		<button
+			class="sm:hidden text-dark-muted hover:text-dark-text"
+			onclick={() => mobileMenuOpen = !mobileMenuOpen}
+			aria-label="Toggle menu"
+		>
+			<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				{#if mobileMenuOpen}
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+				{:else}
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+				{/if}
+			</svg>
+		</button>
+	</nav>
+
+	{#if mobileMenuOpen}
+		<div class="sm:hidden border-t border-dark-border bg-dark-bg px-4 py-3 flex flex-col gap-3">
+			{#each navLinks as link}
+				<a href={link.href} class="text-sm text-dark-muted hover:text-dark-text" onclick={() => mobileMenuOpen = false}>
+					{link.label}
+				</a>
+			{/each}
+			<a href="https://github.com/joryeugene/dadbod-grip.nvim" target="_blank" rel="noopener noreferrer" class="text-sm text-dark-muted hover:text-dark-text">
+				GitHub
+			</a>
+		</div>
+	{/if}
+</header>
+
+{@render children()}
+
+<footer class="border-t border-dark-border mt-24 py-10 text-center text-dark-muted text-sm">
+	<p>
+		<a href="https://github.com/joryeugene/dadbod-grip.nvim" target="_blank" rel="noopener noreferrer" class="hover:text-grip-400 transition-colors">dadbod-grip.nvim</a>
+		&nbsp;&bull;&nbsp;MIT License
+	</p>
+</footer>

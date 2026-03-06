@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+
+	code {
+		@apply font-mono text-sm bg-dark-surface px-1.5 py-0.5 rounded text-grip-400;
+	}
+
+	pre code {
+		@apply bg-transparent px-0 py-0;
+	}
+
+	/* Docs markdown typography */
+	.prose h1 { @apply text-3xl font-bold text-dark-text mb-6 mt-2; }
+	.prose h2 { @apply text-2xl font-semibold text-dark-text mb-4 mt-10 border-b border-dark-border pb-2; }
+	.prose h3 { @apply text-lg font-semibold text-dark-text mb-3 mt-6; }
+	.prose p { @apply text-dark-muted leading-7 mb-4; }
+	.prose ul { @apply list-disc list-inside text-dark-muted mb-4 space-y-1; }
+	.prose ol { @apply list-decimal list-inside text-dark-muted mb-4 space-y-1; }
+	.prose li { @apply leading-7; }
+	.prose a { @apply text-grip-400 hover:text-grip-500 underline; }
+	.prose strong { @apply text-dark-text font-semibold; }
+	.prose table { @apply w-full border-collapse mb-6; }
+	.prose th { @apply text-left text-dark-text font-semibold px-3 py-2 border-b border-dark-border bg-dark-surface text-sm; }
+	.prose td { @apply px-3 py-2 border-b border-dark-border text-dark-muted text-sm; }
+	.prose blockquote { @apply border-l-4 border-grip-600 pl-4 text-dark-muted italic; }
+	.prose pre { @apply bg-dark-surface rounded-lg p-4 overflow-x-auto mb-4 border border-dark-border; }
+	.prose pre code { @apply text-dark-text text-sm; }
+}

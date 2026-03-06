@@ -1,0 +1,103 @@
+---
+title: Editing and Mutations
+description: Edit database rows inline, stage changes, preview SQL, and apply in a single transaction.
+---
+
+# Editing and Mutations
+
+Every change in dadbod-grip goes through a staging layer before it touches the database.
+Stage one change or fifty, preview the full SQL, then apply in a single transaction with
+a single keystroke.
+
+## Edit a cell
+
+Move the cursor to any cell and press `i` or `<CR>`. A popup editor opens with the current
+value. Edit and press `<CR>` to stage, or `<Esc>` to cancel.
+
+The row turns teal in the grid. A live SQL float appears in the corner showing the exact
+`UPDATE` statement that will run.
+
+## NULL values
+
+Press `x` to set a cell to NULL. The cell displays `NULL` in red. The generated SQL uses
+`= NULL` correctly (not an empty string).
+
+## Delete a row
+
+Press `d` to toggle delete on the row under the cursor. The row turns red. Press `d` again
+to unstage the deletion.
+
+## Insert a new row
+
+Press `o` to insert a new row after the cursor. A blank row opens in the popup editor.
+Fill in each column in sequence. The row turns green when staged.
+
+## Clone a row
+
+Press `c` to duplicate the current row. Primary key columns are cleared so you can fill
+in a new PK without a conflict. All other columns copy their current values.
+
+## Batch editing
+
+Enter visual mode with `v` or `V`, select multiple rows, then:
+
+- `e` to set all selected cells in the current column to the same value
+- `d` to toggle delete on all selected rows
+- `x` to NULL all selected cells
+
+## Mutation preview
+
+Press `<C-CR>` from the query pad to preview a mutation before executing. The affected
+rows appear color-coded in the grid. Press `a` to execute, `u` to cancel.
+
+## Apply changes
+
+Press `a` to apply all staged changes. The full mutation runs in a single `BEGIN`/`COMMIT`
+transaction. If any statement fails, the entire batch rolls back and the staging layer
+stays intact.
+
+## Undo
+
+| Key | Behavior |
+|-----|----------|
+| `u` | Undo the last staged edit (50-deep) |
+| `<C-r>` | Redo |
+| `U` | Undo all staged changes (reset to original) |
+
+After applying to the database, press `u` again to open the **transaction undo** layer.
+This generates a compensating SQL statement (`UPDATE` with original values, or `INSERT`
+for deleted rows) and applies it in a new transaction with confirmation.
+
+## Saved queries
+
+```vim
+:GripSave   -- save current query pad contents
+:GripLoad   -- load a saved query
+```
+
+Queries persist in `.grip/queries/` relative to the current working directory. They
+appear in the `gq` picker.
+
+## Watch mode
+
+Watch mode re-runs the current query on a timer and updates the grid automatically.
+Useful for monitoring changing data or log tables.
+
+```vim
+:Grip file.csv --watch     -- default 5-second interval
+:Grip file.csv --watch=10s -- custom interval
+```
+
+Toggle watch mode on any open grid with `gW`. An active watch mode shows as a blue
+badge in the grid winbar.
+
+## Write mode
+
+Write mode applies edits back to the file on disk instead of running DML against a database.
+Supported for Parquet, CSV, JSON, NDJSON, TSV, and Arrow files opened through DuckDB.
+
+```vim
+:Grip data.parquet --write
+```
+
+Toggle on any open grid with `g!`. A red badge appears in the grid winbar.

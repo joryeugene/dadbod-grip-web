@@ -1,0 +1,69 @@
+---
+title: AI SQL Generation
+description: Generate SQL from natural language using Anthropic, OpenAI, Gemini, or Ollama.
+---
+
+# AI SQL Generation
+
+Press `A` from the grid or `gA` from the query pad to open the AI prompt. Describe
+what you want in plain English and the AI generates a SQL query against your current schema.
+
+## Setup
+
+Configure your provider in the `setup()` call:
+
+```lua
+require('dadbod-grip').setup({
+  ai = {
+    provider = 'anthropic',           -- 'anthropic' | 'openai' | 'gemini' | 'ollama'
+    model = 'claude-opus-4-5',        -- model name for the chosen provider
+  }
+})
+```
+
+Set your API key in your shell environment:
+
+```bash
+export ANTHROPIC_API_KEY=...   -- for Anthropic
+export OPENAI_API_KEY=...      -- for OpenAI
+export GEMINI_API_KEY=...      -- for Gemini
+```
+
+Ollama runs locally with no API key needed. Make sure Ollama is running before connecting.
+
+## How the context works
+
+The AI receives:
+- Your current schema (table names, column names, types, PK/FK relationships)
+- Any existing SQL in the query pad (so you can ask it to modify a query rather than generate from scratch)
+- The current table name (when invoked from the grid)
+
+Schema context is cached per connection so repeat invocations do not re-fetch the schema.
+
+## Example prompts
+
+**From a clean query pad:**
+> Show me all orders placed in the last 30 days with their customer name and total amount
+
+**To modify an existing query:**
+> Add a filter to exclude cancelled orders
+
+**From the grid:**
+> Find all rows where this column is above the average
+
+**Cross-database (federation session):**
+> Join the Postgres customers table to the SQLite orders table and show me revenue by region
+
+## Supported providers
+
+| Provider | Models | Key env var |
+|----------|--------|-------------|
+| Anthropic | claude-opus-4-5, claude-sonnet-4-5, claude-haiku-4-5 | `ANTHROPIC_API_KEY` |
+| OpenAI | gpt-4o, gpt-4-turbo, gpt-3.5-turbo | `OPENAI_API_KEY` |
+| Gemini | gemini-1.5-pro, gemini-1.5-flash | `GEMINI_API_KEY` |
+| Ollama | any local model | (none, uses localhost:11434) |
+
+## The generated SQL goes into the query pad
+
+After generation, the SQL appears in the query pad for review. Press `<C-CR>` to
+execute, or edit it first. Nothing runs automatically.
