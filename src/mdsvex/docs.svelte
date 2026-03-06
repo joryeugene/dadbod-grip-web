@@ -27,7 +27,9 @@
 				{ label: 'Editing & Mutations', href: `${base}/docs/features/editing` },
 				{ label: 'Analysis', href: `${base}/docs/features/analysis` },
 				{ label: 'AI Integration', href: `${base}/docs/features/ai` },
-				{ label: 'Federation', href: `${base}/docs/features/federation` }
+				{ label: 'Federation', href: `${base}/docs/features/federation` },
+				{ label: 'Files & Remote Sources', href: `${base}/docs/features/files` },
+				{ label: 'Watch Mode', href: `${base}/docs/features/watch` }
 			]
 		}
 	];

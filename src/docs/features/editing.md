@@ -9,13 +9,25 @@ Every change in dadbod-grip goes through a staging layer before it touches the d
 Stage one change or fifty, preview the full SQL, then apply in a single transaction with
 a single keystroke.
 
+## Row color legend
+
+Staged changes are color-coded so you can see what will happen before `a` commits anything:
+
+| Color | Meaning |
+|-------|---------|
+| Teal | Row has staged updates |
+| Red | Row is staged for deletion |
+| Green | New row staged for insertion |
+
+Nothing has touched the database yet. Press `u` to unstage individual edits or `U` to reset all.
+
 ## Edit a cell
 
 Move the cursor to any cell and press `i` or `<CR>`. A popup editor opens with the current
 value. Edit and press `<CR>` to stage, or `<Esc>` to cancel.
 
-The row turns teal in the grid. A live SQL float appears in the corner showing the exact
-`UPDATE` statement that will run.
+The row turns teal in the grid. Press `gl` to toggle the live SQL float: it shows the exact
+DML statement that will run, updating as you stage more changes.
 
 ## NULL values
 
@@ -49,6 +61,11 @@ Enter visual mode with `v` or `V`, select multiple rows, then:
 
 Press `<C-CR>` from the query pad to preview a mutation before executing. The affected
 rows appear color-coded in the grid. Press `a` to execute, `u` to cancel.
+
+## Navigate staged rows
+
+Press `{` to jump to the previous modified row and `}` to jump to the next. Useful when
+you have staged edits scattered across a large table and want to review them before applying.
 
 ## Apply changes
 

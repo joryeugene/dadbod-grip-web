@@ -52,9 +52,31 @@ The diff works across databases when running through a DuckDB federation session
 Press `gF` to open an interactive filter builder. Choose a column, select an operator,
 and enter a value. Multiple filters stack with AND.
 
-Supported operators: `=`, `!=`, `>`, `<`, `>=`, `<=`, `LIKE`, `IN`, `BETWEEN`, `IS NULL`, `IS NOT NULL`.
+| Operator | Use for |
+|----------|---------|
+| `=` / `!=` | Exact match / exclusion |
+| `>` / `<` / `>=` / `<=` | Numeric and date ranges |
+| `LIKE` | Pattern matching (`%text%` for contains, `text%` for prefix) |
+| `IN` | Multiple values: `red,green,blue` |
+| `BETWEEN` | Range: `100,500` |
+| `IS NULL` / `IS NOT NULL` | Presence checks |
+
+Press `f` for a faster shortcut: it filters the current column to the exact value under
+the cursor in one keystroke. Press `F` to clear all active filters.
 
 Save the current filter combination as a named preset with `gP`. Load presets with `gp`.
+
+## Data diff across databases
+
+`gD` compares two tables by primary key. In a DuckDB federation session, you can diff
+a Postgres table against an archive SQLite table:
+
+1. Open a federation session with both databases attached
+2. Open the Postgres table in a grid
+3. Press `gD` and select the SQLite table as the comparison target
+
+Rows that differ appear color-coded by change type. Useful for migration validation
+and schema drift detection.
 
 ## Export
 
@@ -64,15 +86,16 @@ CSV, TSV, JSON, SQL INSERT, Markdown pipe table, or Grip Table (box-drawing bord
 Press `gX` or run `:GripExport` to write to a file. Choose CSV, JSON, or SQL INSERT.
 The file goes to the current working directory by default.
 
-## Sort and pagination
+## Sort stacking
 
-| Key | Effect |
-|-----|--------|
-| `s` | Toggle sort on the current column (ASC, DESC, off) |
-| `S` | Add secondary sort (indicators show stack order: 1, 2, 3) |
-| `H` / `L` | Previous / next page |
-| `[P` / `]P` | First / last page |
-| `X` | Reset all sorts, filters, and page to defaults |
+Press `s` to toggle sort on the current column (ASC then DESC then off). Press `S` to
+add a secondary sort without replacing the first. Columns show their direction and
+stack position:
 
-Sort stacking lets you sort by multiple columns simultaneously. Each column shows its
-sort direction and its position in the sort stack.
+```
+ id  ▲1  name  ▼2  created_at
+```
+
+This grid is sorted by `id` ascending first, then by `name` descending within ties.
+Stack up to as many columns as needed. Press `X` to clear all sorts, filters, and
+pagination in one keystroke.

@@ -69,10 +69,39 @@ Attachments persist in `.grip/connections.json` and restore automatically when y
 reconnect to the same DuckDB file. The sidebar shows each attached database as a
 separate section with its own table list.
 
+## Sidebar keymaps for federation
+
+From the schema sidebar, two keymaps manage attachments without leaving the buffer:
+
+| Key | Action |
+|-----|--------|
+| `ga` | Attach an external database (prompts for URL and alias) |
+| `gd` | Detach an attached database (picker) |
+
+The sidebar shows each attached database as a separate section with its own table list
+and PK/FK markers.
+
 ## Detach
 
 ```vim
 :GripDetach
 ```
 
-Select the attachment to remove from a picker. Or use `gd` in the schema sidebar.
+Select the attachment to remove from a picker. Or press `gd` in the schema sidebar.
+
+## Auto-restore on reconnect
+
+Attachments persist in `.grip/connections.json`. When you reconnect to the same DuckDB
+file in a future session, all previous attachments restore automatically. You do not
+need to re-run `:GripAttach` each time.
+
+## MotherDuck
+
+MotherDuck is a cloud DuckDB service. Attach it the same way as any other source:
+
+```vim
+:GripAttach md:my_database  cloud
+```
+
+Set `MOTHERDUCK_TOKEN` in your shell environment. The `md:` prefix tells DuckDB to use
+the MotherDuck client extension, which installs automatically on first use.

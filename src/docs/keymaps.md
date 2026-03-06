@@ -165,13 +165,23 @@ The query pad is an editable SQL buffer (`ft=sql`).
 | Key | Action |
 |-----|--------|
 | `<C-CR>` | Execute query |
+| `<C-CR>` (visual) | Execute selected SQL only |
 | `<C-Space>` | Manually trigger SQL completion |
 | `<C-x><C-o>` | SQL completion (omnifunc / nvim-cmp source) |
+| `<C-s>` | Save current query |
 | `gA` | AI SQL generation |
+| `gC` / `<C-g>` | Switch database connection |
+| `gb` | Toggle schema browser sidebar |
+| `gG` | ER diagram float |
+| `gw` | Focus main grid (or welcome screen) |
+| `go` / `gT` / `gt` | Pick table (floating picker) |
+| `gq` | Load saved query into pad |
+| `gh` | Query history |
+| `Q` | Welcome screen |
 | `?` | Show help |
 | `q` | Close query pad |
 | `1` | Open sidebar |
-| `2` | Query history |
+| `2` | Query history (secondary: already in query pad) |
 | `3` | Jump to grid |
 | `4` - `9` | Jump to grid in that view |
 
@@ -203,7 +213,7 @@ SQL completion fires automatically as you type: tables, columns, aliases, and at
 |---------|-----|---------|-----|------|
 | Grid | Open query pad | (nothing) | Help | Connections |
 | Sidebar | Open query pad | Close | Help | Connections |
-| Query pad | Welcome screen | (nothing) | Help | (nothing) |
+| Query pad | Welcome screen | (nothing) | Help | Connections |
 | Modal floats | Close | Close | (nothing) | (nothing) |
 
 Uppercase `g` keymaps handle global/navigation actions. Lowercase `g` keymaps handle local inspection and analysis. `?` opens help everywhere.

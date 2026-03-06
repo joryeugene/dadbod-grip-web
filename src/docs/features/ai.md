@@ -58,12 +58,30 @@ Schema context is cached per connection so repeat invocations do not re-fetch th
 
 | Provider | Models | Key env var |
 |----------|--------|-------------|
-| Anthropic | claude-opus-4-5, claude-sonnet-4-5, claude-haiku-4-5 | `ANTHROPIC_API_KEY` |
+| Anthropic | claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5 | `ANTHROPIC_API_KEY` |
 | OpenAI | gpt-4o, gpt-4-turbo, gpt-3.5-turbo | `OPENAI_API_KEY` |
 | Gemini | gemini-1.5-pro, gemini-1.5-flash | `GEMINI_API_KEY` |
 | Ollama | any local model | (none, uses localhost:11434) |
+
+## Modify an existing query
+
+When the query pad already has SQL, the AI uses it as context. You can ask it to
+refine rather than generate from scratch:
+
+1. Run a query and get results you want to extend
+2. Press `gA` from the query pad (or `A` from the grid to jump to the pad with context)
+3. Describe the change: "add a filter for the last 7 days" or "group by status"
+
+The AI rewrites the existing SQL rather than replacing it wholesale.
 
 ## The generated SQL goes into the query pad
 
 After generation, the SQL appears in the query pad for review. Press `<C-CR>` to
 execute, or edit it first. Nothing runs automatically.
+
+## Both surfaces trigger AI
+
+- `A` from the **grid**: opens or focuses the query pad, pre-fills context for the current table
+- `gA` from the **query pad**: generates or modifies SQL in place
+
+Both use the same model and schema context.

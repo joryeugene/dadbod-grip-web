@@ -1,10 +1,13 @@
 <script lang="ts">
 	import '../app.css';
 	import { base } from '$app/paths';
+	import { afterNavigate } from '$app/navigation';
 
 	let { children } = $props();
 
 	let mobileMenuOpen = $state(false);
+
+	afterNavigate(() => window.scrollTo(0, 0));
 
 	const navLinks = [
 		{ label: 'Docs', href: `${base}/docs/getting-started` },
