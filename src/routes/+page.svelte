@@ -89,7 +89,7 @@
 				<span class="text-green-400 ml-1">■</span>
 			</div>
 			<div class="text-sm font-semibold text-dark-text mb-1">Color-coded</div>
-			<div class="text-xs text-dark-muted">Teal = update. Red = delete. Green = insert. Nothing has run yet.</div>
+			<div class="text-xs text-dark-muted"><span class="text-cyan-400">Teal = update.</span> <span class="text-red-400">Red = delete.</span> <span class="text-green-400">Green = insert.</span> Nothing has run yet.</div>
 		</div>
 		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center">
 			<div class="text-2xl font-mono font-bold text-grip-400 mb-2">gl</div>
