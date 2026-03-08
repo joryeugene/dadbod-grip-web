@@ -8,8 +8,20 @@
 			label: 'Getting Started',
 			items: [
 				{ label: 'Installation', href: `${base}/docs/getting-started` },
-				{ label: 'Keymaps Reference', href: `${base}/docs/keymaps` },
-				{ label: 'Demo Walkthrough', href: `${base}/docs/demo` }
+				{ label: 'Demo Walkthrough', href: `${base}/docs/demo` },
+				{ label: 'Keymaps Reference', href: `${base}/docs/keymaps` }
+			]
+		},
+		{
+			label: 'Features',
+			items: [
+				{ label: 'SQL Notebooks', href: `${base}/docs/features/notebooks` },
+				{ label: 'AI Integration', href: `${base}/docs/features/ai` },
+				{ label: 'Editing & Mutations', href: `${base}/docs/features/editing` },
+				{ label: 'Analysis', href: `${base}/docs/features/analysis` },
+				{ label: 'Federation', href: `${base}/docs/features/federation` },
+				{ label: 'Files & Remote Sources', href: `${base}/docs/features/files` },
+				{ label: 'Watch Mode', href: `${base}/docs/features/watch` }
 			]
 		},
 		{
@@ -19,18 +31,6 @@
 				{ label: 'DuckDB', href: `${base}/docs/databases/duckdb` },
 				{ label: 'SQLite', href: `${base}/docs/databases/sqlite` },
 				{ label: 'MySQL', href: `${base}/docs/databases/mysql` }
-			]
-		},
-		{
-			label: 'Features',
-			items: [
-				{ label: 'Editing & Mutations', href: `${base}/docs/features/editing` },
-				{ label: 'Analysis', href: `${base}/docs/features/analysis` },
-				{ label: 'AI Integration', href: `${base}/docs/features/ai` },
-				{ label: 'Federation', href: `${base}/docs/features/federation` },
-				{ label: 'Files & Remote Sources', href: `${base}/docs/features/files` },
-				{ label: 'Watch Mode', href: `${base}/docs/features/watch` },
-				{ label: 'SQL Notebooks', href: `${base}/docs/features/notebooks` }
 			]
 		}
 	];
