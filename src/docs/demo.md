@@ -9,7 +9,9 @@ Run `:GripStart` to open the Softrear Inc. Analyst Portal. The demo database shi
 with seventeen tables and realistic narrative data about a consumer goods company
 with some unusual patterns in the incident records.
 
-This walkthrough traces a data quality investigation using about forty keystrokes.
+The demo opens as a SQL notebook in the query pad. Place your cursor inside any
+`sql` block and press `C-CR` to run it. Results appear in the grid below. Press
+`gn` to open a notebook file picker for `.md` and `.sql` files in your project.
 
 ## Setup
 
@@ -17,93 +19,102 @@ This walkthrough traces a data quality investigation using about forty keystroke
 :GripStart
 ```
 
-This seeds a local SQLite database (at `~/.local/share/nvim/dadbod-grip/softrear.db`)
-and connects automatically. The schema sidebar opens on the left.
+This seeds a local SQLite database and opens the Softrear Inc. notebook in the
+query pad automatically. Seventeen tables appear in the schema sidebar.
 
-## Step 1: Browse the schema
+## The investigation
 
-Use `j`/`k` to navigate the sidebar. The tables in play are:
+Three questions:
 
-- `products` - the product catalog
-- `suppliers` - supplier records with region and tier
-- `incidents` - consumer-reported problems
-- `incident_line_items` - individual products cited in each incident
+1. Is there a product quality problem, and where does it originate?
+2. Who knows what, and what has been done about it?
+3. What decisions drove the company here, and how were they made?
 
-Press `<CR>` on `incidents` to open the grid.
+### 1. Product catalog
 
-## Step 2: Profile the data
+The catalog has 500+ SKUs. Sort by softness score ascending to see the edges:
 
-Press `gR` to open the table profile. Look at the `severity_score` column. The distribution
-is bimodal: most incidents cluster at low severity, but there is a secondary peak at the
-maximum value with no smooth gradient between them.
+```sql
+SELECT sku, ply, softness_score, tensile_strength, discontinued
+FROM rolls
+ORDER BY softness_score ASC
+LIMIT 20
+```
 
-Close the profile with `q`.
+`ULTRA_BUDGET_XTRM` surfaces at the top: softness_score = 0.0, discontinued = false.
+A product with a zero softness score exists in the catalog and it ships.
 
-## Step 3: Filter by high severity
+### 2. Consumer incidents
 
-Press `gF` to open the filter builder. Select the `severity_score` column, choose `>`, and
-enter `90`. Press `<CR>` to apply.
+How bad are the incidents, and does a pattern emerge in the worst ones?
 
-The grid now shows only the high-severity incidents. Look at the `supplier_id` column.
-The same three suppliers appear in almost every row.
+```sql
+SELECT incident_type, severity, roll_sku, notes
+FROM consumer_incidents
+ORDER BY severity DESC
+LIMIT 30
+```
 
-## Step 4: Follow the foreign key
+Every row with `severity = 10` has `incident_type = 'airplane'`, without exception.
+Airline bathrooms are a structural failure mode for this product category.
 
-Move the cursor to any `supplier_id` cell. Press `gf` to follow the foreign key to the
-`suppliers` table. The referenced row opens in a new grid. Note the `tier` and `region`
-fields on these suppliers.
+### 3. The supply chain in one query
 
-Press `<C-o>` to go back to the incidents view.
-
-## Step 5: Cross-reference incident line items
-
-Open the query pad with `q`. Run this query:
+Follow the foreign key chain from a consumer incident all the way to the supplier
+without leaving the query pad:
 
 ```sql
 SELECT
-  s.name AS supplier,
-  s.tier,
-  COUNT(DISTINCT i.id) AS incident_count,
-  AVG(i.severity_score) AS avg_severity,
-  COUNT(DISTINCT ili.product_id) AS affected_products
-FROM incidents i
-JOIN incident_line_items ili ON ili.incident_id = i.id
-JOIN products p ON p.id = ili.product_id
-JOIN suppliers s ON s.id = p.supplier_id
-WHERE i.severity_score > 90
-GROUP BY s.name, s.tier
-ORDER BY incident_count DESC;
+  ci.roll_sku,
+  ci.severity,
+  pb.quality_score,
+  pb.recall,
+  f.name          AS facility_name,
+  f.vibe_score,
+  bc.alias        AS supplier_alias,
+  bc.our_relationship
+FROM consumer_incidents ci
+JOIN rolls r               ON r.sku = ci.roll_sku
+JOIN production_batches pb ON pb.id = r.batch_id
+JOIN facilities f          ON f.id = pb.facility_id
+JOIN bamboo_cartel_members bc ON bc.id = f.bamboo_supplier_id
+WHERE ci.roll_sku = 'ULTRA_BUDGET_XTRM'
+ORDER BY ci.severity DESC
 ```
 
-Press `<C-CR>` to execute. The results name the suppliers with the highest concentration
-of severe incidents.
+The chain: recalled batch, Shanghai Liaison Office, supplier currently under embargo.
+The root cause is four foreign keys deep and visible in a single result set.
 
-## Step 6: Check the timeline
-
-Add a date filter to see whether the pattern predates a specific quarter:
+### 4. What they told themselves
 
 ```sql
-SELECT
-  strftime('%Y-%m', i.created_at) AS month,
-  COUNT(*) AS high_severity_incidents
-FROM incidents i
-WHERE i.severity_score > 90
-GROUP BY month
-ORDER BY month;
+SELECT directive, publicly_acknowledged, issued_by
+FROM leadership_directives
+ORDER BY publicly_acknowledged ASC
 ```
 
-The spike begins in a specific month and does not taper off. The data has a sourcing problem,
-not a reporting anomaly.
+Three directives were never publicly acknowledged. One was: "Greg is authorized to
+self-certify all SKUs. This is intentional." The other three describe how to rename
+the problem in customer communications.
 
 ## What you just used
 
-In six steps, the investigation used:
-
-- Schema sidebar navigation (`j`/`k`, `<CR>`)
-- Table profiling (`gR`)
-- Filter builder (`gF`)
-- FK navigation (`gf`, `<C-o>`)
-- Query pad with `<C-CR>` execution
-- Results rendered as editable grids
+- **Query pad with notebook mode**: `C-CR` runs the SQL block under the cursor
+- **Notebook picker**: `gn` opens `.md` and `.sql` files as notebooks
+- **FK trail**: a single JOIN query traverses four hops instead of four separate `gf` presses
+- **Grid**: each `C-CR` result opens as an editable, sortable, filterable grid below
 
 All of these work the same way against a production database.
+
+## Go deeper
+
+The full notebook lives at `demo/softrear-internal.md` inside the plugin directory.
+It covers sixteen sections including the supplier intelligence cross-database join,
+the BambooKnows investigation, and the pricing arrangement that created the incentive
+to mislabel incoming shipments.
+
+Open it from any session:
+
+```vim
+gn   " notebook picker: navigate to demo/softrear-internal.md
+```

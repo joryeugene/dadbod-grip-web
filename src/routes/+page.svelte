@@ -183,6 +183,7 @@
 		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Write mode: edits persist back to file on disk (<code>g!</code>)</div>
 		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Schema sidebar with PK/FK markers and 1-9 tab views</div>
 		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> SQL completion in query pad: tables, columns, aliases, federation schemas</div>
+		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> SQL notebooks: run individual blocks with <code>C-CR</code>, open files with <code>gn</code></div>
 		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Save and load named queries (<code>:GripSave</code> / <code>gq</code>)</div>
 		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Multi-level undo inside staging, undo of applied transactions</div>
 	</div>

@@ -16,7 +16,8 @@ export const entries: EntryGenerator = () => [
 	{ topic: 'features', page: 'ai' },
 	{ topic: 'features', page: 'federation' },
 	{ topic: 'features', page: 'files' },
-	{ topic: 'features', page: 'watch' }
+	{ topic: 'features', page: 'watch' },
+	{ topic: 'features', page: 'notebooks' }
 ];
 
 // Glob all docs at build time so Vite can bundle them statically

@@ -16,7 +16,7 @@ Configure your provider in the `setup()` call:
 require('dadbod-grip').setup({
   ai = {
     provider = 'anthropic',           -- 'anthropic' | 'openai' | 'gemini' | 'ollama'
-    model = 'claude-opus-4-5',        -- model name for the chosen provider
+    model = 'claude-sonnet-4-6',      -- model name for the chosen provider
   }
 })
 ```
@@ -58,9 +58,9 @@ Schema context is cached per connection so repeat invocations do not re-fetch th
 
 | Provider | Models | Key env var |
 |----------|--------|-------------|
-| Anthropic | claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5 | `ANTHROPIC_API_KEY` |
-| OpenAI | gpt-4o, gpt-4-turbo, gpt-3.5-turbo | `OPENAI_API_KEY` |
-| Gemini | gemini-1.5-pro, gemini-1.5-flash | `GEMINI_API_KEY` |
+| Anthropic | claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5-20251001 | `ANTHROPIC_API_KEY` |
+| OpenAI | gpt-4.1, gpt-4.1-mini, gpt-4o, o3, o4-mini | `OPENAI_API_KEY` |
+| Gemini | gemini-2.5-pro, gemini-2.5-flash | `GEMINI_API_KEY` |
 | Ollama | any local model | (none, uses localhost:11434) |
 
 ## Modify an existing query

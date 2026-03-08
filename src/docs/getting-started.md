@@ -26,7 +26,7 @@ transaction.
 
 ```lua
 -- or pin to a specific version
-{ "joryeugene/dadbod-grip.nvim", tag = "v3.3.0" }
+{ "joryeugene/dadbod-grip.nvim", tag = "v1.0.0" }
 ```
 
 ### packer.nvim
@@ -88,7 +88,7 @@ require('dadbod-grip').setup({
   -- AI provider for natural language SQL (optional)
   ai = {
     provider = 'anthropic',  -- 'anthropic' | 'openai' | 'gemini' | 'ollama'
-    model = 'claude-opus-4-6',
+    model = 'claude-sonnet-4-6',   -- or claude-opus-4-6, claude-haiku-4-5
   },
 
   -- Key to open the grip workspace (default: <leader>db)
