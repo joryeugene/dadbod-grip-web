@@ -29,7 +29,8 @@
 				{ label: 'AI Integration', href: `${base}/docs/features/ai` },
 				{ label: 'Federation', href: `${base}/docs/features/federation` },
 				{ label: 'Files & Remote Sources', href: `${base}/docs/features/files` },
-				{ label: 'Watch Mode', href: `${base}/docs/features/watch` }
+				{ label: 'Watch Mode', href: `${base}/docs/features/watch` },
+				{ label: 'SQL Notebooks', href: `${base}/docs/features/notebooks` }
 			]
 		}
 	];
