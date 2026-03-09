@@ -32,7 +32,7 @@ Press `ga` without a selection to aggregate the entire current column across all
 
 ## Query Doctor
 
-Run `:GripExplain` or press `gx` to explain the current query. The output translates
+Run `:GripExplain` or press `gQ` to explain the current query. The output translates
 the raw EXPLAIN plan into plain-English health checks with cost bars and index suggestions.
 
 Look for:

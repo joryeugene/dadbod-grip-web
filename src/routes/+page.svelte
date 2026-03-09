@@ -173,7 +173,8 @@
 		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Navigate FK relationships with <code>gf</code> / <code>&lt;C-o&gt;</code> back</div>
 		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Profile column distributions with sparklines (<code>gR</code>)</div>
 		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> ER diagram float for all tables and FK relationships (<code>gG</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Explain query plans with cost and index suggestions (<code>gx</code>)</div>
+		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Explain query plans with cost and index suggestions (<code>gQ</code>)</div>
+		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Open URL in current cell (http/https/ftp) (<code>gx</code>)</div>
 		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Filter builder: =, !=, &gt;, &lt;, LIKE, IN, BETWEEN, NULL (<code>gF</code>)</div>
 		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Diff two tables by primary key (<code>gD</code>)</div>
 		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Export to CSV, TSV, JSON, SQL, Markdown, or Grip Table (<code>gE</code>)</div>

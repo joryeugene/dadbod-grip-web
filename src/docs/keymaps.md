@@ -110,7 +110,8 @@ mappings are safe here since there is no insert mode.
 | `gS` | Column statistics popup (distinct, nulls%, top values) |
 | `gR` | Table profile (sparkline distributions) |
 | `gV` | Show CREATE TABLE DDL float |
-| `gx` | Explain current query plan |
+| `gQ` | Explain current query plan |
+| `gx` | Open URL in current cell (http/https/ftp) |
 | `gD` | Diff against another table |
 | `gE` | Export to clipboard (CSV, TSV, JSON, SQL, Markdown, Grip Table) |
 | `gX` | Export to file (csv, json, or sql) |
