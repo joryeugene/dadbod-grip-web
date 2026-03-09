@@ -11,7 +11,7 @@
 
 	const navLinks = [
 		{ label: 'Docs', href: `${base}/docs/getting-started` },
-		{ label: 'Keymaps', href: `${base}/docs/keymaps` },
+		{ label: 'Keymaps', href: `${base}/keymaps` },
 		{ label: 'Demo', href: `${base}/docs/demo` }
 	];
 </script>

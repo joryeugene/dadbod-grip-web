@@ -9,7 +9,7 @@
 			items: [
 				{ label: 'Installation', href: `${base}/docs/getting-started` },
 				{ label: 'Demo Walkthrough', href: `${base}/docs/demo` },
-				{ label: 'Keymaps Reference', href: `${base}/docs/keymaps` }
+				{ label: 'Keymaps Explorer', href: `${base}/keymaps` }
 			]
 		},
 		{
