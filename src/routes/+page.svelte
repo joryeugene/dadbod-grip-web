@@ -1,5 +1,150 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+
+	// ── Interactive staging demo state ──────────────────────────
+	interface DemoRow {
+		id: number;
+		name: string;
+		status: string;
+		total: string;
+	}
+
+	interface Mutation {
+		type: 'update' | 'delete' | 'insert';
+		rowId: number;
+		column?: string;
+		oldValue?: string;
+		newValue?: string;
+		row?: DemoRow;
+	}
+
+	const INITIAL_ROWS: DemoRow[] = [
+		{ id: 42, name: 'Alice Chen', status: 'pending', total: '149.99' },
+		{ id: 43, name: 'Bob Park', status: 'shipped', total: '89.50' },
+		{ id: 44, name: 'Carol Diaz', status: 'pending', total: '234.00' },
+		{ id: 45, name: 'Dan Kim', status: 'returned', total: '67.25' },
+		{ id: 46, name: 'Eve Lu', status: 'shipped', total: '412.80' }
+	];
+
+	const COLUMNS: (keyof DemoRow)[] = ['id', 'name', 'status', 'total'];
+
+	let rows = $state<DemoRow[]>(structuredClone(INITIAL_ROWS));
+	let mutations = $state<Mutation[]>([]);
+	let editingCell = $state<{ rowId: number; column: string } | null>(null);
+	let editValue = $state('');
+	let nextId = $state(47);
+	let applied = $state(false);
+
+	function isDeleted(rowId: number): boolean {
+		return mutations.some((m) => m.type === 'delete' && m.rowId === rowId);
+	}
+
+	function isInserted(rowId: number): boolean {
+		return mutations.some((m) => m.type === 'insert' && m.rowId === rowId);
+	}
+
+	function isUpdated(rowId: number, column: string): boolean {
+		return mutations.some((m) => m.type === 'update' && m.rowId === rowId && m.column === column);
+	}
+
+	function startEdit(rowId: number, column: string, currentValue: string) {
+		if (column === 'id' || isDeleted(rowId)) return;
+		editingCell = { rowId, column };
+		editValue = currentValue;
+	}
+
+	function commitEdit() {
+		if (!editingCell) return;
+		const row = rows.find((r) => r.id === editingCell!.rowId);
+		if (!row) return;
+		const col = editingCell.column as keyof DemoRow;
+		const oldValue = row[col];
+		if (editValue !== oldValue) {
+			// Remove any previous update for same cell
+			mutations = mutations.filter(
+				(m) => !(m.type === 'update' && m.rowId === editingCell!.rowId && m.column === col)
+			);
+			mutations = [
+				...mutations,
+				{
+					type: 'update',
+					rowId: editingCell.rowId,
+					column: col,
+					oldValue: String(oldValue),
+					newValue: editValue
+				}
+			];
+			(row as any)[col] = editValue;
+		}
+		editingCell = null;
+	}
+
+	function cancelEdit() {
+		editingCell = null;
+	}
+
+	function toggleDelete(rowId: number) {
+		const existing = mutations.findIndex((m) => m.type === 'delete' && m.rowId === rowId);
+		if (existing >= 0) {
+			mutations = mutations.filter((_, i) => i !== existing);
+		} else {
+			mutations = [...mutations, { type: 'delete', rowId }];
+		}
+	}
+
+	function insertRow() {
+		const newRow: DemoRow = {
+			id: nextId,
+			name: 'New Customer',
+			status: 'pending',
+			total: '0.00'
+		};
+		rows = [...rows, newRow];
+		mutations = [...mutations, { type: 'insert', rowId: nextId, row: newRow }];
+		nextId++;
+	}
+
+	function resetDemo() {
+		rows = structuredClone(INITIAL_ROWS);
+		mutations = [];
+		editingCell = null;
+		editValue = '';
+		nextId = 47;
+		applied = false;
+	}
+
+	function applyDemo() {
+		applied = true;
+		setTimeout(() => {
+			resetDemo();
+		}, 1800);
+	}
+
+	let stagedSql = $derived.by(() => {
+		if (mutations.length === 0) return [];
+		const lines: { text: string; color: string }[] = [];
+		lines.push({ text: 'BEGIN;', color: 'text-grip-400' });
+		for (const m of mutations) {
+			if (m.type === 'update') {
+				lines.push({
+					text: `UPDATE orders SET ${m.column} = '${m.newValue}' WHERE id = ${m.rowId};`,
+					color: 'text-cyan-400'
+				});
+			} else if (m.type === 'delete') {
+				lines.push({
+					text: `DELETE FROM orders WHERE id = ${m.rowId};`,
+					color: 'text-red-400'
+				});
+			} else if (m.type === 'insert' && m.row) {
+				lines.push({
+					text: `INSERT INTO orders (name, status, total) VALUES ('${m.row.name}', '${m.row.status}', '${m.row.total}');`,
+					color: 'text-green-400'
+				});
+			}
+		}
+		lines.push({ text: 'COMMIT;', color: 'text-grip-400' });
+		return lines;
+	});
 </script>
 
 <svelte:head>
@@ -115,6 +260,112 @@
 <span class="text-red-400">DELETE FROM</span><span class="text-dark-text"> orders WHERE id = </span><span class="text-grip-400">17</span><span class="text-dark-text">;</span>
 <span class="text-green-400">INSERT INTO</span><span class="text-dark-text"> orders (customer_id, total) </span><span class="text-green-400">VALUES</span><span class="text-dark-text"> (</span><span class="text-grip-400">88</span><span class="text-dark-text">, </span><span class="text-grip-400">149.99</span><span class="text-dark-text">);</span>
 <span class="text-grip-400">COMMIT</span><span class="text-dark-text">;</span></code></pre>
+	</div>
+</section>
+
+<!-- Interactive staging demo -->
+<section class="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
+	<div class="text-center mb-8">
+		<p class="text-dark-muted text-sm">Click any cell. Delete a row. Insert one. Watch the SQL update live.</p>
+	</div>
+
+	<div class="bg-dark-surface border border-dark-border rounded-xl overflow-hidden {applied ? 'ring-2 ring-grip-400/60 transition-all duration-300' : ''}">
+		<!-- Grid table -->
+		<div class="overflow-x-auto">
+			<table class="w-full text-sm font-mono">
+				<thead>
+					<tr class="border-b border-dark-border">
+						{#each COLUMNS as col}
+							<th class="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-dark-muted">
+								{col}
+							</th>
+						{/each}
+						<th class="px-4 py-2.5 w-10"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each rows as row (row.id)}
+						{@const deleted = isDeleted(row.id)}
+						{@const inserted = isInserted(row.id)}
+						<tr class="border-b border-dark-border/50 {deleted ? 'bg-red-400/5' : inserted ? 'bg-green-400/5' : 'hover:bg-dark-border/20'} transition-colors">
+							{#each COLUMNS as col}
+								{@const updated = isUpdated(row.id, col)}
+								<td
+									class="px-4 py-2 {deleted ? 'text-red-400 line-through opacity-60' : inserted ? 'text-green-400' : updated ? 'text-cyan-400' : 'text-dark-text'} {col !== 'id' && !deleted ? 'cursor-pointer' : ''}"
+									onclick={() => startEdit(row.id, col, String(row[col]))}
+								>
+									{#if editingCell && editingCell.rowId === row.id && editingCell.column === col}
+										<!-- svelte-ignore a11y_autofocus -->
+										<input
+											type="text"
+											bind:value={editValue}
+											autofocus
+											class="bg-dark-bg border border-grip-400/50 rounded px-1.5 py-0.5 text-cyan-400 outline-none w-full max-w-[140px]"
+											onkeydown={(e) => {
+												if (e.key === 'Enter') commitEdit();
+												if (e.key === 'Escape') cancelEdit();
+											}}
+											onblur={() => commitEdit()}
+										/>
+									{:else}
+										{row[col]}
+									{/if}
+								</td>
+							{/each}
+							<td class="px-4 py-2 text-center">
+								{#if !inserted}
+									<button
+										class="text-dark-muted hover:text-red-400 transition-colors text-xs"
+										onclick={() => toggleDelete(row.id)}
+										title={deleted ? 'Undo delete' : 'Stage delete'}
+									>
+										{deleted ? '↩' : '✕'}
+									</button>
+								{/if}
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Action bar -->
+		<div class="flex items-center gap-3 px-4 py-3 border-t border-dark-border bg-dark-bg/50">
+			<button
+				class="text-xs text-green-400 hover:text-green-300 font-mono transition-colors"
+				onclick={insertRow}
+			>
+				+ INSERT
+			</button>
+			<div class="flex-1"></div>
+			{#if mutations.length > 0}
+				<span class="text-xs text-dark-muted">{mutations.length} staged</span>
+			{/if}
+			<button
+				class="text-xs text-dark-muted hover:text-dark-text font-mono transition-colors"
+				onclick={resetDemo}
+			>
+				Reset
+			</button>
+			<button
+				class="text-xs px-3 py-1 rounded font-mono transition-colors {mutations.length > 0 ? 'bg-grip-600 hover:bg-grip-500 text-white' : 'bg-dark-border text-dark-muted cursor-not-allowed'}"
+				onclick={applyDemo}
+				disabled={mutations.length === 0 || applied}
+			>
+				{applied ? 'Committed.' : 'Apply'}
+			</button>
+		</div>
+
+		<!-- SQL panel -->
+		{#if stagedSql.length > 0}
+			<div class="border-t border-dark-border">
+				<div class="px-4 py-1.5 border-b border-dark-border/50 text-xs text-dark-muted font-mono flex items-center gap-2">
+					<span class="w-1.5 h-1.5 rounded-full bg-cyan-400/70"></span>
+					staged SQL
+				</div>
+				<pre class="px-4 py-3 text-xs font-mono overflow-x-auto">{#each stagedSql as line}<span class={line.color}>{line.text}</span>{'\n'}{/each}</pre>
+			</div>
+		{/if}
 	</div>
 </section>
 
