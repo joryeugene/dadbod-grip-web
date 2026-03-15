@@ -16,6 +16,126 @@
 	let selectedKeymap = $state<Keymap | null>(null);
 	let activeKeyFilter = $state<string | null>(null); // exact key filter from keyboard clicks
 
+	// ── Vim sequence simulator ──
+	let typeModeActive = $state(false);
+	let sequenceBuffer = $state<string[]>([]);
+	let sequenceDisplay = $state('');
+	let sequenceState = $state<'idle' | 'waiting' | 'matched' | 'nomatch'>('idle');
+	let sequenceTimeout: ReturnType<typeof setTimeout> | undefined;
+	let matchedKeys = $state<Set<string>>(new Set());
+
+	function mapBrowserKey(e: KeyboardEvent): string | null {
+		if (e.key === 'Escape') return null; // handled separately
+		if (e.key === 'Shift' || e.key === 'Control' || e.key === 'Alt' || e.key === 'Meta') return null;
+		if (e.ctrlKey && e.key === 'Enter') return 'C-CR';
+		if (e.ctrlKey) return `C-${e.key.toLowerCase()}`;
+		if (e.key === 'Enter') return 'CR';
+		if (e.key === 'Tab') return 'Tab';
+		if (e.key === 'Backspace') return null;
+		return e.key;
+	}
+
+	function getKeymapsForSurface(): Keymap[] {
+		return activeSurface === 'all'
+			? keymaps
+			: keymaps.filter(k => k.surfaces.includes(activeSurface as Surface));
+	}
+
+	function findExactMatch(seq: string): Keymap | undefined {
+		return getKeymapsForSurface().find(k => k.key === seq);
+	}
+
+	function isPrefix(seq: string): boolean {
+		return getKeymapsForSurface().some(k => k.key.startsWith(seq) && k.key !== seq);
+	}
+
+	function keysInSequence(seq: string): Set<string> {
+		const result = new Set<string>();
+		for (const ch of seq) {
+			result.add(ch);
+		}
+		if (seq.startsWith('C-')) result.add('Ctrl');
+		if (seq === 'CR' || seq.endsWith('-CR')) result.add('CR');
+		if (seq === 'Tab') result.add('Tab');
+		if (seq === 'S-Tab') { result.add('Tab'); result.add('Shift'); }
+		return result;
+	}
+
+	function clearSequence() {
+		if (sequenceTimeout) clearTimeout(sequenceTimeout);
+		sequenceBuffer = [];
+		sequenceDisplay = '';
+		sequenceState = 'idle';
+		matchedKeys = new Set();
+	}
+
+	function handleSequenceKey(e: KeyboardEvent) {
+		if (!typeModeActive) return;
+
+		// Escape: clear buffer or deactivate type mode
+		if (e.key === 'Escape') {
+			e.preventDefault();
+			if (sequenceBuffer.length > 0) {
+				clearSequence();
+			} else {
+				typeModeActive = false;
+				clearSequence();
+			}
+			return;
+		}
+
+		const mapped = mapBrowserKey(e);
+		if (!mapped) return;
+
+		// Prevent browser defaults for mapped keys
+		e.preventDefault();
+
+		if (sequenceTimeout) clearTimeout(sequenceTimeout);
+
+		sequenceBuffer = [...sequenceBuffer, mapped];
+		const candidate = sequenceBuffer.join('');
+		sequenceDisplay = sequenceBuffer.join(' ');
+
+		const exact = findExactMatch(candidate);
+		if (exact) {
+			sequenceState = 'matched';
+			matchedKeys = keysInSequence(candidate);
+			selectedKeymap = exact;
+			activeKeyFilter = null;
+
+			setTimeout(() => {
+				clearSequence();
+			}, 1200);
+			return;
+		}
+
+		if (isPrefix(candidate)) {
+			sequenceState = 'waiting';
+			matchedKeys = keysInSequence(candidate);
+			// Filter the table to show prefix matches
+			activeKeyFilter = sequenceBuffer[0];
+			search = '';
+
+			sequenceTimeout = setTimeout(() => {
+				clearSequence();
+			}, 1500);
+			return;
+		}
+
+		// No match, no prefix
+		sequenceState = 'nomatch';
+		matchedKeys = keysInSequence(candidate);
+		setTimeout(() => {
+			clearSequence();
+		}, 600);
+	}
+
+	function getSequenceKeyState(keyChar: string): 'none' | 'waiting' | 'matched' | 'nomatch' {
+		if (!typeModeActive || sequenceState === 'idle') return 'none';
+		if (!matchedKeys.has(keyChar)) return 'none';
+		return sequenceState;
+	}
+
 	// ── Keyboard layout ──
 	// Standard QWERTY rows with display labels and logical key names
 	const keyboardRows = [
@@ -160,6 +280,8 @@
 	<meta name="description" content="Interactive keymap explorer for dadbod-grip.nvim. Visual keyboard layout, searchable reference, filterable by surface." />
 </svelte:head>
 
+<svelte:window onkeydown={handleSequenceKey} />
+
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
 
 	<!-- Header -->
@@ -199,11 +321,18 @@
 						{@const isActive = mappedKeys.has(key.key)}
 						{@const keyMaps = getKeymapsForKey(key.key, activeSurface)}
 						{@const count = keyMaps.length}
+						{@const seqState = getSequenceKeyState(key.key)}
 						<button
 							class="h-10 rounded-md text-xs font-mono flex items-center justify-center border transition-all relative
-								{isActive
-									? 'bg-grip-400/15 border-grip-400/50 text-grip-400 hover:bg-grip-400/25 cursor-pointer'
-									: 'bg-dark-bg/50 border-dark-border/50 text-dark-muted/40 cursor-default'
+								{seqState === 'matched'
+									? 'bg-grip-400/30 border-grip-400/60 text-grip-400 ring-1 ring-grip-400/40'
+									: seqState === 'waiting'
+										? 'bg-amber-400/25 border-amber-400/50 text-amber-400'
+										: seqState === 'nomatch'
+											? 'bg-red-400/20 border-red-400/40 text-red-400'
+											: isActive
+												? 'bg-grip-400/15 border-grip-400/50 text-grip-400 hover:bg-grip-400/25 cursor-pointer'
+												: 'bg-dark-bg/50 border-dark-border/50 text-dark-muted/40 cursor-default'
 								}"
 							style="width: {key.w * 2.75}rem; min-width: {key.w * 2.75}rem;"
 							onclick={() => isActive && handleKeyClick(key.key)}
@@ -220,13 +349,39 @@
 				</div>
 			{/each}
 		</div>
-		<p class="text-xs text-dark-muted/60 mt-3 text-center">
-			{#if activeSurface === 'all'}
-				Showing all mapped keys across all surfaces
-			{:else}
-				Showing keys mapped on the <span class="{SURFACE_COLORS[activeSurface as Surface].split(' ')[1]}">{SURFACE_LABELS[activeSurface as Surface]}</span> surface
-			{/if}
-		</p>
+		<div class="flex items-center justify-between mt-3">
+			<p class="text-xs text-dark-muted/60">
+				{#if activeSurface === 'all'}
+					Showing all mapped keys across all surfaces
+				{:else}
+					Showing keys mapped on the <span class="{SURFACE_COLORS[activeSurface as Surface].split(' ')[1]}">{SURFACE_LABELS[activeSurface as Surface]}</span> surface
+				{/if}
+			</p>
+			<button
+				class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors
+					{typeModeActive
+						? 'bg-grip-400/15 border-grip-400/50 text-grip-400'
+						: 'border-dark-border text-dark-muted hover:text-dark-text hover:border-dark-text/40'
+					}"
+				onclick={() => { typeModeActive = !typeModeActive; clearSequence(); }}
+			>
+				<span class="w-1.5 h-1.5 rounded-full {typeModeActive ? 'bg-grip-400 animate-pulse' : 'bg-dark-muted/40'}"></span>
+				{typeModeActive ? 'Type mode on' : 'Type Vim keys'}
+			</button>
+		</div>
+		{#if typeModeActive}
+			<div class="mt-2 flex items-center justify-center gap-2 h-7 text-xs font-mono">
+				{#if sequenceState === 'idle'}
+					<span class="text-dark-muted/60">Type a key sequence...</span>
+				{:else if sequenceState === 'waiting'}
+					<span class="text-amber-400">Sequence: {sequenceDisplay} <span class="animate-pulse">_</span></span>
+				{:else if sequenceState === 'matched'}
+					<span class="text-grip-400">Matched: {sequenceDisplay} = {selectedKeymap?.description}</span>
+				{:else if sequenceState === 'nomatch'}
+					<span class="text-red-400">No match: {sequenceDisplay}</span>
+				{/if}
+			</div>
+		{/if}
 	</div>
 
 	<!-- Selected keymap detail -->

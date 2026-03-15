@@ -31,4 +31,23 @@
 	.prose blockquote { @apply border-l-4 border-grip-600 pl-4 text-dark-muted italic; }
 	.prose pre { @apply bg-dark-surface rounded-lg p-4 overflow-x-auto mb-4 border border-dark-border; }
 	.prose pre code { @apply text-dark-text text-sm; }
+
+	/* Copy button on code blocks */
+	.copy-btn {
+		@apply absolute top-2 right-2 p-1.5 rounded-md bg-dark-elevated border border-dark-border;
+		@apply text-dark-muted hover:text-grip-400 opacity-0 transition-opacity duration-150;
+		@apply focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-grip-400;
+		line-height: 0;
+	}
+	pre:hover .copy-btn,
+	pre:focus-within .copy-btn {
+		opacity: 1;
+	}
+
+	/* Scroll reveal animations */
+	.sr-hidden { opacity: 0; transform: translateY(24px); }
+	.sr-visible { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+	@media (prefers-reduced-motion: reduce) {
+		.sr-hidden, .sr-visible { opacity: 1; transform: none; transition: none; }
+	}
 }

@@ -2,6 +2,7 @@
 	import '../app.css';
 	import { base } from '$app/paths';
 	import { afterNavigate } from '$app/navigation';
+	import Toast from '$lib/components/Toast.svelte';
 
 	let { children } = $props();
 
@@ -71,6 +72,7 @@
 </header>
 
 {@render children()}
+<Toast />
 
 <footer class="border-t border-dark-border mt-24 py-10 text-center text-dark-muted text-sm space-y-3">
 	<div class="flex justify-center gap-6">

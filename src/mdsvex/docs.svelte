@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
+	import { copyCode } from '$lib/actions/copy-code';
 
 	let { children, title = '', description = '' } = $props();
 
@@ -73,7 +74,7 @@
 	</aside>
 
 	<!-- Content -->
-	<main class="flex-1 min-w-0 prose max-w-3xl">
+	<main class="flex-1 min-w-0 prose max-w-3xl" use:copyCode>
 		{@render children()}
 	</main>
 </div>

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import { copyCode } from '$lib/actions/copy-code';
+	import { scrollReveal } from '$lib/actions/scroll-reveal';
 
 	// ── Interactive staging demo state ──────────────────────────
 	interface DemoRow {
@@ -151,6 +153,7 @@
 	<title>dadbod-grip.nvim: Editable Database Grids for Neovim</title>
 </svelte:head>
 
+<div use:copyCode>
 <!-- Hero -->
 <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-16 flex flex-col items-center text-center">
 	<img src="{base}/mascot.gif" alt="Chonk, the dadbod-grip mascot" class="w-32 h-auto mb-8" />
@@ -201,7 +204,7 @@
 </section>
 
 <!-- DB badges -->
-<section class="border-y border-dark-border bg-dark-surface/50 py-10">
+<section class="border-y border-dark-border bg-dark-surface/50 py-10" use:scrollReveal>
 	<div class="max-w-4xl mx-auto px-4 sm:px-6 flex flex-wrap justify-center gap-4">
 		{#each ['PostgreSQL', 'MySQL', 'SQLite', 'DuckDB', 'MotherDuck', 'Parquet / CSV / S3 / HTTPS'] as db}
 			<span class="px-4 py-1.5 rounded-full border border-dark-border text-dark-muted text-sm font-mono">
@@ -213,7 +216,7 @@
 
 <!-- Staging cycle — the core differentiator -->
 <section class="max-w-6xl mx-auto px-4 sm:px-6 py-20">
-	<div class="text-center mb-12">
+	<div class="text-center mb-12" use:scrollReveal>
 		<h2 class="font-sans text-2xl font-bold text-dark-text mb-3">Not just a viewer. A full edit cycle.</h2>
 		<p class="text-dark-muted max-w-xl mx-auto text-sm">
 			Every change stages before it touches the database. Review the SQL. Commit or cancel.
@@ -222,12 +225,12 @@
 	</div>
 
 	<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
-		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center">
+		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center" use:scrollReveal>
 			<div class="text-2xl font-mono font-bold text-grip-400 mb-2">i</div>
 			<div class="text-sm font-semibold text-dark-text mb-1">Edit</div>
 			<div class="text-xs text-dark-muted">Popup editor opens. Change the value, press Enter to stage.</div>
 		</div>
-		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center">
+		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center" use:scrollReveal={{ delay: 100 }}>
 			<div class="text-lg font-mono font-bold mb-2">
 				<span class="text-cyan-400">■</span>
 				<span class="text-red-400 ml-1">■</span>
@@ -236,19 +239,19 @@
 			<div class="text-sm font-semibold text-dark-text mb-1">Color-coded</div>
 			<div class="text-xs text-dark-muted"><span class="text-cyan-400">Teal = update.</span> <span class="text-red-400">Red = delete.</span> <span class="text-green-400">Green = insert.</span> Nothing has run yet.</div>
 		</div>
-		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center">
+		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center" use:scrollReveal={{ delay: 200 }}>
 			<div class="text-2xl font-mono font-bold text-grip-400 mb-2">gl</div>
 			<div class="text-sm font-semibold text-dark-text mb-1">Preview SQL</div>
 			<div class="text-xs text-dark-muted">Live float shows the exact DML as you work. No surprises.</div>
 		</div>
-		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center">
+		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center" use:scrollReveal={{ delay: 300 }}>
 			<div class="text-2xl font-mono font-bold text-grip-400 mb-2">a</div>
 			<div class="text-sm font-semibold text-dark-text mb-1">Apply</div>
 			<div class="text-xs text-dark-muted">All changes run in one BEGIN/COMMIT. Any failure rolls back the batch.</div>
 		</div>
 	</div>
 
-	<div class="bg-dark-surface border border-dark-border rounded-xl overflow-hidden">
+	<div class="bg-dark-surface border border-dark-border rounded-xl overflow-hidden" use:scrollReveal={{ delay: 400 }}>
 		<div class="px-4 py-2 border-b border-dark-border text-xs text-dark-muted font-mono flex items-center gap-2">
 			<span class="w-2 h-2 rounded-full bg-cyan-400/70"></span>
 			<span>live SQL float  (gl)</span>
@@ -264,7 +267,7 @@
 </section>
 
 <!-- Interactive staging demo -->
-<section class="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
+<section class="max-w-6xl mx-auto px-4 sm:px-6 pb-20" use:scrollReveal>
 	<div class="text-center mb-8">
 		<p class="text-dark-muted text-sm">Click any cell. Delete a row. Insert one. Watch the SQL update live.</p>
 	</div>
@@ -376,7 +379,7 @@
 
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 			<!-- 1: Staging -->
-			<div class="bg-dark-bg border border-grip-600/40 rounded-xl p-6">
+			<div class="bg-dark-bg border border-grip-600/40 rounded-xl p-6" use:scrollReveal>
 				<div class="text-grip-400 font-mono text-xs uppercase tracking-widest mb-3">01</div>
 				<h3 class="text-dark-text font-bold text-base mb-3">Staging transactions</h3>
 				<p class="text-dark-muted text-sm leading-relaxed mb-4">
@@ -388,7 +391,7 @@
 			</div>
 
 			<!-- 2: Federation -->
-			<div class="bg-dark-bg border border-grip-600/40 rounded-xl p-6">
+			<div class="bg-dark-bg border border-grip-600/40 rounded-xl p-6" use:scrollReveal={{ delay: 120 }}>
 				<div class="text-grip-400 font-mono text-xs uppercase tracking-widest mb-3">02</div>
 				<h3 class="text-dark-text font-bold text-base mb-3">Cross-database federation</h3>
 				<p class="text-dark-muted text-sm leading-relaxed mb-4">
@@ -400,7 +403,7 @@
 			</div>
 
 			<!-- 3: AI -->
-			<div class="bg-dark-bg border border-grip-600/40 rounded-xl p-6">
+			<div class="bg-dark-bg border border-grip-600/40 rounded-xl p-6" use:scrollReveal={{ delay: 240 }}>
 				<div class="text-grip-400 font-mono text-xs uppercase tracking-widest mb-3">03</div>
 				<h3 class="text-dark-text font-bold text-base mb-3">AI with full schema context</h3>
 				<p class="text-dark-muted text-sm leading-relaxed mb-4">
@@ -421,7 +424,7 @@
 
 	<div class="space-y-8">
 		<!-- Editing -->
-		<div>
+		<div use:scrollReveal>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Editing</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Batch-edit selected rows in visual mode</div>
@@ -434,7 +437,7 @@
 		</div>
 
 		<!-- Navigation -->
-		<div>
+		<div use:scrollReveal={{ delay: 80 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Navigation</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Navigate FK relationships with <code>gf</code> / <code>&lt;C-o&gt;</code> back</div>
@@ -446,7 +449,7 @@
 		</div>
 
 		<!-- Analysis -->
-		<div>
+		<div use:scrollReveal={{ delay: 160 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Analysis</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Profile column distributions with sparklines (<code>gR</code>)</div>
@@ -460,7 +463,7 @@
 		</div>
 
 		<!-- Integration -->
-		<div>
+		<div use:scrollReveal={{ delay: 240 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Integration</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> SQL completion: tables, columns, aliases, federation schemas</div>
@@ -472,7 +475,7 @@
 		</div>
 
 		<!-- I/O -->
-		<div>
+		<div use:scrollReveal={{ delay: 320 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">I/O</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Export to CSV, TSV, JSON, SQL, Markdown, or Grip Table (<code>gE</code>)</div>
@@ -485,7 +488,7 @@
 </section>
 
 <!-- Cross-DB federation code demo -->
-<section class="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
+<section class="max-w-6xl mx-auto px-4 sm:px-6 pb-20" use:scrollReveal>
 	<div class="bg-dark-surface border border-grip-600/30 rounded-xl p-8">
 		<h2 class="font-sans text-xl font-bold text-dark-text mb-2">Query three databases in one statement</h2>
 		<p class="text-dark-muted text-sm mb-6 max-w-2xl">
@@ -509,7 +512,7 @@
 </section>
 
 <!-- Install snippet -->
-<section class="border-t border-dark-border py-20">
+<section class="border-t border-dark-border py-20" use:scrollReveal>
 	<div class="max-w-xl mx-auto px-4 sm:px-6">
 		<h2 class="font-sans text-2xl font-bold text-dark-text text-center mb-8">One line to install</h2>
 		<div class="bg-dark-surface border border-dark-border rounded-xl overflow-hidden mb-8">
@@ -535,3 +538,4 @@
 		</div>
 	</div>
 </section>
+</div>
