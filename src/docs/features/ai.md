@@ -85,3 +85,24 @@ execute, or edit it first. Nothing runs automatically.
 - `gA` from the **query pad**: generates or modifies SQL in place
 
 Both use the same model and schema context.
+
+## AI row fill
+
+Press `gA` from the grid (not the query pad) to generate AI-populated staged rows. The
+AI reads the table schema, including column types and foreign key constraints, and produces
+realistic sample data that matches the structure.
+
+Generated rows appear as staged inserts (green). Review them the same way as manual edits:
+press `gl` to see the INSERT statements, `u` to unstage individual rows, or `a` to apply.
+
+For bulk generation, use the command form:
+
+```vim
+:GripFill 10
+```
+
+This stages 10 AI-generated rows at once. The rows respect unique constraints and produce
+varied, plausible values rather than repeating patterns.
+
+Note: `gA` behaves differently depending on the surface. From the **query pad**, it modifies
+existing SQL. From the **grid**, it generates staged rows.

@@ -82,17 +82,22 @@ All options are optional. The plugin works with no configuration at all.
 
 ```lua
 require('dadbod-grip').setup({
-  -- Maximum rows to fetch per page (default: 200)
-  limit = 200,
+  limit = 200,              -- rows per page (default: 200)
+  max_col_width = 60,       -- truncate long cell values in the grid
+  timeout = 30000,          -- query timeout in milliseconds
 
-  -- AI provider for natural language SQL (optional)
+  picker = 'builtin',       -- 'builtin' | 'telescope' | 'snacks'
+  completion = true,        -- false to use blink.cmp or nvim-cmp instead
+  connections_path = nil,   -- absolute path to shared connections.json
+
   ai = {
-    provider = 'anthropic',  -- 'anthropic' | 'openai' | 'gemini' | 'ollama'
-    model = 'claude-sonnet-4-6',   -- or claude-opus-4-6, claude-haiku-4-5
+    provider = 'anthropic', -- 'anthropic' | 'openai' | 'gemini' | 'ollama'
+    model = 'claude-sonnet-4-6',
+    api_key = nil,          -- nil reads from env var; or 'env:VAR', 'cmd:...', direct string
+    base_url = nil,         -- override for Ollama or proxy endpoints
   },
 
-  -- Key to open the grip workspace (default: <leader>db)
-  open_key = '<leader>db',
+  open_key = '<leader>db',  -- key to open the grip workspace
 })
 ```
 
@@ -104,4 +109,9 @@ When you connect, grip opens three surfaces:
 - **Query pad** in the center: a scratch SQL buffer that pipes results into grids
 - **Grid** at the bottom: the editable table view
 
-Press `1`, `2`, or `3` to jump between them. Press `?` on any surface for the full keymap reference.
+Press `1`, `2`, or `3` to jump between surfaces. Keys `4` through `9` open depth views:
+ER diagram (`4`), column stats (`5`), columns (`6`), foreign keys (`7`), indexes (`8`),
+and constraints (`9`).
+
+Press `<C-p>` on any surface to open the command palette, a searchable list of every
+available action. Press `?` for the full keymap reference.

@@ -155,7 +155,7 @@
 <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-16 flex flex-col items-center text-center">
 	<img src="{base}/mascot.gif" alt="Chonk, the dadbod-grip mascot" class="w-32 h-auto mb-8" />
 
-	<h1 class="text-4xl sm:text-5xl font-bold text-dark-text mb-4 leading-tight">
+	<h1 class="font-sans text-4xl sm:text-5xl font-bold text-dark-text mb-4 leading-tight">
 		Edit database tables<br class="hidden sm:block" />
 		<span class="text-grip-400">like Vim buffers.</span>
 	</h1>
@@ -214,7 +214,7 @@
 <!-- Staging cycle — the core differentiator -->
 <section class="max-w-6xl mx-auto px-4 sm:px-6 py-20">
 	<div class="text-center mb-12">
-		<h2 class="text-2xl font-bold text-dark-text mb-3">Not just a viewer. A full edit cycle.</h2>
+		<h2 class="font-sans text-2xl font-bold text-dark-text mb-3">Not just a viewer. A full edit cycle.</h2>
 		<p class="text-dark-muted max-w-xl mx-auto text-sm">
 			Every change stages before it touches the database. Review the SQL. Commit or cancel.
 			This is what makes dadbod-grip different from every other database plugin.
@@ -372,7 +372,7 @@
 <!-- Three game-changer cards -->
 <section class="border-t border-dark-border bg-dark-surface/30 py-20">
 	<div class="max-w-6xl mx-auto px-4 sm:px-6">
-		<h2 class="text-2xl font-bold text-dark-text text-center mb-12">Three things that change how you work</h2>
+		<h2 class="font-sans text-2xl font-bold text-dark-text text-center mb-12">Three things that change how you work</h2>
 
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 			<!-- 1: Staging -->
@@ -415,36 +415,79 @@
 	</div>
 </section>
 
-<!-- Everything else: compact feature strip -->
+<!-- Everything else: categorized feature strip -->
 <section class="max-w-6xl mx-auto px-4 sm:px-6 py-20">
-	<h2 class="text-xl font-bold text-dark-text mb-8">Everything else</h2>
+	<h2 class="font-sans text-xl font-bold text-dark-text mb-10">Everything else</h2>
 
-	<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-3 text-sm text-dark-muted">
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Batch-edit selected rows in visual mode</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Navigate FK relationships with <code>gf</code> / <code>&lt;C-o&gt;</code> back</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Profile column distributions with sparklines (<code>gR</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> ER diagram float for all tables and FK relationships (<code>gG</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Explain query plans with cost and index suggestions (<code>gQ</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Open URL in current cell (http/https/ftp) (<code>gx</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Filter builder: =, !=, &gt;, &lt;, LIKE, IN, BETWEEN, NULL (<code>gF</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Diff two tables by primary key (<code>gD</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Export to CSV, TSV, JSON, SQL, Markdown, or Grip Table (<code>gE</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Sort stacking with visual indicators (<code>s</code> / <code>S</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Open Parquet, CSV, HTTPS, S3 as live tables (<code>:GripOpen</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Watch mode: auto-refresh on a timer (<code>gW</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Write mode: edits persist back to file on disk (<code>g!</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Schema sidebar with PK/FK markers and 1-9 tab views</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> SQL completion in query pad: tables, columns, aliases, federation schemas</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> SQL notebooks: run individual blocks with <code>C-CR</code>, open files with <code>gn</code></div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Save and load named queries (<code>:GripSave</code> / <code>gq</code>)</div>
-		<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Multi-level undo inside staging, undo of applied transactions</div>
+	<div class="space-y-8">
+		<!-- Editing -->
+		<div>
+			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Editing</p>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Batch-edit selected rows in visual mode</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Multi-level undo inside staging, undo of applied transactions</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Schema DDL: rename, add, and drop columns and tables</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> AI row fill: generate staged rows from schema context (<code>gA</code> / <code>:GripFill</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Close and reopen all grip windows with <code>:GripToggle</code></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Conditional formatting: negatives red, booleans colored, URLs underlined</div>
+			</div>
+		</div>
+
+		<!-- Navigation -->
+		<div>
+			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Navigation</p>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Navigate FK relationships with <code>gf</code> / <code>&lt;C-o&gt;</code> back</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Schema sidebar with PK/FK markers and 1-9 tab views</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Command palette: searchable action list (<code>&lt;C-p&gt;</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Row view transpose: vertical key-value display (<code>K</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> ER diagram float for all tables and FK relationships (<code>gG</code>)</div>
+			</div>
+		</div>
+
+		<!-- Analysis -->
+		<div>
+			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Analysis</p>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Profile column distributions with sparklines (<code>gR</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Explain query plans with cost and index suggestions (<code>gQ</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Diff two tables by primary key (<code>gD</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Sort stacking with visual indicators (<code>s</code> / <code>S</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Filter builder: =, !=, &gt;, &lt;, LIKE, IN, BETWEEN, NULL (<code>gF</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Save and load filter presets (<code>gP</code> / <code>gp</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Open URL in current cell (http/https/ftp) (<code>gx</code>)</div>
+			</div>
+		</div>
+
+		<!-- Integration -->
+		<div>
+			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Integration</p>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> SQL completion: tables, columns, aliases, federation schemas</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Telescope and snacks.nvim picker backends</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> blink.cmp and nvim-cmp completion sources</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> SQL notebooks: run individual blocks with <code>C-CR</code>, open files with <code>gn</code></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Save and load named queries (<code>:GripSave</code> / <code>gq</code>)</div>
+			</div>
+		</div>
+
+		<!-- I/O -->
+		<div>
+			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">I/O</p>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Export to CSV, TSV, JSON, SQL, Markdown, or Grip Table (<code>gE</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Open Parquet, CSV, HTTPS, S3 as live tables (<code>:GripOpen</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Watch mode: auto-refresh on a timer (<code>gW</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Write mode: edits persist back to file on disk (<code>g!</code>)</div>
+			</div>
+		</div>
 	</div>
 </section>
 
 <!-- Cross-DB federation code demo -->
 <section class="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
 	<div class="bg-dark-surface border border-grip-600/30 rounded-xl p-8">
-		<h2 class="text-xl font-bold text-dark-text mb-2">Query three databases in one statement</h2>
+		<h2 class="font-sans text-xl font-bold text-dark-text mb-2">Query three databases in one statement</h2>
 		<p class="text-dark-muted text-sm mb-6 max-w-2xl">
 			Attach any combination of databases to a DuckDB session. Every attachment
 			gets a schema prefix. JOIN across them like they are local tables.
@@ -468,7 +511,7 @@
 <!-- Install snippet -->
 <section class="border-t border-dark-border py-20">
 	<div class="max-w-xl mx-auto px-4 sm:px-6">
-		<h2 class="text-2xl font-bold text-dark-text text-center mb-8">One line to install</h2>
+		<h2 class="font-sans text-2xl font-bold text-dark-text text-center mb-8">One line to install</h2>
 		<div class="bg-dark-surface border border-dark-border rounded-xl overflow-hidden mb-8">
 			<div class="px-4 py-2 border-b border-dark-border text-xs text-dark-muted font-mono flex items-center gap-2">
 				<span class="w-2.5 h-2.5 rounded-full bg-red-500/60"></span>

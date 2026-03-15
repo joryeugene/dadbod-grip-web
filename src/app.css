@@ -16,9 +16,9 @@
 	}
 
 	/* Docs markdown typography */
-	.prose h1 { @apply text-3xl font-bold text-dark-text mb-6 mt-2; }
-	.prose h2 { @apply text-2xl font-semibold text-dark-text mb-4 mt-10 border-b border-dark-border pb-2; }
-	.prose h3 { @apply text-lg font-semibold text-dark-text mb-3 mt-6; }
+	.prose h1 { @apply font-sans text-3xl font-bold text-dark-text mb-6 mt-2; }
+	.prose h2 { @apply font-sans text-2xl font-semibold text-dark-text mb-4 mt-10 border-b border-dark-border pb-2; }
+	.prose h3 { @apply font-sans text-lg font-semibold text-dark-text mb-3 mt-6; }
 	.prose p { @apply text-dark-muted leading-7 mb-4; }
 	.prose ul { @apply list-disc list-inside text-dark-muted mb-4 space-y-1; }
 	.prose ol { @apply list-decimal list-inside text-dark-muted mb-4 space-y-1; }

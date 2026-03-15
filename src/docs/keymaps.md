@@ -157,7 +157,9 @@ Table-depth views work consistently across grid, sidebar, and query pad:
 | `gq` | Load saved query |
 | `gh` | Query history browser |
 | `r` | Refresh (re-run query) |
+| `<C-p>` | Command palette (searchable action list) |
 | `A` | AI SQL generation |
+| `gA` | AI row fill: stage generated rows (`:GripFill`) |
 
 ## Query Pad
 
@@ -171,6 +173,7 @@ The query pad is an editable SQL buffer (`ft=sql`).
 | `<C-x><C-o>` | SQL completion (omnifunc / nvim-cmp source) |
 | `<C-s>` | Save current query |
 | `gA` | AI SQL generation |
+| `gF` | Format SQL (cascading: sql-formatter, pg_format, sqlfluff, Lua fallback) |
 | `gC` / `<C-g>` | Switch database connection |
 | `gb` | Toggle schema browser sidebar |
 | `gG` | ER diagram float |
@@ -201,6 +204,9 @@ SQL completion fires automatically as you type: tables, columns, aliases, and at
 | `ga` | Attach external DB (DuckDB federation) |
 | `gd` | Detach attached database |
 | `gG` | ER diagram float |
+| `gn` | Open notebook file (.md / .sql) |
+| `+` | Create table (at root) or add column (on table/column) |
+| `D` | Drop table (typed confirmation, CASCADE awareness) |
 | `?` | Show help |
 | `1` | Connections picker |
 | `2` | Open query pad |

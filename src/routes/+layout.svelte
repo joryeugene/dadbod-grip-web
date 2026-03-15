@@ -72,7 +72,12 @@
 
 {@render children()}
 
-<footer class="border-t border-dark-border mt-24 py-10 text-center text-dark-muted text-sm">
+<footer class="border-t border-dark-border mt-24 py-10 text-center text-dark-muted text-sm space-y-3">
+	<div class="flex justify-center gap-6">
+		<a href="{base}/docs/getting-started" class="hover:text-grip-400 transition-colors">Docs</a>
+		<a href="{base}/keymaps" class="hover:text-grip-400 transition-colors">Keymaps</a>
+		<a href="https://github.com/joryeugene/dadbod-grip.nvim" target="_blank" rel="noopener noreferrer" class="hover:text-grip-400 transition-colors">GitHub</a>
+	</div>
 	<p>
 		<a href="https://github.com/joryeugene/dadbod-grip.nvim" target="_blank" rel="noopener noreferrer" class="hover:text-grip-400 transition-colors">dadbod-grip.nvim</a>
 		&nbsp;&bull;&nbsp;MIT License

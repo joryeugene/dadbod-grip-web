@@ -57,6 +57,30 @@ Enter visual mode with `v` or `V`, select multiple rows, then:
 - `d` to toggle delete on all selected rows
 - `x` to NULL all selected cells
 
+## Row view (transpose)
+
+Press `K` to view the current row as a vertical key-value layout. Each column appears as
+a labeled row in a floating window, showing the full untruncated value. This is useful for
+wide tables where horizontal scrolling hides columns.
+
+In visual mode, select multiple rows and press `K` to stack them in a single float for
+side-by-side comparison.
+
+## Conditional formatting
+
+The grid applies automatic formatting based on cell values:
+
+| Value type | Display |
+|-----------|---------|
+| Negative numbers | Red text |
+| Boolean true | Green text |
+| Boolean false | Red text |
+| Past dates | Dimmed text |
+| URLs (http/https/ftp) | Underlined, openable with `gx` |
+
+Conditional formatting is automatic and not configurable. It applies to all grids
+regardless of database backend.
+
 ## Mutation preview
 
 Press `<C-CR>` from the query pad to preview a mutation before executing. The affected
@@ -94,6 +118,12 @@ for deleted rows) and applies it in a new transaction with confirmation.
 
 Queries persist in `.grip/queries/` relative to the current working directory. They
 appear in the `gq` picker.
+
+## GripToggle
+
+Run `:GripToggle` to close all grip windows (sidebar, query pad, grid) at once. Run it
+again to reopen them in their previous state. This is useful for temporarily reclaiming
+screen space without losing your session context.
 
 ## Watch mode
 

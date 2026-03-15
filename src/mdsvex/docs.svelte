@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import { page } from '$app/state';
 
 	let { children, title = '', description = '' } = $props();
 
@@ -22,7 +23,10 @@
 				{ label: 'Analysis', href: `${base}/docs/features/analysis` },
 				{ label: 'Federation', href: `${base}/docs/features/federation` },
 				{ label: 'Files & Remote Sources', href: `${base}/docs/features/files` },
-				{ label: 'Watch Mode', href: `${base}/docs/features/watch` }
+				{ label: 'Watch Mode', href: `${base}/docs/features/watch` },
+				{ label: 'Picker Integration', href: `${base}/docs/features/picker` },
+				{ label: 'Completion', href: `${base}/docs/features/completion` },
+				{ label: 'Schema Operations', href: `${base}/docs/features/schema` }
 			]
 		},
 		{
@@ -56,7 +60,7 @@
 							<li>
 								<a
 									href={item.href}
-									class="block text-sm text-dark-muted hover:text-grip-400 py-0.5 transition-colors"
+									class="block text-sm py-0.5 transition-colors {page.url.pathname === item.href ? 'text-grip-400 font-medium border-l-2 border-grip-400 pl-2 -ml-2' : 'text-dark-muted hover:text-grip-400'}"
 								>
 									{item.label}
 								</a>

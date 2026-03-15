@@ -64,7 +64,18 @@ and enter a value. Multiple filters stack with AND.
 Press `f` for a faster shortcut: it filters the current column to the exact value under
 the cursor in one keystroke. Press `F` to clear all active filters.
 
-Save the current filter combination as a named preset with `gP`. Load presets with `gp`.
+## Saved filter presets
+
+Save the current filter combination as a named preset with `gP`. A prompt asks for a
+preset name. The preset captures all active filters, including column, operator, and value
+for each one.
+
+Load a saved preset with `gp`. The picker shows all presets for the current table with
+a preview of the filter conditions. Selecting a preset replaces the current filters entirely.
+
+Presets persist in `.grip/filter_presets.json` relative to the current working directory.
+They are scoped to the table name, so presets saved on the `orders` table only appear
+when viewing `orders`.
 
 ## Data diff across databases
 
