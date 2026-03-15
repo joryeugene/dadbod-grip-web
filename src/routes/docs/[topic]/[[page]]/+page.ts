@@ -5,6 +5,7 @@ export const prerender = true;
 
 export const entries: EntryGenerator = () => [
 	{ topic: 'getting-started', page: undefined },
+	{ topic: 'troubleshooting', page: undefined },
 	{ topic: 'keymaps', page: undefined },
 	{ topic: 'demo', page: undefined },
 	{ topic: 'databases', page: 'postgres' },
