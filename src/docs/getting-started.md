@@ -90,6 +90,8 @@ require('dadbod-grip').setup({
   completion = true,        -- false to use blink.cmp or nvim-cmp instead
   connections_path = nil,   -- absolute path to shared connections.json
 
+  pinned_max = nil,
+
   ai = {
     provider = 'anthropic', -- 'anthropic' | 'openai' | 'gemini' | 'ollama'
     model = 'claude-sonnet-4-6',

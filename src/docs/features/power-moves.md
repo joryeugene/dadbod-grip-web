@@ -13,6 +13,12 @@ When you save a connection in one project, it stays in that project's `.grip/con
 
 See: [Connections](connections)
 
+## gL and gJ: pin results and switch between them
+
+Press `gL` to pin the current result grid. Pinned results are never replaced when you run the next query. Run a query, pin it, run another, and both results stay open in separate splits. Press `gJ` to open a picker over all live result buffers (pinned listed first) and jump to any of them. This is the workflow for comparing the output of multiple queries without losing any of them.
+
+See: [Analysis](analysis)
+
 ## `{` and `}`: navigate staged rows
 
 When you have staged edits scattered across a large table, `{` jumps to the previous modified row and `}` jumps to the next. This lets you review every pending change before pressing `a` to apply. Without these, you are scrolling and hoping you caught everything.

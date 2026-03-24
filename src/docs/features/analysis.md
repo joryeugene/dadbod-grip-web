@@ -5,6 +5,36 @@ description: Profile tables, explain query plans, export data, and filter with a
 
 # Analysis
 
+## Result management
+
+dadbod-grip keeps result buffers alive as long as you want them. By default, running a new query replaces the existing grid. Pin a result to protect it from being replaced.
+
+### Pinning results
+
+Press `gL` to pin the current result. Pinned results are never replaced by subsequent query executions. The buffer name gains a `[pinned]` suffix so you can tell them apart. Press `gL` again to unpin.
+
+Pin multiple results to compare queries side by side. Run one query, pin it, run another, and both grids stay open in their own splits.
+
+To cap the number of pinned results, set `pinned_max` in your setup:
+
+```lua
+require('dadbod-grip').setup({
+  pinned_max = 3,
+})
+```
+
+When the cap is reached, `gL` refuses to pin and notifies you to unpin something first.
+
+### Result switcher
+
+Press `gJ` to open a picker over all live result buffers. Pinned results appear first. Selecting a result focuses its window, or opens it in the current window if it is not currently visible.
+
+Use the result switcher to navigate a session where you have run several queries and want to return to an earlier result without hunting for the window.
+
+### Execute in new split
+
+Press `<S-CR>` in the query pad to execute the current query and always open the result in a new horizontal split, regardless of whether an unpinned grid already exists. This is useful when you want to compare the output of two queries without pinning.
+
 ## Table profile
 
 Press `gR` or run `:GripProfile` to open a column distribution view. Each column shows
