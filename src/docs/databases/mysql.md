@@ -12,7 +12,7 @@ mysql://user:pass@host:3306/dbname
 mysql://user@localhost/mydb
 ```
 
-MariaDB uses the same connection format.
+MariaDB uses the same connection format. dadbod-grip auto-detects MariaDB via `mysql --version` and switches to `--batch` output mode automatically. No extra configuration is needed.
 
 ## Features
 

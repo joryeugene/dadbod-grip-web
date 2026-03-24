@@ -31,6 +31,16 @@ export GEMINI_API_KEY=...      -- for Gemini
 
 Ollama runs locally with no API key needed. Make sure Ollama is running before connecting.
 
+## Disable AI
+
+Set `ai = false` to turn off all AI features:
+
+```lua
+require('dadbod-grip').setup({ ai = false })
+```
+
+With `ai = false`: schema pre-warm is skipped, the `A` and `gA` keymaps are not registered, and `:GripFill` is unavailable. SQL completion still works because it reads local schema data, not an external API. Use this in environments without API key access or where the plugin's footprint must be strictly local.
+
 ## How the context works
 
 The AI receives:
@@ -38,7 +48,7 @@ The AI receives:
 - Any existing SQL in the query pad (so you can ask it to modify a query rather than generate from scratch)
 - The current table name (when invoked from the grid)
 
-Schema context is cached per connection so repeat invocations do not re-fetch the schema.
+Schema context is fetched lazily on the first AI invocation, not on connect. The first `A` or `gA` press may pause briefly while schema data is loaded. Subsequent invocations use the cached schema instantly.
 
 ## Example prompts
 

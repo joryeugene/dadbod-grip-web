@@ -11,9 +11,11 @@
 			items: [
 				{ label: 'Installation', href: `${base}/docs/getting-started` },
 				{ label: 'Demo Walkthrough', href: `${base}/docs/demo` },
+				{ label: 'Connections', href: `${base}/docs/features/connections` },
 				{ label: 'Keymaps Explorer', href: `${base}/keymaps` },
 				{ label: 'Keymaps Reference', href: `${base}/docs/keymaps` },
-				{ label: 'Troubleshooting', href: `${base}/docs/troubleshooting` }
+				{ label: 'Troubleshooting', href: `${base}/docs/troubleshooting` },
+				{ label: 'Power Moves', href: `${base}/docs/features/power-moves` }
 			]
 		},
 		{

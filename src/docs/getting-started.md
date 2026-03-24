@@ -60,7 +60,7 @@ https://host/data.parquet  -- remote file via DuckDB httpfs
 duckdb::memory:            -- in-memory scratch, tables reset per query
 ```
 
-Connections persist to `.grip/connections.json` automatically, so you never type them twice.
+Connections persist automatically across sessions. See [Connections](/docs/features/connections) for how the project and global connection files work, including sharing connections across projects.
 
 ## Your first edit
 

@@ -40,6 +40,18 @@ Look for:
 - Nested loop joins on high-cardinality columns
 - Sort steps without an index to satisfy the ORDER BY
 
+## Row diff
+
+Select exactly 2 rows in visual mode and press `gd`. Cells that differ between the two rows highlight in amber. Matching cells are unchanged. Use this to spot what changed between two versions of the same record, or to compare rows that should be identical.
+
+Three comparison operations cover different needs:
+
+| Key | Scope | Output |
+|-----|-------|--------|
+| `K` | Any number of rows | Key-value float for reading, no diff highlights |
+| `gd` | Exactly 2 rows | Inline amber highlights on differing cells |
+| `gD` | Two entire tables by PK | Cross-table diff, works across databases |
+
 ## Data diff
 
 Press `gD` or run `:GripDiff` to compare two tables by primary key. The grid shows
