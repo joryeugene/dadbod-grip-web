@@ -1,6 +1,6 @@
 ---
 title: PostgreSQL
-description: Connect dadbod-grip.nvim to PostgreSQL for editable grids, schema browsing, and DDL operations.
+description: Dadbod Grip connects to PostgreSQL for editable grids, schema browsing, and DDL operations.
 ---
 
 # PostgreSQL
@@ -8,7 +8,7 @@ description: Connect dadbod-grip.nvim to PostgreSQL for editable grids, schema b
 ## Connect
 
 ```
-postgresql://user:pass@host:5432/dbname
+postgresql://user:${DB_PASSWORD}@host:5432/dbname
 postgresql://user@localhost/mydb
 postgresql://localhost/mydb?sslmode=disable
 ```
@@ -22,7 +22,7 @@ All core grip features work against PostgreSQL:
 - Inline cell editing with full type awareness (boolean, integer, numeric, text, jsonb, timestamps)
 - Batch edits across visual-mode selections
 - Mutation preview before apply
-- Transaction undo: reverse committed changes
+- Best-effort transaction undo generates compensating SQL for a reported successful batch
 - Schema sidebar with all schemas visible (not just `public`)
 - FK navigation across schemas
 - DDL: create tables, rename and add/drop columns, drop with CASCADE
@@ -34,9 +34,9 @@ as `schema.table` in the sidebar and are fully editable.
 
 ## JSON and JSONB columns
 
-JSON and JSONB columns display inline and open in a dedicated JSON viewer when you press
-`K` (row view) or `e` (edit). The editor renders the JSON with syntax highlighting
-and writes back valid JSON on apply.
+JSON and JSONB columns display inline. Press `gK` to explore the current cell as a tree,
+or press `i` to edit it. The editor renders JSON with syntax highlighting and writes
+back valid JSON on apply.
 
 ## Federation via DuckDB
 

@@ -1,6 +1,6 @@
 ---
 title: Keymaps Reference
-description: Complete keymap reference for dadbod-grip.nvim grids, query pad, and schema sidebar.
+description: This reference documents the keymaps for Dadbod Grip grids, the query pad, and the schema sidebar.
 ---
 
 # Keymaps Reference
@@ -32,7 +32,9 @@ mappings are safe here since there is no insert mode.
 | Key | Action |
 |-----|--------|
 | `i` / `<CR>` | Edit cell under cursor |
+| `gB` | Open the cell in a split buffer; `:w` stages the change |
 | `x` | Set cell to NULL |
+| `gU` | Set this column to one value across all visible rows |
 | `p` | Paste clipboard into cell |
 | `P` | Paste multi-line into consecutive rows |
 | `o` | Insert new row after cursor |
@@ -51,6 +53,7 @@ mappings are safe here since there is no insert mode.
 | `d` | Toggle delete on selected rows |
 | `x` | Set selected cells to NULL |
 | `y` | Yank selected cells in column |
+| `gd` | Diff exactly two selected rows |
 
 ### Display
 
@@ -88,6 +91,7 @@ mappings are safe here since there is no insert mode.
 | Key | Action |
 |-----|--------|
 | `gf` | Follow foreign key under cursor |
+| `gm` | Find rows in another table that reference the current row |
 | `<C-o>` | Go back in FK navigation stack |
 
 ### Inspection
@@ -95,6 +99,7 @@ mappings are safe here since there is no insert mode.
 | Key | Action |
 |-----|--------|
 | `ge` | Explain cell (type, value, status) |
+| `gK` | Explore the current JSON cell as a collapsible tree |
 | `gs` | Preview staged SQL |
 | `gc` | Copy staged SQL to clipboard |
 | `gi` | Table info (columns, types, PKs) |
@@ -153,6 +158,8 @@ Table-depth views work consistently across grid, sidebar, and query pad:
 | `gC` / `<C-g>` | Switch database connection |
 | `gW` | Toggle watch mode (auto-refresh on timer) |
 | `g!` | Toggle write mode (apply overwrites file) |
+| `gL` | Pin or unpin the current result |
+| `gJ` | Browse and focus open result buffers |
 | `q` | Open query pad |
 | `gq` | Load saved query |
 | `gh` | Query history browser |
@@ -168,6 +175,7 @@ The query pad is an editable SQL buffer (`ft=sql`).
 | Key | Action |
 |-----|--------|
 | `<C-CR>` | Execute query |
+| `<S-CR>` | Execute the query and open its result in a new split |
 | `<C-CR>` (visual) | Execute selected SQL only |
 | `<C-Space>` | Manually trigger SQL completion |
 | `<C-x><C-o>` | SQL completion (omnifunc / nvim-cmp source) |
@@ -196,6 +204,7 @@ SQL completion fires automatically as you type: tables, columns, aliases, and at
 | Key | Action |
 |-----|--------|
 | `<CR>` / `go` | Open table under cursor |
+| `<S-CR>` | Open table under cursor in a new split |
 | `gT` / `gt` | Pick table (picker) |
 | `gb` | Close sidebar |
 | `gq` | Load saved query into query pad |

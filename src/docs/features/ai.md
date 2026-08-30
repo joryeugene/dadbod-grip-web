@@ -1,6 +1,6 @@
 ---
 title: AI SQL Generation
-description: Generate SQL from natural language using Anthropic, OpenAI, Gemini, or Ollama.
+description: Dadbod Grip generates SQL from natural language through Anthropic, OpenAI, Gemini, or Ollama.
 ---
 
 # AI SQL Generation

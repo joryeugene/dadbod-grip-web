@@ -1,12 +1,12 @@
 ---
 title: Editing and Mutations
-description: Edit database rows inline, stage changes, preview SQL, and apply in a single transaction.
+description: Dadbod Grip edits database rows inline, stages changes, previews SQL, and sends one mutation batch.
 ---
 
 # Editing and Mutations
 
 Every change in dadbod-grip goes through a staging layer before it touches the database.
-Stage one change or fifty, preview the full SQL, then apply in a single transaction with
+Stage one change or fifty, preview the full SQL, then send one `BEGIN`/`COMMIT` batch with
 a single keystroke.
 
 ## Row color legend
@@ -93,9 +93,9 @@ you have staged edits scattered across a large table and want to review them bef
 
 ## Apply changes
 
-Press `a` to apply all staged changes. The full mutation runs in a single `BEGIN`/`COMMIT`
-transaction. If any statement fails, the entire batch rolls back and the staging layer
-stays intact.
+Press `a` to send all staged changes in one `BEGIN`/`COMMIT` batch. A nonzero database-client
+exit leaves the staging layer intact. Do not assume the database rolled back every statement;
+inspect it after an apply error before retrying the unchanged batch.
 
 ## Undo
 
@@ -105,9 +105,10 @@ stays intact.
 | `<C-r>` | Redo |
 | `U` | Undo all staged changes (reset to original) |
 
-After applying to the database, press `u` again to open the **transaction undo** layer.
-This generates a compensating SQL statement (`UPDATE` with original values, or `INSERT`
-for deleted rows) and applies it in a new transaction with confirmation.
+After a reported success, press `u` again to open the **transaction undo** layer.
+This generates best-effort compensating SQL (`UPDATE` with original values, or `INSERT`
+for deleted rows) and sends it in a new batch after confirmation. Generated keys and lossy
+client output can prevent an exact reversal, so review the statement before applying it.
 
 ## Saved queries
 
@@ -141,7 +142,7 @@ badge in the grid winbar.
 ## Write mode
 
 Write mode applies edits back to the file on disk instead of running DML against a database.
-Supported for Parquet, CSV, JSON, NDJSON, TSV, and Arrow files opened through DuckDB.
+Supported for Parquet, CSV, TSV, JSON, NDJSON, JSONL, Arrow, and IPC files opened through DuckDB.
 
 ```vim
 :Grip data.parquet --write

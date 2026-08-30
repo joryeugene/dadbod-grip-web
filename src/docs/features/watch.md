@@ -1,6 +1,6 @@
 ---
 title: Watch Mode
-description: Auto-refresh the grid on a timer. Monitor live tables, log streams, and changing data without leaving Neovim.
+description: Watch mode refreshes a grid on a timer so you can monitor changing data inside Neovim.
 ---
 
 # Watch Mode

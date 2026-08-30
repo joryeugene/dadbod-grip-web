@@ -1,6 +1,6 @@
 ---
 title: Schema Operations
-description: Rename columns, add and drop columns, create and drop tables from within Neovim.
+description: Dadbod Grip renames columns and creates, changes, or drops tables from inside Neovim.
 ---
 
 # Schema Operations

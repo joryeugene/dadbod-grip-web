@@ -80,7 +80,9 @@ export const keymaps: Keymap[] = [
 	// ── Grid: Editing ──
 	{ key: 'i', action: 'grid_edit', description: 'Edit cell (open inline editor)', surfaces: ['grid'], category: 'Editing' },
 	{ key: 'CR', action: 'grid_edit_enter', description: 'Edit cell (enter)', surfaces: ['grid'], category: 'Editing' },
+	{ key: 'gB', action: 'grid_cell_buffer', description: 'Open cell in a split buffer', surfaces: ['grid'], category: 'Editing' },
 	{ key: 'x', action: 'grid_null', description: 'Set cell to NULL', surfaces: ['grid'], category: 'Editing' },
+	{ key: 'gU', action: 'grid_column_set', description: 'Set column for all visible rows', surfaces: ['grid'], category: 'Editing' },
 	{ key: 'p', action: 'grid_paste', description: 'Paste clipboard into cell', surfaces: ['grid'], category: 'Editing' },
 	{ key: 'P', action: 'grid_paste_rows', description: 'Paste multi-line into consecutive rows', surfaces: ['grid'], category: 'Editing' },
 	{ key: 'o', action: 'grid_insert', description: 'Insert new blank row', surfaces: ['grid'], category: 'Editing' },
@@ -129,6 +131,7 @@ export const keymaps: Keymap[] = [
 
 	// ── Grid: Inspection ──
 	{ key: 'ge', action: 'grid_explain_cell', description: 'Explain cell (type, value, status)', surfaces: ['grid'], category: 'Inspection' },
+	{ key: 'gK', action: 'grid_json_tree', description: 'Explore JSON cell as a tree', surfaces: ['grid'], category: 'Inspection' },
 	{ key: 'gs', action: 'grid_preview_sql', description: 'Preview staged SQL', surfaces: ['grid'], category: 'Inspection' },
 	{ key: 'gc', action: 'grid_copy_sql', description: 'Copy staged SQL to clipboard', surfaces: ['grid'], category: 'Inspection' },
 	{ key: 'gi', action: 'grid_table_info', description: 'Table info (columns, types, PKs)', surfaces: ['grid'], category: 'Inspection' },
@@ -152,6 +155,7 @@ export const keymaps: Keymap[] = [
 
 	// ── Grid: FK Navigation ──
 	{ key: 'gf', action: 'grid_fk_follow', description: 'Follow foreign key', surfaces: ['grid'], category: 'FK Navigation' },
+	{ key: 'gm', action: 'grid_fk_referencing', description: 'Find rows that reference this row', surfaces: ['grid'], category: 'FK Navigation' },
 	{ key: 'C-o', action: 'grid_fk_back', description: 'Back in FK stack', surfaces: ['grid'], category: 'FK Navigation' },
 
 	// ── Grid: Workflow ──
@@ -160,6 +164,8 @@ export const keymaps: Keymap[] = [
 	{ key: 'g!', action: 'grid_write_mode', description: 'Toggle write mode (file persist)', surfaces: ['grid'], category: 'Workflow' },
 	{ key: 'gO', action: 'grid_open_edit', description: 'Open as editable table', surfaces: ['grid'], category: 'Workflow' },
 	{ key: 'gA', action: 'grid_fill', description: 'AI-generated staged rows (GripFill)', surfaces: ['grid'], category: 'AI' },
+	{ key: 'gL', action: 'grid_pin', description: 'Pin or unpin this result', surfaces: ['grid'], category: 'Workflow' },
+	{ key: 'gJ', action: 'grid_results', description: 'Browse open result buffers', surfaces: ['grid'], category: 'Workflow' },
 
 	// ── Tabs 1-9 ──
 	{ key: '1', action: 'tab_1', description: 'Grid: sidebar | QP: sidebar | Sidebar: connections', surfaces: ['grid', 'query_pad', 'sidebar'], category: 'Tabs (1-9)' },
@@ -174,6 +180,7 @@ export const keymaps: Keymap[] = [
 
 	// ── Query Pad ──
 	{ key: 'C-CR', action: 'qpad_execute', description: 'Execute query', surfaces: ['query_pad'], category: 'Workflow' },
+	{ key: 'S-CR', action: 'qpad_execute_new', description: 'Execute query in a new split', surfaces: ['query_pad'], category: 'Workflow' },
 	{ key: 'C-s', action: 'qpad_save', description: 'Save current query', surfaces: ['query_pad'], category: 'Workflow' },
 	{ key: 'gA', action: 'qpad_ai', description: 'AI SQL generation', surfaces: ['query_pad'], category: 'AI' },
 	{ key: 'gF', action: 'qpad_format', description: 'Format SQL', surfaces: ['query_pad'], category: 'Workflow' },
@@ -182,6 +189,7 @@ export const keymaps: Keymap[] = [
 
 	// ── Sidebar ──
 	{ key: 'CR', action: 'sidebar_open', description: 'Open table under cursor', surfaces: ['sidebar'], category: 'Navigation' },
+	{ key: 'S-CR', action: 'sidebar_open_spl', description: 'Open table in a new split', surfaces: ['sidebar'], category: 'Navigation' },
 	{ key: 'l', action: 'sidebar_expand', description: 'Expand node', surfaces: ['sidebar'], category: 'Navigation' },
 	{ key: 'h', action: 'sidebar_collapse', description: 'Collapse node', surfaces: ['sidebar'], category: 'Navigation' },
 	{ key: 'zo', action: 'sidebar_expand_z', description: 'Expand (vim fold style)', surfaces: ['sidebar'], category: 'Navigation' },

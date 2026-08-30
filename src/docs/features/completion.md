@@ -1,6 +1,6 @@
 ---
 title: SQL Completion
-description: Auto-complete table names, columns, aliases, and federation schemas in the query pad.
+description: Dadbod Grip completes table names, columns, aliases, and federation schemas in the query pad.
 ---
 
 # SQL Completion

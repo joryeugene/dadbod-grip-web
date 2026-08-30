@@ -1,6 +1,6 @@
 ---
 title: Demo Walkthrough
-description: Investigate the Softrear Inc. demo database included with dadbod-grip.nvim.
+description: This walkthrough investigates the Softrear Inc. demo database included with Dadbod Grip.
 ---
 
 # Demo Walkthrough
@@ -10,7 +10,7 @@ with seventeen tables and realistic narrative data about a consumer goods compan
 with some unusual patterns in the incident records.
 
 The demo opens as a SQL notebook in the query pad. Place your cursor inside any
-`sql` block and press `C-CR` to run it. Results appear in the grid below. Press
+`sql` block and press `<C-CR>` to run it. Results appear in the grid below. Press
 `gn` to open a notebook file picker for `.md` and `.sql` files in your project.
 
 ## Setup
@@ -93,16 +93,16 @@ FROM leadership_directives
 ORDER BY publicly_acknowledged ASC
 ```
 
-Three directives were never publicly acknowledged. One was: "Greg is authorized to
-self-certify all SKUs. This is intentional." The other three describe how to rename
-the problem in customer communications.
+Three directives were never publicly acknowledged, and each one describes how to rename
+the problem in customer communications. The only acknowledged directive states: "Greg is
+authorized to self-certify all SKUs. This is intentional."
 
 ## What you just used
 
-- **Query pad with notebook mode**: `C-CR` runs the SQL block under the cursor
+- **Query pad with notebook mode**: `<C-CR>` runs the SQL block under the cursor
 - **Notebook picker**: `gn` opens `.md` and `.sql` files as notebooks
 - **FK trail**: a single JOIN query traverses four hops instead of four separate `gf` presses
-- **Grid**: each `C-CR` result opens as an editable, sortable, filterable grid below
+- **Grid**: each `<C-CR>` result opens as a sortable and filterable grid below. Press `gO` when a simple single-table result can be reopened for editing.
 
 All of these work the same way against a production database.
 

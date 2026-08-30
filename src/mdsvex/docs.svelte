@@ -10,8 +10,10 @@
 			label: 'Getting Started',
 			items: [
 				{ label: 'Installation', href: `${base}/docs/getting-started` },
+				{ label: 'Version 3.10.0', href: `${base}/docs/releases/v3.10.0` },
 				{ label: 'Demo Walkthrough', href: `${base}/docs/demo` },
 				{ label: 'Connections', href: `${base}/docs/features/connections` },
+				{ label: 'Commands', href: `${base}/docs/commands` },
 				{ label: 'Keymaps Explorer', href: `${base}/keymaps` },
 				{ label: 'Keymaps Reference', href: `${base}/docs/keymaps` },
 				{ label: 'Troubleshooting', href: `${base}/docs/troubleshooting` },
@@ -39,7 +41,8 @@
 				{ label: 'PostgreSQL', href: `${base}/docs/databases/postgres` },
 				{ label: 'DuckDB', href: `${base}/docs/databases/duckdb` },
 				{ label: 'SQLite', href: `${base}/docs/databases/sqlite` },
-				{ label: 'MySQL', href: `${base}/docs/databases/mysql` }
+				{ label: 'MySQL / MariaDB', href: `${base}/docs/databases/mysql` },
+				{ label: 'SQL Server', href: `${base}/docs/databases/sqlserver` }
 			]
 		}
 	];
