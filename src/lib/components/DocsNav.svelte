@@ -7,15 +7,8 @@
 			label: 'Getting Started',
 			items: [
 				{ label: 'Installation', href: `${base}/docs/getting-started` },
-				{ label: 'Version 3.10.1', href: `${base}/docs/releases/v3.10.1` },
-				{ label: 'Version 3.10.0', href: `${base}/docs/releases/v3.10.0` },
 				{ label: 'Demo Walkthrough', href: `${base}/docs/demo` },
-				{ label: 'Connections', href: `${base}/docs/features/connections` },
-				{ label: 'Commands', href: `${base}/docs/commands` },
-				{ label: 'Keymaps Explorer', href: `${base}/keymaps` },
-				{ label: 'Keymaps Reference', href: `${base}/docs/keymaps` },
-				{ label: 'Troubleshooting', href: `${base}/docs/troubleshooting` },
-				{ label: 'Power Moves', href: `${base}/docs/features/power-moves` }
+				{ label: 'Connections', href: `${base}/docs/features/connections` }
 			]
 		},
 		{
@@ -30,7 +23,8 @@
 				{ label: 'Watch Mode', href: `${base}/docs/features/watch` },
 				{ label: 'Picker Integration', href: `${base}/docs/features/picker` },
 				{ label: 'Completion', href: `${base}/docs/features/completion` },
-				{ label: 'Schema Operations', href: `${base}/docs/features/schema` }
+				{ label: 'Schema Operations', href: `${base}/docs/features/schema` },
+				{ label: 'Power Moves', href: `${base}/docs/features/power-moves` }
 			]
 		},
 		{
@@ -41,6 +35,15 @@
 				{ label: 'SQLite', href: `${base}/docs/databases/sqlite` },
 				{ label: 'MySQL / MariaDB', href: `${base}/docs/databases/mysql` },
 				{ label: 'SQL Server', href: `${base}/docs/databases/sqlserver` }
+			]
+		},
+		{
+			label: 'Reference',
+			items: [
+				{ label: 'Commands', href: `${base}/docs/commands` },
+				{ label: 'Keymaps Explorer', href: `${base}/keymaps` },
+				{ label: 'Keymaps Reference', href: `${base}/docs/keymaps` },
+				{ label: 'Troubleshooting', href: `${base}/docs/troubleshooting` }
 			]
 		}
 	];
@@ -66,9 +69,9 @@
 	{/each}
 {/snippet}
 
-<details class="lg:hidden w-full rounded-lg border border-dark-border bg-dark-surface px-4 py-3">
+<details class="sticky top-16 z-40 lg:hidden w-full rounded-lg border border-dark-border bg-dark-surface px-4 py-3">
 	<summary class="cursor-pointer select-none text-sm font-semibold text-dark-text">Browse documentation</summary>
-	<nav aria-label="Documentation" class="mt-4 grid gap-6 border-t border-dark-border pt-4 sm:grid-cols-3">
+	<nav aria-label="Documentation" class="mt-4 grid max-h-[calc(100vh-8rem)] gap-6 overflow-y-auto overscroll-contain border-t border-dark-border pt-4 pr-1 sm:grid-cols-2">
 		{@render links()}
 	</nav>
 </details>
