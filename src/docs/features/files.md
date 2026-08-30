@@ -5,9 +5,11 @@ description: Dadbod Grip opens local files, remote object paths, and MotherDuck 
 
 # Files and Remote Sources
 
-dadbod-grip opens supported files as queryable grids without an active database connection.
+Dadbod Grip opens supported files as queryable grids without an active database connection.
 DuckDB reads the file directly. Enable write mode only for a supported local format when you
 intend to replace that file.
+
+The `duckdb` client must be on your `PATH` before Dadbod Grip can open these sources.
 
 ## GripOpen
 
@@ -39,7 +41,7 @@ without polluting your connection list. Use `:GripConnect` if you want to persis
 | `.arrow` | yes | yes |
 | `.ipc` | yes | yes |
 
-DuckDB auto-detects schema from the file. No setup required.
+DuckDB infers the schema from the file, so you do not need to declare it first.
 
 ## Remote HTTPS
 

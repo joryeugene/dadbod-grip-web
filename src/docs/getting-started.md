@@ -82,7 +82,7 @@ Connections saved from the picker go to `.grip/connections.json`. Global connect
 
 ## Try the built-in demo
 
-Run `:GripStart` to recreate and open the Softrear Inc. SQLite demo. Each run reseeds the database, so edits from an earlier demo session are discarded. The [walkthrough](demo) explains the investigation.
+Run `:GripStart` to recreate and open the Softrear Inc. demo. Dadbod Grip uses DuckDB when the `duckdb` client is available and falls back to SQLite through `sqlite3`. One of those clients must be on your `PATH`. Each run reseeds the database, so edits from an earlier demo session are discarded. The [walkthrough](demo) explains the investigation.
 
 ## Configuration
 
