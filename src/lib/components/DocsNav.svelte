@@ -7,6 +7,7 @@
 			label: 'Getting Started',
 			items: [
 				{ label: 'Installation', href: `${base}/docs/getting-started` },
+				{ label: 'Version 3.10.1', href: `${base}/docs/releases/v3.10.1` },
 				{ label: 'Version 3.10.0', href: `${base}/docs/releases/v3.10.0` },
 				{ label: 'Demo Walkthrough', href: `${base}/docs/demo` },
 				{ label: 'Connections', href: `${base}/docs/features/connections` },

@@ -42,6 +42,6 @@ mssql://app@db.internal:1433/warehouse?encrypt=strict&server_certificate=%2Fetc%
 
 ## Session behavior
 
-Every command enables `QUOTED_IDENTIFIER`, and Dadbod Grip translates grid pagination into SQL Server's `OFFSET` and `FETCH` syntax. Passwords travel in the command environment instead of process arguments.
+Every command enables `QUOTED_IDENTIFIER`, and Dadbod Grip translates grid pagination into SQL Server's `OFFSET` and `FETCH` syntax. SQL travels through `sqlcmd` standard input, and passwords travel through `SQLCMDPASSWORD` instead of process arguments.
 
 SQL Server support is read-only in this release. The query pad can run SQL, but the editable-grid mutation workflow and DDL actions are unavailable for this adapter.
