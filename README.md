@@ -20,6 +20,8 @@ npm run build
 
 Documentation pages live in `src/docs`, the homepage lives in `src/routes/+page.svelte`, and the keymap explorer reads `src/lib/keymaps-data.ts`.
 
+Keep website documentation evergreen. GitHub Releases owns version history, so update the relevant guide instead of adding a versioned documentation page.
+
 ## Publishing
 
 Merging a pull request into `main` triggers the GitHub Pages workflow. Review the generated site and coordinate Dadbod Grip release timing before merging documentation for an unreleased version.

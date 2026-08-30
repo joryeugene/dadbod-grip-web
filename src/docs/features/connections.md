@@ -106,6 +106,8 @@ Use a `${VAR}` placeholder in the URL and optionally point the entry at an `env_
 
 Dadbod Grip resolves the placeholder only while dispatching a database command. The expanded URL is not written back to a connection or saved-query file. An unset or empty variable stops the connection instead of falling through to another credential source.
 
+Environment placeholders keep resolved credentials out of saved files and child-process arguments. They do not hide those values from other processes running as the same operating-system user.
+
 ## Saved-query connection binding
 
 New query files store an opaque connection ID:

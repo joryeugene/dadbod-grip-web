@@ -15,8 +15,6 @@ export const entries: EntryGenerator = () => [
 	{ topic: 'databases', page: 'sqlite' },
 	{ topic: 'databases', page: 'mysql' },
 	{ topic: 'databases', page: 'sqlserver' },
-	{ topic: 'releases', page: 'v3.10.1' },
-	{ topic: 'releases', page: 'v3.10.0' },
 	{ topic: 'features', page: 'editing' },
 	{ topic: 'features', page: 'analysis' },
 	{ topic: 'features', page: 'ai' },

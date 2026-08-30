@@ -190,12 +190,6 @@
 		>
 			See the Demo
 		</a>
-		<a
-			href="{base}/docs/releases/v3.10.1"
-			class="px-6 py-2.5 border border-dark-border hover:border-grip-600 text-dark-muted hover:text-dark-text font-medium rounded-lg transition-colors text-sm"
-		>
-			What changed in v3.10.1
-		</a>
 	</div>
 
 	<!-- Screenshot -->
