@@ -31,6 +31,21 @@ export GEMINI_API_KEY=...      -- for Gemini
 
 Ollama runs locally with no API key needed. Make sure Ollama is running before connecting.
 
+You can also resolve a key from another environment variable or a shell command:
+
+```lua
+require('dadbod-grip').setup({
+  ai = {
+    provider = 'anthropic',
+    api_key = 'cmd:pass show services/anthropic',
+  }
+})
+```
+
+Dadbod Grip sends a `cmd:...` program through shell standard input. The resolved key then travels with the provider URL, headers, prompt, schema context, existing SQL, and JSON request body through curl config on standard input. None of that request content appears in process arguments.
+
+API failures retain only a short error type such as `invalid_request_error`, and curl failures retain only the exit code. Dadbod Grip does not repeat remote error text or request content. The configured remote provider still receives the context described below.
+
 ## Disable AI
 
 Set `ai = false` to turn off all AI features:

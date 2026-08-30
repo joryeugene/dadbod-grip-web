@@ -31,6 +31,8 @@ round-trip correctly. Backslashes in cell values are treated as literals, not es
 
 `mysql` (the CLI client) must be on your `PATH`.
 
+Dadbod Grip sends session setup and SQL through `mysql` standard input. The host, port, user, and database remain ordinary client arguments, while the password travels through the process environment. Complete connection URLs and SQL do not appear in process arguments.
+
 ```bash
 which mysql
 ```
