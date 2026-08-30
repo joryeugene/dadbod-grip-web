@@ -47,7 +47,7 @@ If you are in an environment without API key access, or you simply do not want A
 require('dadbod-grip').setup({ ai = false })
 ```
 
-Schema pre-warm is skipped, `A` and `gA` are not registered, and `:GripFill` is unavailable. SQL completion still works because it reads local schema data.
+Schema pre-warm is skipped, and `:GripFill` is unavailable. The `A` and `gA` mappings remain registered so Dadbod Grip can explain that AI is disabled. SQL completion still works because it reads local schema data.
 
 See: [AI SQL Generation](ai)
 
@@ -81,7 +81,7 @@ See: [Editing and Mutations](editing)
 
 ## Ctrl-p: command palette
 
-Press `<C-p>` from any surface to open a searchable list of every available action. This is faster than remembering a keymap you use once a week. Type a few letters of what you want to do: "export", "explain", "history", "notebook." The palette filters as you type and shows the bound key next to each action.
+Press `<C-p>` from the Grid, Query Pad, or Sidebar to open a searchable list of the actions available there. This is faster than remembering a keymap you use once a week. Type a few letters of what you want to do: "export", "explain", "history", or "notebook." The palette filters as you type and shows the bound key next to each action.
 
 See: [Picker Integration](picker)
 

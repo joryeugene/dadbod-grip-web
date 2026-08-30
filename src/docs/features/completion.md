@@ -78,4 +78,7 @@ to see columns.
 ## Manual trigger
 
 Press `<C-Space>` in the query pad to manually trigger completion at any time. Press
-`<C-x><C-o>` for the standard Vim omnifunc trigger if you prefer.
+`<C-x><C-o>` for the standard Vim omnifunc trigger if you prefer. While the completion
+menu is open, `Tab` and `<Down>` move forward, `<S-Tab>` and `<Up>` move backward, and
+`<CR>` accepts the selected item. Setting `completion = false` removes these
+completion-specific mappings from the query pad.

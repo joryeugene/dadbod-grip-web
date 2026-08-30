@@ -115,7 +115,7 @@ It covers sixteen sections including the supplier intelligence cross-database jo
 the BambooKnows investigation, and the pricing arrangement that created the incentive
 to mislabel incoming shipments.
 
-Open it from any session:
+Open it from the query pad or schema sidebar:
 
 ```vim
 gn   " notebook picker: navigate to demo/softrear-internal.md
