@@ -18,7 +18,17 @@ npm run check
 npm run build
 ```
 
-Documentation pages live in `src/docs`, the homepage lives in `src/routes/+page.svelte`, and the keymap explorer reads `src/lib/keymaps-data.ts`.
+Documentation pages live in `src/docs`, and the homepage lives in `src/routes/+page.svelte`. The keymap Explorer and reference share the released plugin catalog vendored at `src/lib/keymaps.json`.
+
+Refresh that catalog only after a plugin release, using its full release commit:
+
+```sh
+npm run keymaps:sync -- <full-release-commit>
+```
+
+`npm run check` downloads the catalog from the pinned immutable commit and rejects local drift.
+
+Keep website documentation evergreen. GitHub Releases owns version history, so update the relevant guide instead of adding a versioned documentation page.
 
 ## Publishing
 

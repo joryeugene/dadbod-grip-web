@@ -57,12 +57,12 @@ The configured backend handles simple list selection. Pickers with Dadbod Grip-s
 | Keymap | Surface | What it picks | Interface |
 |--------|---------|---------------|-----------|
 | `gT` / `gt` | Grid, Sidebar, Query Pad | A table with a column preview. | Configured backend. |
-| `gh` | All surfaces | Query history with SQL previews. | Configured backend. |
-| `<C-p>` | All surfaces | The command palette. | Configured backend. |
+| `gh` | Grid, Sidebar, Query Pad | Query history with SQL previews. | Configured backend. |
+| `<C-p>` | Grid, Sidebar, Query Pad | The command palette. | Configured backend. |
 | `gm` | Grid | A referencing table when more than one table points at the row. | Configured backend. |
-| `gC` / `<C-g>` | All surfaces | A database connection and its management actions. | Built-in. |
-| `gn` | Grid, Sidebar, Query Pad | A notebook file. | Built-in. |
-| `gq` | All surfaces | A saved query and its management actions. | Built-in. |
+| `gC` / `<C-g>` | Grid, Sidebar, Query Pad | A database connection and its management actions. | Built-in. |
+| `gn` | Sidebar, Query Pad | A notebook file. | Built-in. |
+| `gq` | Grid, Sidebar, Query Pad | A saved query and its management actions. | Built-in. |
 | `gp` | Grid | A saved filter preset. | Built-in. |
 
 Exports use Neovim's selection and input prompts. Column visibility uses its own multi-select float, so neither surface changes with `picker`.

@@ -31,6 +31,23 @@ export GEMINI_API_KEY=...      -- for Gemini
 
 Ollama runs locally with no API key needed. Make sure Ollama is running before connecting.
 
+You can also resolve a key from another environment variable or a shell command:
+
+```lua
+require('dadbod-grip').setup({
+  ai = {
+    provider = 'anthropic',
+    api_key = 'cmd:pass show services/anthropic',
+  }
+})
+```
+
+Dadbod Grip sends a `cmd:...` program through shell standard input. The resolved key then travels with the provider URL, headers, prompt, schema context, existing SQL, and JSON request body through curl config on standard input. None of that request content appears in process arguments.
+
+An environment-backed key remains visible to other processes running as the same operating-system user.
+
+API failures retain only a short error type such as `invalid_request_error`, and curl failures retain only the exit code. Dadbod Grip does not repeat remote error text or request content. The configured remote provider still receives the context described below.
+
 ## Disable AI
 
 Set `ai = false` to turn off all AI features:
@@ -39,7 +56,7 @@ Set `ai = false` to turn off all AI features:
 require('dadbod-grip').setup({ ai = false })
 ```
 
-With `ai = false`: schema pre-warm is skipped, the `A` and `gA` keymaps are not registered, and `:GripFill` is unavailable. SQL completion still works because it reads local schema data, not an external API. Use this in environments without API key access or where the plugin's footprint must be strictly local.
+With `ai = false`, schema pre-warm is skipped, and `:GripFill` is unavailable. The `A` and `gA` mappings remain registered so Dadbod Grip can explain that AI is disabled. SQL completion still works because it reads local schema data, not an external API. Use this in environments without API key access or where the plugin's footprint must remain strictly local.
 
 ## How the context works
 

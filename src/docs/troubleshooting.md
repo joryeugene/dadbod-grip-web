@@ -156,22 +156,20 @@ The extension files land in `~/.duckdb/extensions/`. Copy that directory to the 
 ```lua
 require("dadbod-grip").setup({
   keymaps = {
-    grid = {
-      live_sql = "<leader>ls",
-      apply    = "<leader>a",
-    }
+    grid_live_sql = "<leader>ls",
+    grid_apply = "<leader>a",
   }
 })
 ```
 
-All surfaces accept a `keymaps` override table. See `:help dadbod-grip-keymaps` for the full key name list.
+The `keymaps` table accepts stable action names from the primary-surface catalog. Transient floats, pickers, trees, and diagrams keep their contextual controls. See the [Keymaps Reference](keymaps) or `:help grip-keymaps-cfg` for the complete configurable list.
 
 **Disable a keymap entirely** by setting its value to `false`:
 
 ```lua
 require("dadbod-grip").setup({
   keymaps = {
-    grid = { live_sql = false }
+    grid_live_sql = false,
   }
 })
 ```

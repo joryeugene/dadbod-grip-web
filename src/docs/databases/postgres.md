@@ -54,6 +54,8 @@ under the `pg.` prefix.
 
 `psql` must be on your `PATH`. The grip adapter calls `psql` to execute queries.
 
+Dadbod Grip sends SQL through `psql` standard input. It writes password-free URI options to an invocation-scoped libpq service file, passes the password through `PGPASSWORD`, and removes the service file after the command. Complete connection URLs and SQL do not appear in process arguments.
+
 ```bash
 which psql   -- must return a path
 ```

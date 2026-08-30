@@ -34,4 +34,4 @@ The plugin's Lazy spec registers every public command, so a lazy.nvim configurat
 | `:GripHome` | It returns to the welcome screen. |
 | `:GripToggle` | It closes all Dadbod Grip windows or restores them when they are closed. |
 
-Press `<C-p>` inside a Dadbod Grip surface to search the actions available in that context. The [keymap explorer](../keymaps) shows the default bindings by surface.
+Press `<C-p>` from the Grid, Query Pad, or Sidebar to search the actions available there. The [keymap explorer](../keymaps) shows the default bindings by surface and mode.

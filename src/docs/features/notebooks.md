@@ -11,7 +11,7 @@ result appears in the grid below without touching anything else in the file.
 
 ## Opening a notebook
 
-Press `gn` from the grid, query pad, or schema sidebar to open the notebook picker.
+Press `gn` from the query pad or schema sidebar to open the notebook picker.
 It scans for `.md` and `.sql` files in your project directory and shows a preview
 of each file's contents.
 
@@ -71,7 +71,7 @@ incidents, a four-hop supply chain JOIN, intelligence analysis, and a cross-data
 join against an attached supplier database.
 
 The notebook lives at `demo/softrear-internal.md` inside the plugin directory.
-Open it with `gn` from any session to reload it.
+Open it with `gn` from the query pad or schema sidebar to reload it.
 
 ## Plain SQL files
 
@@ -91,4 +91,4 @@ To save a notebook as a file on disk, use a normal `:w` write:
 :w notebooks/my-analysis.md
 ```
 
-The file is plain Markdown. It opens again with `gn` from any session.
+The file is plain Markdown. Open it again with `gn` from the query pad or schema sidebar.

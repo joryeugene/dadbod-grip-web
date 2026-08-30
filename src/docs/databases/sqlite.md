@@ -38,6 +38,8 @@ under the `legacy.` prefix (or whatever alias you choose).
 
 `sqlite3` must be on your `PATH`.
 
+Dadbod Grip sends SQL through `sqlite3` standard input instead of a process argument. The database path remains an ordinary `sqlite3` argument.
+
 ```bash
 which sqlite3
 ```

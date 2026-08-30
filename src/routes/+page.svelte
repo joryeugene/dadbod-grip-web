@@ -190,12 +190,6 @@
 		>
 			See the Demo
 		</a>
-		<a
-			href="{base}/docs/releases/v3.10.0"
-			class="px-6 py-2.5 border border-dark-border hover:border-grip-600 text-dark-muted hover:text-dark-text font-medium rounded-lg transition-colors text-sm"
-		>
-			What changed in v3.10
-		</a>
 	</div>
 
 	<!-- Screenshot -->
@@ -415,7 +409,8 @@
 				<p class="text-dark-muted text-sm leading-relaxed mb-4">
 					<code class="text-grip-400">A</code>, or <code class="text-grip-400">gA</code> in the query pad,
 					sends the request, current SQL, and cached schema metadata to the configured provider.
-					Generated SQL returns for review and does not run automatically. Grid
+					The request travels through curl config on standard input. Generated SQL
+					returns for review and does not run automatically. Grid
 					<code class="text-grip-400">gA</code> stages generated rows instead.
 				</p>
 				<a href="{base}/docs/features/ai" class="text-grip-400 text-xs hover:underline">AI docs &rarr;</a>
