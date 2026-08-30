@@ -5,14 +5,19 @@
 		keymaps,
 		SURFACE_LABELS,
 		SURFACE_COLORS,
+		MODE_LABELS,
+		MODE_COLORS,
 		CATEGORIES,
+		filterKeymaps,
 		type Surface,
+		type Mode,
 		type Keymap
 	} from '$lib/keymaps-data';
 
 	// ── State ──
 	let search = $state('');
 	let activeSurface = $state<Surface | 'all'>('all');
+	let activeMode = $state<Mode | 'all'>('all');
 	let activeCategory = $state<string | 'all'>('all');
 	let selectedKeymap = $state<Keymap | null>(null);
 	let activeKeyFilter = $state<string | null>(null); // exact key filter from keyboard clicks
@@ -29,36 +34,55 @@
 		if (e.key === 'Escape') return null; // handled separately
 		if (e.key === 'Shift' || e.key === 'Control' || e.key === 'Alt' || e.key === 'Meta') return null;
 		if (e.ctrlKey && e.key === 'Enter') return 'C-CR';
+		if (e.shiftKey && e.key === 'Enter') return 'S-CR';
+		if (e.ctrlKey && (e.key === ' ' || e.code === 'Space')) return 'C-Space';
+		if (e.shiftKey && e.key === 'Tab') return 'S-Tab';
 		if (e.ctrlKey) return `C-${e.key.toLowerCase()}`;
 		if (e.key === 'Enter') return 'CR';
 		if (e.key === 'Tab') return 'Tab';
+		if (e.key === 'ArrowUp') return 'Up';
+		if (e.key === 'ArrowDown') return 'Down';
 		if (e.key === 'Backspace') return null;
 		return e.key;
 	}
 
-	function getKeymapsForSurface(): Keymap[] {
-		return activeSurface === 'all'
-			? keymaps
-			: keymaps.filter(k => k.surfaces.includes(activeSurface as Surface));
+	function getKeymapsForContext(): Keymap[] {
+		return filterKeymaps(activeSurface, activeMode);
 	}
 
 	function findExactMatch(seq: string): Keymap | undefined {
-		return getKeymapsForSurface().find(k => k.key === seq);
+		return getKeymapsForContext().find(k => k.key === seq);
 	}
 
 	function isPrefix(seq: string): boolean {
-		return getKeymapsForSurface().some(k => k.key.startsWith(seq) && k.key !== seq);
+		return getKeymapsForContext().some(k => k.key.startsWith(seq) && k.key !== seq);
 	}
 
 	function keysInSequence(seq: string): Set<string> {
 		const result = new Set<string>();
-		for (const ch of seq) {
-			result.add(ch);
+		const addKey = (key: string) => {
+			if (/^[A-Z]$/.test(key)) {
+				result.add('Shift');
+				result.add(key.toLowerCase());
+			} else {
+				result.add(key);
+			}
+		};
+		if (seq === 'CR') return new Set(['CR']);
+		if (seq === 'Tab') return new Set(['Tab']);
+		if (seq === 'S-Tab') return new Set(['Shift', 'Tab']);
+		if (seq === 'C-Space') return new Set(['Ctrl', 'Space']);
+		if (seq === 'Up' || seq === 'Down') return new Set([seq]);
+		if (seq === 'C-CR') return new Set(['Ctrl', 'CR']);
+		if (seq === 'S-CR') return new Set(['Shift', 'CR']);
+		if (seq.startsWith('C-')) {
+			result.add('Ctrl');
+			addKey(seq.slice(2));
+			return result;
 		}
-		if (seq.startsWith('C-')) result.add('Ctrl');
-		if (seq === 'CR' || seq.endsWith('-CR')) result.add('CR');
-		if (seq === 'Tab') result.add('Tab');
-		if (seq === 'S-Tab') { result.add('Tab'); result.add('Shift'); }
+		for (const ch of seq) {
+			addKey(ch);
+		}
 		return result;
 	}
 
@@ -176,12 +200,15 @@
 			{ display: '.', key: '.', w: 1 }, { display: '/', key: '/', w: 1 },
 		],
 	];
+	const auxiliaryKeys = [
+		{ display: 'Space', key: 'Space', w: 3 },
+		{ display: '\u2191', key: 'Up', w: 1 },
+		{ display: '\u2193', key: 'Down', w: 1 }
+	];
 
 	// Build set of single-char keys that are mapped (for keyboard highlighting)
-	function getMappedKeysForSurface(surface: Surface | 'all'): Set<string> {
-		const relevant = surface === 'all'
-			? keymaps
-			: keymaps.filter(k => k.surfaces.includes(surface as Surface));
+	function getMappedKeysForContext(surface: Surface | 'all', mode: Mode | 'all'): Set<string> {
+		const relevant = filterKeymaps(surface, mode);
 		const keys = new Set<string>();
 		for (const km of relevant) {
 			// Only highlight single-char keys and special keys on the keyboard
@@ -190,12 +217,16 @@
 			// Also add lowercase for uppercase keys (Shift+key)
 			if (k.length === 1 && k === k.toUpperCase() && k !== k.toLowerCase()) {
 				keys.add(k.toLowerCase());
+				keys.add('Shift');
 			}
 			// Special keys
 			if (k === 'Tab') keys.add('Tab');
 			if (k === 'S-Tab') keys.add('Tab');
+			if (k.startsWith('S-')) keys.add('Shift');
 			if (k === 'CR') keys.add('CR');
 			if (k === 'Esc') keys.add('Esc');
+			if (k === 'C-Space') keys.add('Space');
+			if (k === 'Up' || k === 'Down') keys.add(k);
 			if (k.startsWith('C-')) keys.add('Ctrl');
 			if (k.startsWith('[') || k.startsWith(']')) { keys.add('['); keys.add(']'); }
 		}
@@ -203,10 +234,8 @@
 	}
 
 	// Find keymaps for a given keyboard key
-	function getKeymapsForKey(keyChar: string, surface: Surface | 'all'): Keymap[] {
-		const relevant = surface === 'all'
-			? keymaps
-			: keymaps.filter(k => k.surfaces.includes(surface as Surface));
+	function getKeymapsForKey(keyChar: string, surface: Surface | 'all', mode: Mode | 'all'): Keymap[] {
+		const relevant = filterKeymaps(surface, mode);
 
 		return relevant.filter(km => {
 			const k = km.key;
@@ -214,8 +243,11 @@
 			if (k.toLowerCase() === keyChar) return true;
 			// Special: Tab maps to Tab key
 			if (keyChar === 'Tab' && (k === 'Tab' || k === 'S-Tab')) return true;
-			if (keyChar === 'CR' && (k === 'CR' || k === 'C-CR')) return true;
+			if (keyChar === 'CR' && (k === 'CR' || k === 'C-CR' || k === 'S-CR')) return true;
 			if (keyChar === 'Esc' && k === 'Esc') return true;
+			if (keyChar === 'Space' && k === 'C-Space') return true;
+			if ((keyChar === 'Up' || keyChar === 'Down') && k === keyChar) return true;
+			if (keyChar === 'Shift' && (/^[A-Z]$/.test(k) || k.startsWith('S-'))) return true;
 			// g-prefixed keys: highlight g
 			if (keyChar === 'g' && k.startsWith('g') && k.length > 1) return true;
 			// Ctrl combos
@@ -230,16 +262,13 @@
 
 	// ── Filtered keymaps ──
 	let filtered = $derived.by(() => {
-		let result = keymaps;
-		if (activeSurface !== 'all') {
-			result = result.filter(k => k.surfaces.includes(activeSurface as Surface));
-		}
+		let result = filterKeymaps(activeSurface, activeMode);
 		if (activeCategory !== 'all') {
 			result = result.filter(k => k.category === activeCategory);
 		}
 		if (activeKeyFilter) {
 			// Exact key match from keyboard click
-			result = getKeymapsForKey(activeKeyFilter, activeSurface);
+			result = getKeymapsForKey(activeKeyFilter, activeSurface, activeMode);
 		} else if (search) {
 			const q = search.toLowerCase();
 			result = result.filter(k =>
@@ -251,19 +280,19 @@
 		return result;
 	});
 
-	let mappedKeys = $derived(getMappedKeysForSurface(activeSurface));
+	let mappedKeys = $derived(getMappedKeysForContext(activeSurface, activeMode));
 
 	// Surface counts
 	let surfaceCounts = $derived.by(() => {
-		const counts: Record<string, number> = { all: keymaps.length };
+		const counts: Record<string, number> = { all: filterKeymaps('all', activeMode).length };
 		for (const s of Object.keys(SURFACE_LABELS)) {
-			counts[s] = keymaps.filter(k => k.surfaces.includes(s as Surface)).length;
+			counts[s] = filterKeymaps(s as Surface, activeMode).length;
 		}
 		return counts;
 	});
 
 	function handleKeyClick(keyChar: string) {
-		const matches = getKeymapsForKey(keyChar, activeSurface);
+		const matches = getKeymapsForKey(keyChar, activeSurface, activeMode);
 		if (matches.length === 1) {
 			selectedKeymap = matches[0];
 			activeKeyFilter = null;
@@ -278,7 +307,7 @@
 
 <svelte:head>
 	<title>Interactive Keymaps - dadbod-grip.nvim</title>
-	<meta name="description" content="Interactive keymap explorer for dadbod-grip.nvim. Visual keyboard layout, searchable reference, filterable by surface." />
+	<meta name="description" content="Explore Dadbod Grip keymaps by surface and mode with a searchable keyboard reference." />
 </svelte:head>
 
 <svelte:window onkeydown={handleSequenceKey} />
@@ -292,7 +321,7 @@
 		<h1 class="text-3xl font-bold text-dark-text mb-2">Keymaps Explorer</h1>
 		<p class="text-dark-muted text-sm">
 			Click any key on the keyboard to see what it does.
-			Filter by surface to see which keys are active in each context.
+			Filter by surface and mode to see which keys are active in each context.
 			Press <code class="text-grip-400">?</code> inside the plugin to see the full help popup.
 		</p>
 	</div>
@@ -301,14 +330,16 @@
 	<div class="flex flex-wrap gap-2 mb-6">
 		<button
 			class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors {activeSurface === 'all' ? 'bg-dark-surface border-grip-400/60 text-grip-400' : 'border-dark-border text-dark-muted hover:text-dark-text hover:border-dark-text/40'}"
-			onclick={() => { activeSurface = 'all'; search = ''; activeKeyFilter = null; }}
+			onclick={() => { activeSurface = 'all'; search = ''; activeKeyFilter = null; selectedKeymap = null; }}
+			aria-pressed={activeSurface === 'all'}
 		>
 			All ({surfaceCounts['all']})
 		</button>
 		{#each Object.entries(SURFACE_LABELS) as [surface, label]}
 			<button
 				class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors {activeSurface === surface ? SURFACE_COLORS[surface as Surface] : 'border-dark-border text-dark-muted hover:text-dark-text hover:border-dark-text/40'}"
-				onclick={() => { activeSurface = surface as Surface; search = ''; activeKeyFilter = null; }}
+				onclick={() => { activeSurface = surface as Surface; search = ''; activeKeyFilter = null; selectedKeymap = null; }}
+				aria-pressed={activeSurface === surface}
 			>
 				{label} ({surfaceCounts[surface]})
 			</button>
@@ -317,12 +348,12 @@
 
 	<!-- Visual Keyboard -->
 	<div class="bg-dark-surface border border-dark-border rounded-xl p-4 sm:p-6 mb-8 overflow-x-auto">
-		<div class="min-w-[640px]">
+		<div class="min-w-[600px]">
 			{#each keyboardRows as row}
 				<div class="flex gap-1 mb-1">
 					{#each row as key}
 						{@const isActive = mappedKeys.has(key.key)}
-						{@const keyMaps = getKeymapsForKey(key.key, activeSurface)}
+						{@const keyMaps = getKeymapsForKey(key.key, activeSurface, activeMode)}
 						{@const count = keyMaps.length}
 						{@const seqState = getSequenceKeyState(key.key)}
 						<button
@@ -337,7 +368,7 @@
 												? 'bg-grip-400/15 border-grip-400/50 text-grip-400 hover:bg-grip-400/25 cursor-pointer'
 												: 'bg-dark-bg/50 border-dark-border/50 text-dark-muted/40 cursor-default'
 								}"
-							style="width: {key.w * 2.75}rem; min-width: {key.w * 2.75}rem;"
+							style="width: {key.w * 2.5}rem; min-width: {key.w * 2.5}rem;"
 							onclick={() => isActive && handleKeyClick(key.key)}
 							disabled={!isActive}
 						>
@@ -351,11 +382,38 @@
 					{/each}
 				</div>
 			{/each}
+			<div class="mt-2 flex gap-1">
+				{#each auxiliaryKeys as key}
+					{@const isActive = mappedKeys.has(key.key)}
+					{@const keyMaps = getKeymapsForKey(key.key, activeSurface, activeMode)}
+					{@const seqState = getSequenceKeyState(key.key)}
+					<button
+						class="h-10 rounded-md text-xs font-mono flex items-center justify-center border transition-all
+							{seqState === 'matched'
+								? 'bg-grip-400/30 border-grip-400/60 text-grip-400 ring-1 ring-grip-400/40'
+								: seqState === 'waiting'
+									? 'bg-amber-400/25 border-amber-400/50 text-amber-400'
+									: seqState === 'nomatch'
+										? 'bg-red-400/20 border-red-400/40 text-red-400'
+										: isActive
+											? 'bg-grip-400/15 border-grip-400/50 text-grip-400 hover:bg-grip-400/25 cursor-pointer'
+											: 'bg-dark-bg/50 border-dark-border/50 text-dark-muted/40 cursor-default'}"
+						style="width: {key.w * 2.5}rem; min-width: {key.w * 2.5}rem;"
+						onclick={() => isActive && handleKeyClick(key.key)}
+						disabled={!isActive}
+					>
+						{key.display}
+						{#if keyMaps.length > 1}
+							<span class="sr-only"> ({keyMaps.length} mappings)</span>
+						{/if}
+					</button>
+				{/each}
+			</div>
 		</div>
 		<div class="flex items-center justify-between mt-3">
 			<p class="text-xs text-dark-muted/60">
 				{#if activeSurface === 'all'}
-					Showing all mapped keys across all surfaces
+					Showing mapped keys across the selected context
 				{:else}
 					Showing keys mapped on the <span class="{SURFACE_COLORS[activeSurface as Surface].split(' ')[1]}">{SURFACE_LABELS[activeSurface as Surface]}</span> surface
 				{/if}
@@ -367,6 +425,7 @@
 						: 'border-dark-border text-dark-muted hover:text-dark-text hover:border-dark-text/40'
 					}"
 				onclick={() => { typeModeActive = !typeModeActive; clearSequence(); }}
+				aria-pressed={typeModeActive}
 			>
 				<span class="w-1.5 h-1.5 rounded-full {typeModeActive ? 'bg-grip-400 animate-pulse' : 'bg-dark-muted/40'}"></span>
 				{typeModeActive ? 'Type mode on' : 'Type Vim keys'}
@@ -395,18 +454,23 @@
 					<code class="text-lg font-mono text-grip-400 bg-dark-bg px-2 py-0.5 rounded">{selectedKeymap.key}</code>
 					<span class="text-dark-text font-semibold">{selectedKeymap.description}</span>
 				</div>
-				<div class="flex items-center gap-2 text-xs">
+				<div class="flex flex-wrap items-center gap-2 text-xs">
 					<span class="text-dark-muted">Action:</span>
 					<code class="text-dark-muted">{selectedKeymap.action}</code>
 					<span class="text-dark-muted ml-2">Surfaces:</span>
 					{#each selectedKeymap.surfaces as s}
 						<span class="px-1.5 py-0.5 rounded text-[10px] border {SURFACE_COLORS[s]}">{SURFACE_LABELS[s]}</span>
 					{/each}
+					<span class="text-dark-muted ml-2">Modes:</span>
+					{#each selectedKeymap.modes as mode}
+						<span class="px-1.5 py-0.5 rounded text-[10px] border {MODE_COLORS[mode]}">{MODE_LABELS[mode]}</span>
+					{/each}
 				</div>
 			</div>
 			<button
 				class="text-dark-muted hover:text-dark-text text-sm"
 				onclick={() => selectedKeymap = null}
+				aria-label="Close mapping details"
 			>
 				&times;
 			</button>
@@ -419,6 +483,7 @@
 			<input
 				type="text"
 				placeholder="Search keys, actions, or descriptions..."
+				aria-label="Search keymaps"
 				bind:value={search}
 				oninput={() => activeKeyFilter = null}
 				class="w-full bg-dark-surface border border-dark-border rounded-lg px-4 py-2 text-sm text-dark-text placeholder:text-dark-muted/50 focus:outline-none focus:border-grip-400/60"
@@ -434,6 +499,8 @@
 		</div>
 		<select
 			bind:value={activeCategory}
+			aria-label="Category"
+			onchange={() => selectedKeymap = null}
 			class="bg-dark-surface border border-dark-border rounded-lg px-3 py-2 text-sm text-dark-muted focus:outline-none focus:border-grip-400/60"
 		>
 			<option value="all">All categories</option>
@@ -441,25 +508,37 @@
 				<option value={cat}>{cat}</option>
 			{/each}
 		</select>
+		<select
+			bind:value={activeMode}
+			aria-label="Mode"
+			onchange={() => selectedKeymap = null}
+			class="bg-dark-surface border border-dark-border rounded-lg px-3 py-2 text-sm text-dark-muted focus:outline-none focus:border-grip-400/60"
+		>
+			<option value="all">All modes</option>
+			{#each Object.entries(MODE_LABELS) as [mode, label]}
+				<option value={mode}>{label}</option>
+			{/each}
+		</select>
 	</div>
 
 	<!-- Results count -->
 	<p class="text-xs text-dark-muted mb-3">
 		{filtered.length} keymap{filtered.length !== 1 ? 's' : ''}
-		{#if search || activeCategory !== 'all' || activeSurface !== 'all'}
+		{#if search || activeCategory !== 'all' || activeSurface !== 'all' || activeMode !== 'all'}
 			(filtered)
 		{/if}
 	</p>
 
 	<!-- Keymaps table -->
-	<div class="border border-dark-border rounded-xl overflow-hidden">
-		<table class="w-full text-sm">
+	<div class="border border-dark-border rounded-xl overflow-x-auto">
+		<table class="w-full min-w-[720px] text-sm">
 			<thead>
 				<tr class="bg-dark-surface border-b border-dark-border">
 					<th class="text-left px-4 py-2.5 text-dark-text font-semibold w-20">Key</th>
 					<th class="text-left px-4 py-2.5 text-dark-text font-semibold">Description</th>
-					<th class="text-left px-4 py-2.5 text-dark-text font-semibold hidden sm:table-cell">Category</th>
-					<th class="text-left px-4 py-2.5 text-dark-text font-semibold hidden md:table-cell">Surfaces</th>
+					<th class="text-left px-4 py-2.5 text-dark-text font-semibold">Category</th>
+					<th class="text-left px-4 py-2.5 text-dark-text font-semibold">Surfaces</th>
+					<th class="text-left px-4 py-2.5 text-dark-text font-semibold">Modes</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -472,11 +551,18 @@
 							<code class="font-mono text-grip-400 bg-dark-surface px-1.5 py-0.5 rounded text-xs">{km.key}</code>
 						</td>
 						<td class="px-4 py-2 text-dark-muted">{km.description}</td>
-						<td class="px-4 py-2 text-dark-muted/70 text-xs hidden sm:table-cell">{km.category}</td>
-						<td class="px-4 py-2 hidden md:table-cell">
+						<td class="px-4 py-2 text-dark-muted/70 text-xs">{km.category}</td>
+						<td class="px-4 py-2">
 							<div class="flex gap-1 flex-wrap">
 								{#each km.surfaces as s}
 									<span class="px-1.5 py-0.5 rounded text-[10px] border {SURFACE_COLORS[s]}">{SURFACE_LABELS[s]}</span>
+								{/each}
+							</div>
+						</td>
+						<td class="px-4 py-2">
+							<div class="flex gap-1 flex-wrap">
+								{#each km.modes as mode}
+									<span class="px-1.5 py-0.5 rounded text-[10px] border {MODE_COLORS[mode]}">{MODE_LABELS[mode]}</span>
 								{/each}
 							</div>
 						</td>
@@ -484,7 +570,7 @@
 				{/each}
 				{#if filtered.length === 0}
 					<tr>
-						<td colspan="4" class="px-4 py-8 text-center text-dark-muted/60">
+						<td colspan="5" class="px-4 py-8 text-center text-dark-muted/60">
 							No keymaps match your search.
 						</td>
 					</tr>

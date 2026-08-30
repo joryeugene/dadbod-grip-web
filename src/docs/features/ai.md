@@ -56,7 +56,7 @@ Set `ai = false` to turn off all AI features:
 require('dadbod-grip').setup({ ai = false })
 ```
 
-With `ai = false`: schema pre-warm is skipped, the `A` and `gA` keymaps are not registered, and `:GripFill` is unavailable. SQL completion still works because it reads local schema data, not an external API. Use this in environments without API key access or where the plugin's footprint must be strictly local.
+With `ai = false`, schema pre-warm is skipped, and `:GripFill` is unavailable. The `A` and `gA` mappings remain registered so Dadbod Grip can explain that AI is disabled. SQL completion still works because it reads local schema data, not an external API. Use this in environments without API key access or where the plugin's footprint must remain strictly local.
 
 ## How the context works
 
