@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import DocsNav from '$lib/components/DocsNav.svelte';
 	import {
 		keymaps,
 		SURFACE_LABELS,
@@ -282,7 +283,9 @@
 
 <svelte:window onkeydown={handleSequenceKey} />
 
-<div class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex flex-col lg:flex-row gap-6 lg:gap-10">
+	<DocsNav />
+	<main class="flex-1 min-w-0">
 
 	<!-- Header -->
 	<div class="mb-8">
@@ -496,4 +499,5 @@
 			Prefer a flat reference? View the markdown keymaps table &rarr;
 		</a>
 	</div>
+	</main>
 </div>
