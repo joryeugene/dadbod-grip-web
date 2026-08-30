@@ -1,32 +1,41 @@
 ---
 title: Getting Started
-description: Install dadbod-grip.nvim and connect to your first database.
+description: This guide explains how to install Dadbod Grip and connect to your first database.
 ---
 
 # Getting Started
 
-dadbod-grip.nvim adds editable database grids to Neovim. Connect to any supported database
-and edit rows like Vim buffers. Every change is staged, previewed, and applied in a single
-transaction.
+Dadbod Grip turns database tables into editable Vim buffers. It stages each change, shows the SQL it will run, and sends the batch between `BEGIN` and `COMMIT`.
 
 ## Requirements
 
-- Neovim 0.10+
-- The CLI for each database you want to use: `psql`, `mysql`, `sqlite3`, or `duckdb`
-- No other external dependencies
+- Neovim 0.10 or newer.
+- The CLI for each adapter you use: `psql`, `mysql`, `sqlite3`, `duckdb`, or `sqlcmd`.
+- No other Neovim plugin is required. Picker and completion integrations are optional.
+
+Run `:checkhealth dadbod-grip` after installation to see which database clients and optional AI providers are available.
 
 ## Installation
 
 ### lazy.nvim (recommended)
 
-```lua
--- always latest stable release
-{ "joryeugene/dadbod-grip.nvim", version = "*" }
-```
+The plugin ships a Lazy spec that registers its commands. You do not need to copy a `cmd` list into your configuration.
 
 ```lua
--- or pin to a specific version
-{ "joryeugene/dadbod-grip.nvim", tag = "v1.0.0" }
+{
+  "joryeugene/dadbod-grip.nvim",
+  opts = {},
+}
+```
+
+To dogfood a local checkout while keeping the plugin identity stable:
+
+```lua
+{
+  "joryeugene/dadbod-grip.nvim",
+  dir = "~/Documents/github/dadbod-grip.nvim",
+  opts = {},
+}
 ```
 
 ### packer.nvim
@@ -43,77 +52,68 @@ Plug 'joryeugene/dadbod-grip.nvim', { 'tag': 'v*' }
 
 ## Connect to a database
 
-Run `:GripConnect` and pick or paste a connection string. The schema sidebar and
-query pad open automatically.
+Run `:GripConnect`, then select a known connection or paste one of these forms:
 
-### Connection string formats
-
-```
-postgresql://user:pass@host:5432/dbname
-mysql://user:pass@host:3306/dbname
+```text
+postgresql://user:${DB_PASSWORD}@host:5432/dbname
+mysql://user:${DB_PASSWORD}@host:3306/dbname
+mariadb://user:${DB_PASSWORD}@host:3306/dbname
 sqlite:path/to/file.db
 duckdb:path/to/file.duckdb
+sqlserver://user:${DB_PASSWORD}@host:1433/dbname
+mssql://user:${DB_PASSWORD}@host:1433/dbname
 
-/path/to/file.csv          -- direct file (also .parquet .json .xlsx)
-https://host/data.parquet  -- remote file via DuckDB httpfs
-
-duckdb::memory:            -- in-memory scratch, tables reset per query
+/path/to/file.csv
+https://host/data.parquet
+duckdb::memory:
 ```
 
-Connections persist automatically across sessions. See [Connections](features/connections) for how the project and global connection files work, including sharing connections across projects.
+Dadbod Grip recognizes Parquet, CSV, TSV, JSON, NDJSON, JSONL, XLSX, ORC, Arrow, and IPC files. Remote HTTPS and S3 sources run through DuckDB.
+
+Connections saved from the picker go to `.grip/connections.json`. Global connections live in `~/.grip/connections.json`. See [Connections](features/connections) for scopes, opaque saved-query bindings, and secret placeholders.
 
 ## Your first edit
 
-1. Run `:GripConnect` and connect to a database
-2. Navigate the schema sidebar with `j`/`k` and press `<CR>` to open a table
-3. Move to any cell and press `i` or `<CR>` to edit it
-4. Your change appears teal (staged). Press `gl` to toggle the live SQL float showing the DML.
-5. Press `a` to apply all staged changes in one transaction
+1. Run `:GripConnect` and connect to a database.
+2. Navigate the schema sidebar with `j` and `k`, then press `<CR>` to open a table.
+3. Move to a cell and press `i` or `<CR>` to edit it.
+4. Press `gl` to inspect the staged DML.
+5. Press `a` to send the staged statements as one `BEGIN`/`COMMIT` batch. If the database client reports an error, inspect the database before retrying.
 
 ## Try the built-in demo
 
-Run `:GripStart` to open the Softrear Inc. demo database. Seventeen tables,
-realistic data, and something in the consumer incidents that does not add up.
-The [walkthrough](/docs/demo) explains the full investigation.
+Run `:GripStart` to recreate and open the Softrear Inc. SQLite demo. Each run reseeds the database, so edits from an earlier demo session are discarded. The [walkthrough](demo) explains the investigation.
 
 ## Configuration
 
-All options are optional. The plugin works with no configuration at all.
+Every option is optional. These are the current defaults:
 
 ```lua
-require('dadbod-grip').setup({
-  limit = 200,              -- rows per page (default: 200)
-  max_col_width = 60,       -- truncate long cell values in the grid
-  timeout = 30000,          -- query timeout in milliseconds
-
-  picker = 'builtin',       -- 'builtin' | 'telescope' | 'snacks'
-  completion = true,        -- false to use blink.cmp or nvim-cmp instead
-  connections_path = nil,   -- absolute path to shared connections.json
-
+require("dadbod-grip").setup({
+  limit = 100,
+  max_col_width = 40,
+  timeout = 10000,
+  completion = true,
+  connections_path = nil,
+  picker = "builtin",       -- "builtin", "telescope", or "snacks"
   pinned_max = nil,
-
-  ai = {
-    provider = 'anthropic', -- 'anthropic' | 'openai' | 'gemini' | 'ollama'
-    model = 'claude-sonnet-4-6',
-    api_key = nil,          -- nil reads from env var; or 'env:VAR', 'cmd:...', direct string
-    base_url = nil,         -- override for Ollama or proxy endpoints
-  },
-
-  open_key = '<leader>db',  -- key to open the grip workspace
+  border = "rounded",
+  cell_split = "horizontal",
+  sticky_header = true,
+  open_sidebar = true,
 })
 ```
 
+Set `open_sidebar = false` to connect directly into the welcome screen and query pad. The schema sidebar remains available through `:GripSchema` or `gb`.
+
+`timeout` applies to database CLI calls. DuckDB work that may download an extension or read a remote URL receives a 60-second minimum for that network step, while connection health checks use five seconds.
+
 ## What opens automatically
 
-When you connect, grip opens three surfaces:
+With `open_sidebar = true`, a connection opens three surfaces:
 
-- **Schema sidebar** on the left: tables, columns, PK/FK markers, DDL access
-- **Query pad** in the center: a scratch SQL buffer that pipes results into grids
-- **Grid** at the bottom: the editable table view
+- The schema sidebar shows tables, columns, primary keys, foreign keys, and DDL actions.
+- The query pad provides a persistent SQL buffer.
+- The main workspace displays welcome content and result grids.
 
-Press `1`, `2`, or `3` to jump between surfaces. Keys `4` through `9` open depth views:
-ER diagram (`4`), column stats (`5`), columns (`6`), foreign keys (`7`), indexes (`8`),
-and constraints (`9`).
-
-Press `<C-p>` on any surface to open the command palette, a searchable list of every
-available action. Press `?` for the full keymap reference.
+Press `1`, `2`, or `3` to move among the primary surfaces. Keys `4` through `9` open the ER diagram, column statistics, columns, foreign keys, indexes, and constraints. Press `<C-p>` for the command palette or `?` for the contextual keymap.

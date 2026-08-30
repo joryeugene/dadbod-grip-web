@@ -1,6 +1,6 @@
 ---
 title: Power Moves
-description: Ten non-obvious dadbod-grip patterns that change how you work, with links to full docs.
+description: These ten Dadbod Grip patterns connect useful shortcuts to their full documentation.
 ---
 
 # Power Moves
@@ -9,7 +9,7 @@ The keymaps reference lists every available key. This page covers the ten that c
 
 ## G: promote a connection to global
 
-When you save a connection in one project, it stays in that project's `.grip/connections.json`. To make it available everywhere, open the connection picker and press `G`. The connection copies to `~/.grip/connections.json` and appears in every project from that point forward. Do this once per database and you will never type that connection string again.
+When you save a connection in one project, it stays in that project's `.grip/connections.json`. To make it available elsewhere, open the connection picker and press `G`. The connection copies to `~/.grip/connections.json` and appears in other projects from that point forward.
 
 See: [Connections](connections)
 
@@ -35,7 +35,7 @@ See: [Analysis](analysis)
 
 ## GripFill N: AI-generated test data
 
-Run `:GripFill 10` to stage ten AI-generated rows. The AI reads the table schema including column types, NOT NULL constraints, and foreign key relationships, then produces varied, plausible values that satisfy all constraints. This is faster than writing INSERT statements for test data and produces more realistic values than `generate_series`.
+Run `:GripFill 10` to stage ten AI-generated rows. The configured provider receives the table schema, including column types, `NOT NULL` constraints, and foreign-key relationships, then proposes values for review. Dadbod Grip stages the rows without inserting them, and the database remains the authority on whether they satisfy its constraints.
 
 See: [AI SQL Generation](ai)
 
@@ -61,13 +61,13 @@ require('dadbod-grip').setup({
 })
 ```
 
-Check that file into your dotfiles or infrastructure repository. Every teammate gets the same named connections with no per-machine setup.
+Check the file into your dotfiles or infrastructure repository only when its URLs are credential-free or use `${VAR}` placeholders. Each teammate supplies the matching environment values locally.
 
 See: [Connections](connections)
 
 ## gQ: query doctor
 
-Press `gQ` on any open grid to explain the current query. The output translates the raw EXPLAIN plan into plain-English health checks with cost bars and index suggestions. Look for sequential scans on large tables: they are the most common source of slow queries and each one is a missing index candidate.
+Press `gQ` on any open grid to explain the current query. The output translates the raw `EXPLAIN` plan into cost bars and heuristic index suggestions. A sequential scan on a large table is worth inspecting, but it is not proof that an index is missing.
 
 See: [Analysis](analysis)
 

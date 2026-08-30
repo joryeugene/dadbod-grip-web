@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit';
+import type { Component } from 'svelte';
 import type { EntryGenerator, PageLoad } from './$types';
 
 export const prerender = true;
@@ -6,12 +7,15 @@ export const prerender = true;
 export const entries: EntryGenerator = () => [
 	{ topic: 'getting-started', page: undefined },
 	{ topic: 'troubleshooting', page: undefined },
+	{ topic: 'commands', page: undefined },
 	{ topic: 'keymaps', page: undefined },
 	{ topic: 'demo', page: undefined },
 	{ topic: 'databases', page: 'postgres' },
 	{ topic: 'databases', page: 'duckdb' },
 	{ topic: 'databases', page: 'sqlite' },
 	{ topic: 'databases', page: 'mysql' },
+	{ topic: 'databases', page: 'sqlserver' },
+	{ topic: 'releases', page: 'v3.10.0' },
 	{ topic: 'features', page: 'editing' },
 	{ topic: 'features', page: 'analysis' },
 	{ topic: 'features', page: 'ai' },
@@ -39,7 +43,7 @@ export const load: PageLoad = async ({ params }) => {
 		error(404, `Doc not found: ${path}`);
 	}
 
-	const post = (await importer()) as { default: unknown; metadata?: Record<string, unknown> };
+	const post = (await importer()) as { default: Component; metadata?: Record<string, unknown> };
 	return {
 		content: post.default,
 		meta: post.metadata ?? {}

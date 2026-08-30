@@ -1,12 +1,13 @@
 ---
 title: Files and Remote Sources
-description: Open Parquet, CSV, JSON, S3 paths, HTTPS URLs, and MotherDuck databases as live editable grids.
+description: Dadbod Grip opens local files, remote object paths, and MotherDuck databases as live grids.
 ---
 
 # Files and Remote Sources
 
-dadbod-grip opens any DuckDB-readable source as a live editable grid. You do not need an active
-database connection. DuckDB reads the file directly.
+dadbod-grip opens supported files as queryable grids without an active database connection.
+DuckDB reads the file directly. Enable write mode only for a supported local format when you
+intend to replace that file.
 
 ## GripOpen
 
@@ -17,6 +18,7 @@ database connection. DuckDB reads the file directly.
 :GripOpen data.parquet         " open local Parquet file
 :GripOpen logs.csv             " open local CSV
 :GripOpen results.json         " open local JSON / NDJSON
+:GripOpen book.xlsx            " open an Excel workbook
 ```
 
 `GripOpen` does not save the source to `.grip/connections.json`. It opens a read session
@@ -31,7 +33,11 @@ without polluting your connection list. Use `:GripConnect` if you want to persis
 | `.tsv` | yes | yes |
 | `.json` | yes | yes |
 | `.ndjson` | yes | yes |
-| `.arrow` | yes | no |
+| `.jsonl` | yes | yes |
+| `.xlsx` | yes | no |
+| `.orc` | yes | no |
+| `.arrow` | yes | yes |
+| `.ipc` | yes | yes |
 
 DuckDB auto-detects schema from the file. No setup required.
 
@@ -44,8 +50,8 @@ Open any publicly accessible Parquet or CSV file directly from a URL:
 :GripOpen https://example.com/exports/report.csv
 ```
 
-DuckDB streams the file. Large remote files open quickly because DuckDB reads metadata
-and fetches only the pages it needs for your current query and page size.
+DuckDB reads the URL through `httpfs`. Response time depends on the file format, server,
+and query; remote URLs remain read-only.
 
 ## S3 and object storage
 
@@ -61,7 +67,7 @@ For other S3-compatible stores (Cloudflare R2, MinIO, Backblaze B2):
 
 ```sql
 -- run in the query pad first to configure the endpoint
-CREATE SECRET (
+CREATE TEMP SECRET (
   TYPE s3,
   ENDPOINT 'your-endpoint.example.com',
   KEY_ID 'your-key',
@@ -96,8 +102,7 @@ g!                                 " toggle write mode
 A red **WRITE** badge appears in the grid winbar when write mode is active. Press `a`
 to apply staged edits back to the file. The original file is overwritten.
 
-Write mode is useful for data cleaning workflows: open a CSV, fix values, apply, done.
-No intermediate format conversion. No database needed.
+Write mode supports Parquet, CSV, TSV, JSON, NDJSON, JSONL, Arrow, and IPC. XLSX and ORC remain read-only. Dadbod Grip asks before overwriting a local file; remote URLs are always read-only.
 
 ## Combining files in federation
 

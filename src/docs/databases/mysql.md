@@ -1,6 +1,6 @@
 ---
 title: MySQL / MariaDB
-description: Connect dadbod-grip.nvim to MySQL or MariaDB for editable grids and schema browsing.
+description: Dadbod Grip connects to MySQL and MariaDB for editable grids and schema browsing.
 ---
 
 # MySQL / MariaDB
@@ -8,16 +8,19 @@ description: Connect dadbod-grip.nvim to MySQL or MariaDB for editable grids and
 ## Connect
 
 ```
-mysql://user:pass@host:3306/dbname
+mysql://user:${DB_PASSWORD}@host:3306/dbname
 mysql://user@localhost/mydb
+mariadb://user:${DB_PASSWORD}@host:3306/dbname
 ```
 
-MariaDB uses the same connection format. dadbod-grip auto-detects MariaDB via `mysql --version` and switches to `--batch` output mode automatically. No extra configuration is needed.
+Use `mariadb://` when you want the connection to identify itself explicitly as MariaDB. Both schemes use the compatible `mysql --batch` client protocol, so Dadbod Grip does not need a separate MariaDB executable or a version-detection step.
 
 ## Features
 
 MySQL support covers the core editing workflow: inline cell editing, batch edits,
 mutation preview, and schema browsing with PK/FK markers.
+
+MariaDB integer display widths are normalized in schema views. For example, `bigint(20) unsigned` appears as `bigint unsigned`; the meaningful `unsigned` modifier remains intact.
 
 ## Backslash safety
 

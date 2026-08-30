@@ -1,13 +1,12 @@
 ---
 title: DuckDB
-description: Use DuckDB as a standalone analytical engine or as a federation hub for Postgres, MySQL, SQLite, and remote files.
+description: Dadbod Grip uses DuckDB as an analytical engine and a federation hub for databases and files.
 ---
 
 # DuckDB
 
-DuckDB is the most capable engine in the dadbod-grip toolkit. Use it standalone for
-analytical workloads, or use it as a hub to JOIN across Postgres, MySQL, SQLite,
-and remote files in a single query.
+DuckDB handles local analytical queries and provides the federation layer for PostgreSQL,
+MySQL, SQLite, MotherDuck, and remote files.
 
 ## Connect
 
@@ -38,8 +37,7 @@ Named connections appear in the picker every time.
 
 ### File formats
 
-DuckDB can read Parquet, CSV, TSV, JSON, NDJSON, Arrow, and Excel (`.xlsx`) files.
-Remote `https://` URLs use the httpfs extension, which installs automatically on first use.
+Dadbod Grip routes Parquet, CSV, TSV, JSON, NDJSON, JSONL, XLSX, ORC, Arrow, and IPC files through DuckDB. Remote `https://` URLs use the `httpfs` extension, which installs automatically on first use.
 
 ## Cross-database federation
 
@@ -48,6 +46,7 @@ gets a schema alias. Use that alias as a SQL prefix to query across databases.
 
 ```vim
 :GripAttach postgres:dbname=sales host=localhost user=me  pg
+:GripAttach mysql:database=sales host=localhost user=me  mysql_sales
 :GripAttach sqlite:legacy.db  legacy
 :GripAttach md:cloud_analytics  cloud
 ```
@@ -69,8 +68,15 @@ Attachments persist in `.grip/connections.json` and restore automatically on rec
 Extensions install automatically when you attach:
 
 - `postgres:` installs `postgres_scanner`
+- `mysql:` installs `mysql_scanner`
 - `sqlite:` installs `sqlite_scanner`
 - `md:` connects to MotherDuck (requires a MotherDuck token in your environment)
+
+## Process and credential safety
+
+Dadbod Grip sends every DuckDB query, DML statement, schema request, and attachment declaration through standard input. SQL, URLs, and passwords do not appear in the DuckDB process arguments.
+
+Credentialed PostgreSQL and MySQL attachments use invocation-scoped DuckDB `TEMP SECRET` objects and attach by secret name. Dadbod Grip does not create persistent DuckDB secrets because DuckDB stores them unencrypted. Prefer `${VAR}` placeholders in persisted attachment URLs so credentials also stay out of `connections.json`.
 
 ## S3 access
 
@@ -88,7 +94,7 @@ Public S3 buckets work without credentials. The httpfs extension installs on fir
 DuckDB file connections support two extra modes:
 
 **Write mode** (`--write` or `g!`): applies edits back to disk using `COPY TO`.
-Parquet, CSV, JSON, NDJSON, TSV, and Arrow are all supported for round-trip writes.
+Parquet, CSV, TSV, JSON, NDJSON, JSONL, Arrow, and IPC support round-trip writes.
 
 **Watch mode** (`--watch` or `gW`): re-runs the query on a timer and updates the
 grid automatically. Useful for monitoring changing files.

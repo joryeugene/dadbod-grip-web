@@ -164,9 +164,9 @@
 	</h1>
 
 	<p class="text-lg text-dark-muted max-w-2xl mb-10 leading-relaxed">
-		Stage changes. Preview the exact SQL. Apply in one transaction.
-		Postgres, MySQL, SQLite, DuckDB, MotherDuck, Parquet, S3.
-		Every Vim motion works. Nothing installs outside Neovim.
+		Dadbod Grip turns database tables into editable Vim buffers, with schema browsing,
+		staged mutations, generated SQL, relationship navigation, and cross-database
+		federation inside Neovim.
 	</p>
 
 	<div class="flex flex-wrap gap-3 justify-center mb-16">
@@ -190,6 +190,12 @@
 		>
 			See the Demo
 		</a>
+		<a
+			href="{base}/docs/releases/v3.10.0"
+			class="px-6 py-2.5 border border-dark-border hover:border-grip-600 text-dark-muted hover:text-dark-text font-medium rounded-lg transition-colors text-sm"
+		>
+			What changed in v3.10
+		</a>
 	</div>
 
 	<!-- Screenshot -->
@@ -206,7 +212,7 @@
 <!-- DB badges -->
 <section class="border-y border-dark-border bg-dark-surface/50 py-10" use:scrollReveal>
 	<div class="max-w-4xl mx-auto px-4 sm:px-6 flex flex-wrap justify-center gap-4">
-		{#each ['PostgreSQL', 'MySQL', 'SQLite', 'DuckDB', 'MotherDuck', 'Parquet / CSV / S3 / HTTPS'] as db}
+		{#each ['PostgreSQL', 'MySQL / MariaDB', 'SQL Server', 'SQLite', 'DuckDB / MotherDuck', 'Files / S3 / HTTPS'] as db}
 			<span class="px-4 py-1.5 rounded-full border border-dark-border text-dark-muted text-sm font-mono">
 				{db}
 			</span>
@@ -214,13 +220,13 @@
 	</div>
 </section>
 
-<!-- Staging cycle — the core differentiator -->
+<!-- Staging cycle -->
 <section class="max-w-6xl mx-auto px-4 sm:px-6 py-20">
 	<div class="text-center mb-12" use:scrollReveal>
-		<h2 class="font-sans text-2xl font-bold text-dark-text mb-3">Not just a viewer. A full edit cycle.</h2>
+		<h2 class="font-sans text-2xl font-bold text-dark-text mb-3">Review the write before it runs.</h2>
 		<p class="text-dark-muted max-w-xl mx-auto text-sm">
 			Every change stages before it touches the database. Review the SQL. Commit or cancel.
-			This is what makes dadbod-grip different from every other database plugin.
+			The grid keeps investigation fast and makes the write visible before it runs.
 		</p>
 	</div>
 
@@ -228,7 +234,7 @@
 		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center" use:scrollReveal>
 			<div class="text-2xl font-mono font-bold text-grip-400 mb-2">i</div>
 			<div class="text-sm font-semibold text-dark-text mb-1">Edit</div>
-			<div class="text-xs text-dark-muted">Popup editor opens. Change the value, press Enter to stage.</div>
+			<div class="text-xs text-dark-muted">The popup editor opens on the cell. Change the value and press Enter to stage it.</div>
 		</div>
 		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center" use:scrollReveal={{ delay: 100 }}>
 			<div class="text-lg font-mono font-bold mb-2">
@@ -237,17 +243,17 @@
 				<span class="text-green-400 ml-1">■</span>
 			</div>
 			<div class="text-sm font-semibold text-dark-text mb-1">Color-coded</div>
-			<div class="text-xs text-dark-muted"><span class="text-cyan-400">Teal = update.</span> <span class="text-red-400">Red = delete.</span> <span class="text-green-400">Green = insert.</span> Nothing has run yet.</div>
+			<div class="text-xs text-dark-muted"><span class="text-cyan-400">Teal marks an update.</span> <span class="text-red-400">Red marks a deletion.</span> <span class="text-green-400">Green marks an insertion.</span> Nothing has run yet.</div>
 		</div>
 		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center" use:scrollReveal={{ delay: 200 }}>
 			<div class="text-2xl font-mono font-bold text-grip-400 mb-2">gl</div>
 			<div class="text-sm font-semibold text-dark-text mb-1">Preview SQL</div>
-			<div class="text-xs text-dark-muted">Live float shows the exact DML as you work. No surprises.</div>
+			<div class="text-xs text-dark-muted">The live float shows the exact DML as you work. It does not execute the SQL.</div>
 		</div>
 		<div class="bg-dark-surface border border-dark-border rounded-xl p-5 text-center" use:scrollReveal={{ delay: 300 }}>
 			<div class="text-2xl font-mono font-bold text-grip-400 mb-2">a</div>
 			<div class="text-sm font-semibold text-dark-text mb-1">Apply</div>
-			<div class="text-xs text-dark-muted">All changes run in one BEGIN/COMMIT. Any failure rolls back the batch.</div>
+			<div class="text-xs text-dark-muted">Dadbod Grip sends one BEGIN/COMMIT batch. If the client reports an error, inspect the database before retrying.</div>
 		</div>
 	</div>
 
@@ -372,20 +378,20 @@
 	</div>
 </section>
 
-<!-- Three game-changer cards -->
+<!-- Primary workflows -->
 <section class="border-t border-dark-border bg-dark-surface/30 py-20">
 	<div class="max-w-6xl mx-auto px-4 sm:px-6">
-		<h2 class="font-sans text-2xl font-bold text-dark-text text-center mb-12">Three things that change how you work</h2>
+		<h2 class="font-sans text-2xl font-bold text-dark-text text-center mb-12">The database work stays in one workspace.</h2>
 
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 			<!-- 1: Staging -->
 			<div class="bg-dark-bg border border-grip-600/40 rounded-xl p-6" use:scrollReveal>
 				<div class="text-grip-400 font-mono text-xs uppercase tracking-widest mb-3">01</div>
-				<h3 class="text-dark-text font-bold text-base mb-3">Staging transactions</h3>
+				<h3 class="text-dark-text font-bold text-base mb-3">Staged mutations stay visible.</h3>
 				<p class="text-dark-muted text-sm leading-relaxed mb-4">
-					Stage one change or fifty. The entire batch applies in a single
-					transaction. Any failure rolls it all back. Press <code class="text-grip-400">u</code> after
-					applying to generate a compensating statement and reverse the commit.
+					Stage one change or fifty, then inspect the generated SQL. Dadbod Grip
+					sends one BEGIN/COMMIT batch and keeps the staging state when the client
+					reports an error, so you can inspect the database before retrying.
 				</p>
 				<a href="{base}/docs/features/editing" class="text-grip-400 text-xs hover:underline">Editing docs &rarr;</a>
 			</div>
@@ -393,11 +399,11 @@
 			<!-- 2: Federation -->
 			<div class="bg-dark-bg border border-grip-600/40 rounded-xl p-6" use:scrollReveal={{ delay: 120 }}>
 				<div class="text-grip-400 font-mono text-xs uppercase tracking-widest mb-3">02</div>
-				<h3 class="text-dark-text font-bold text-base mb-3">Cross-database federation</h3>
+				<h3 class="text-dark-text font-bold text-base mb-3">DuckDB joins the sources.</h3>
 				<p class="text-dark-muted text-sm leading-relaxed mb-4">
-					Use DuckDB as a hub. Attach Postgres, MySQL, SQLite, MotherDuck, S3
-					Parquet, or remote HTTPS files. JOIN across all of them in one SQL
-					statement. The results open as a live editable grid.
+					Use DuckDB as a hub for PostgreSQL, MySQL, SQLite, MotherDuck, local
+					files, S3 objects, and HTTPS sources. SQL and attachment credentials
+					travel through standard input instead of process arguments.
 				</p>
 				<a href="{base}/docs/features/federation" class="text-grip-400 text-xs hover:underline">Federation docs &rarr;</a>
 			</div>
@@ -405,12 +411,12 @@
 			<!-- 3: AI -->
 			<div class="bg-dark-bg border border-grip-600/40 rounded-xl p-6" use:scrollReveal={{ delay: 240 }}>
 				<div class="text-grip-400 font-mono text-xs uppercase tracking-widest mb-3">03</div>
-				<h3 class="text-dark-text font-bold text-base mb-3">AI with full schema context</h3>
+				<h3 class="text-dark-text font-bold text-base mb-3">AI generates SQL, not approval.</h3>
 				<p class="text-dark-muted text-sm leading-relaxed mb-4">
-					Press <code class="text-grip-400">A</code> from the grid or <code class="text-grip-400">gA</code> from
-					the query pad. Describe what you want. The AI receives your full schema
-					including table names, column types, and FK relationships. Works with
-					Anthropic, OpenAI, Gemini, or any local Ollama model.
+					<code class="text-grip-400">A</code>, or <code class="text-grip-400">gA</code> in the query pad,
+					sends the request, current SQL, and cached schema metadata to the configured provider.
+					Generated SQL returns for review and does not run automatically. Grid
+					<code class="text-grip-400">gA</code> stages generated rows instead.
 				</p>
 				<a href="{base}/docs/features/ai" class="text-grip-400 text-xs hover:underline">AI docs &rarr;</a>
 			</div>
@@ -418,21 +424,21 @@
 	</div>
 </section>
 
-<!-- Everything else: categorized feature strip -->
+<!-- Additional workflows -->
 <section class="max-w-6xl mx-auto px-4 sm:px-6 py-20">
-	<h2 class="font-sans text-xl font-bold text-dark-text mb-10">Everything else</h2>
+	<h2 class="font-sans text-xl font-bold text-dark-text mb-10">The rest of the workflow stays keyboard-native.</h2>
 
 	<div class="space-y-8">
 		<!-- Editing -->
 		<div use:scrollReveal>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Editing</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Batch-edit selected rows in visual mode</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Multi-level undo inside staging, undo of applied transactions</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Schema DDL: rename, add, and drop columns and tables</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> AI row fill: generate staged rows from schema context (<code>gA</code> / <code>:GripFill</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Close and reopen all grip windows with <code>:GripToggle</code></div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Conditional formatting: negatives red, booleans colored, URLs underlined</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Visual mode stages one edit across selected rows.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> The staging buffer supports multi-level undo, and applied batches produce best-effort compensating SQL.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> DDL actions rename, add, and drop columns and tables after showing the statement.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gA</code> or <code>:GripFill</code> sends the active schema to the configured provider and stages its returned rows for review.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>:GripToggle</code> closes or restores the Dadbod Grip windows.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Conditional formatting marks negative numbers, booleans, dates, and URLs without changing their values.</div>
 			</div>
 		</div>
 
@@ -440,11 +446,11 @@
 		<div use:scrollReveal={{ delay: 80 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Navigation</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Navigate FK relationships with <code>gf</code> / <code>&lt;C-o&gt;</code> back</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Schema sidebar with PK/FK markers and 1-9 tab views</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Command palette: searchable action list (<code>&lt;C-p&gt;</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Row view transpose: vertical key-value display (<code>K</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> ER diagram float for all tables and FK relationships (<code>gG</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gf</code> follows an outgoing foreign key, <code>gm</code> follows incoming references, and <code>&lt;C-o&gt;</code> returns.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> The schema sidebar marks primary and foreign keys and opens table-depth views with keys <code>1</code> through <code>9</code>.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>&lt;C-p&gt;</code> searches the actions available on the current surface.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>K</code> turns the current row into a vertical key-value record.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gG</code> opens an ER map of the tables and their foreign-key relationships.</div>
 			</div>
 		</div>
 
@@ -452,13 +458,13 @@
 		<div use:scrollReveal={{ delay: 160 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Analysis</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Profile column distributions with sparklines (<code>gR</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Explain query plans with cost and index suggestions (<code>gQ</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Diff two tables by primary key (<code>gD</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Sort stacking with visual indicators (<code>s</code> / <code>S</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Filter builder: =, !=, &gt;, &lt;, LIKE, IN, BETWEEN, NULL (<code>gF</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Save and load filter presets (<code>gP</code> / <code>gp</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Open URL in current cell (http/https/ftp) (<code>gx</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gR</code> profiles distributions, completeness, and cardinality across the table.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gQ</code> turns an <code>EXPLAIN</code> plan into cost bars and heuristic index suggestions.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gD</code> compares two tables by primary key.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>s</code> changes the primary sort, while <code>S</code> adds another sort tier.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gF</code> builds filters for equality, ranges, patterns, sets, and null values.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gP</code> saves the active filters, and <code>gp</code> restores a preset.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gx</code> opens an HTTP, HTTPS, or FTP URL from the current cell.</div>
 			</div>
 		</div>
 
@@ -466,11 +472,11 @@
 		<div use:scrollReveal={{ delay: 240 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Integration</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> SQL completion: tables, columns, aliases, federation schemas</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Telescope and snacks.nvim picker backends</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> blink.cmp and nvim-cmp completion sources</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> SQL notebooks: run individual blocks with <code>C-CR</code>, open files with <code>gn</code></div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Save and load named queries (<code>:GripSave</code> / <code>gq</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Built-in SQL completion includes tables, columns, aliases, and attached schemas.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> The <code>picker</code> option delegates supported lists to Telescope or snacks.nvim.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> blink.cmp and nvim-cmp can consume Dadbod Grip's completion source.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gn</code> opens a SQL notebook, and <code>&lt;C-CR&gt;</code> runs the block under the cursor.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Saved queries bind to opaque connection IDs instead of copied database URLs.</div>
 			</div>
 		</div>
 
@@ -478,10 +484,10 @@
 		<div use:scrollReveal={{ delay: 320 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">I/O</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Export to CSV, TSV, JSON, SQL, Markdown, or Grip Table (<code>gE</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Open Parquet, CSV, HTTPS, S3 as live tables (<code>:GripOpen</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Watch mode: auto-refresh on a timer (<code>gW</code>)</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Write mode: edits persist back to file on disk (<code>g!</code>)</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gE</code> and <code>gX</code> export the current page or every filtered and sorted row.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>:GripOpen</code> reads Parquet, CSV, JSON, Excel, ORC, Arrow, IPC, HTTPS, and S3 sources through DuckDB.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gW</code> reruns a file query on a timer while no edits are staged.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>g!</code> enables write mode for supported local files.</div>
 			</div>
 		</div>
 	</div>
@@ -500,7 +506,7 @@
 <span class="text-grip-400">:GripAttach</span> <span class="text-dark-text">sqlite:archive.db  legacy</span>
 <span class="text-grip-400">:GripAttach</span> <span class="text-dark-text">s3://my-bucket/enrichment.parquet  enrichment</span>
 
-<span class="text-dark-muted">-- then JOIN in the query pad (C-CR to run)</span>
+<span class="text-dark-muted">-- then JOIN in the query pad (&lt;C-CR&gt; to run)</span>
 <span class="text-grip-400">SELECT</span>
 <span class="text-dark-text">  prod.customers.email,</span>
 <span class="text-dark-text">  legacy.orders.total,</span>
@@ -514,7 +520,7 @@
 <!-- Install snippet -->
 <section class="border-t border-dark-border py-20" use:scrollReveal>
 	<div class="max-w-xl mx-auto px-4 sm:px-6">
-		<h2 class="font-sans text-2xl font-bold text-dark-text text-center mb-8">One line to install</h2>
+		<h2 class="font-sans text-2xl font-bold text-dark-text text-center mb-8">Load the plugin with Lazy.</h2>
 		<div class="bg-dark-surface border border-dark-border rounded-xl overflow-hidden mb-8">
 			<div class="px-4 py-2 border-b border-dark-border text-xs text-dark-muted font-mono flex items-center gap-2">
 				<span class="w-2.5 h-2.5 rounded-full bg-red-500/60"></span>
@@ -522,8 +528,8 @@
 				<span class="w-2.5 h-2.5 rounded-full bg-green-500/60"></span>
 				<span class="ml-2">lazy.nvim</span>
 			</div>
-			<pre class="px-5 py-4 text-sm font-mono text-dark-text overflow-x-auto"><code><span class="text-dark-muted">-- always latest stable release</span>
-<span class="text-grip-400">{"{"} "joryeugene/dadbod-grip.nvim", version = "*" {"}"}</span>
+			<pre class="px-5 py-4 text-sm font-mono text-dark-text overflow-x-auto"><code><span class="text-dark-muted">-- lazy.nvim</span>
+<span class="text-grip-400">{"{"} "joryeugene/dadbod-grip.nvim" {"}"}</span>
 
 <span class="text-dark-muted">-- then connect</span>
 <span class="text-grip-400">:GripConnect</span></code></pre>

@@ -1,6 +1,6 @@
 ---
 title: SQLite
-description: Connect dadbod-grip.nvim to SQLite databases for editable grids and schema browsing.
+description: Dadbod Grip connects to SQLite databases for editable grids and schema browsing.
 ---
 
 # SQLite
@@ -16,7 +16,9 @@ sqlite:/absolute/path.db
 ## Features
 
 SQLite support includes the full editing suite. Write to any column with a popup editor,
-stage multiple changes, preview the generated SQL, and apply in one transaction.
+stage multiple changes, preview the generated SQL, and send them as one `BEGIN`/`COMMIT` batch.
+If the client reports an apply error, inspect the database before retrying because an earlier
+statement may already have committed.
 
 The demo database ships as SQLite. Run `:GripStart` to open it.
 
@@ -41,8 +43,7 @@ which sqlite3
 
 On macOS: included by default. On Debian/Ubuntu: `sudo apt install sqlite3`.
 
-## File modes
+## Refreshing a SQLite grid
 
-SQLite connections support write mode and watch mode. Use `--write` to apply edits
-back through DuckDB's `COPY TO` (requires an active DuckDB connection). Use `--watch`
-to auto-refresh the grid when the file changes on disk.
+Press `gW` to re-run the current SQLite query on a timer. The `--write` flag belongs to
+DuckDB-backed data files such as CSV and Parquet; ordinary SQLite edits use the SQLite adapter.

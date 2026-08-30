@@ -27,7 +27,8 @@
 	.prose strong { @apply text-dark-text font-semibold; }
 	.prose table { @apply w-full border-collapse mb-6; }
 	.prose th { @apply text-left text-dark-text font-semibold px-3 py-2 border-b border-dark-border bg-dark-surface text-sm; }
-	.prose td { @apply px-3 py-2 border-b border-dark-border text-dark-muted text-sm; }
+	.prose td { @apply px-3 py-2 border-b border-dark-border text-dark-muted text-sm; overflow-wrap: anywhere; }
+	.prose td code { white-space: nowrap; }
 	.prose blockquote { @apply border-l-4 border-grip-600 pl-4 text-dark-muted italic; }
 	.prose pre { @apply bg-dark-surface rounded-lg p-4 overflow-x-auto mb-4 border border-dark-border; }
 	.prose pre code { @apply text-dark-text text-sm; }

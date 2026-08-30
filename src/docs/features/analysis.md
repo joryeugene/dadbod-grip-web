@@ -1,6 +1,6 @@
 ---
 title: Analysis
-description: Profile tables, explain query plans, export data, and filter with a visual builder.
+description: Dadbod Grip profiles tables, explains query plans, exports data, and builds filters.
 ---
 
 # Analysis
@@ -38,8 +38,8 @@ Press `<S-CR>` in the query pad to execute the current query and always open the
 ## Table profile
 
 Press `gR` or run `:GripProfile` to open a column distribution view. Each column shows
-a sparkline histogram, completeness percentage, cardinality estimate, and the top five
-most frequent values.
+an eight-bin distribution, completeness percentage, cardinality estimate, and its
+minimum and maximum values.
 
 Use this to spot anomalies before writing queries: bimodal distributions, unexpectedly
 high NULL rates, or columns with a single value dominating the dataset.
@@ -51,7 +51,7 @@ Press `gS` to open a popup with detailed statistics for the column under the cur
 - Total count and distinct count
 - NULL count and null percentage
 - Minimum and maximum values
-- Top 10 most frequent values with counts
+- An eight-range histogram for numeric columns, or the eight most frequent values for other columns
 
 ## Aggregate on selection
 
@@ -133,11 +133,9 @@ and schema drift detection.
 
 ## Export
 
-Press `gE` to export the current result set to the clipboard in one of six formats:
-CSV, TSV, JSON, SQL INSERT, Markdown pipe table, or Grip Table (box-drawing borders).
+Press `gE` and first choose **Current page** or **All matching rows**. Then choose CSV, TSV, JSON, SQL INSERT, Markdown pipe table, or Grip Table. All-row exports keep the active filters and sort order while removing pagination. Clipboard exports stop at 100,000 rows and direct larger results to a file.
 
-Press `gX` or run `:GripExport` to write to a file. Choose CSV, JSON, or SQL INSERT.
-The file goes to the current working directory by default.
+Press `gX` or run `:GripExport` to write CSV, JSON, or SQL INSERT to a file. All-row exports above 10,000 rows require confirmation. Dadbod Grip streams the result to a temporary file in the destination directory and then renames it atomically, so cancellation or failure does not leave a partial destination file.
 
 ## Sort stacking
 

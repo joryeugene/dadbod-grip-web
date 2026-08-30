@@ -1,12 +1,12 @@
 ---
 title: Picker Integration
-description: Use telescope.nvim, snacks.nvim, or the built-in picker for table selection, command palette, and more.
+description: Dadbod Grip uses its built-in picker or delegates supported lists to telescope.nvim and snacks.nvim.
 ---
 
 # Picker Integration
 
-dadbod-grip ships a zero-dependency built-in picker for all selection surfaces. You can
-optionally delegate to telescope.nvim or snacks.nvim for a more feature-rich experience.
+dadbod-grip ships a built-in picker, so selection surfaces do not require another Neovim plugin.
+You can delegate supported surfaces to telescope.nvim or snacks.nvim when you prefer either interface.
 
 ## Configuration
 
@@ -25,14 +25,13 @@ fuzzy matching, preview panes for table columns, and keyboard navigation.
 
 ## Telescope
 
-Set `picker = "telescope"` to delegate all picker surfaces to telescope.nvim. Telescope
+Set `picker = "telescope"` to delegate supported simple pickers to telescope.nvim. Telescope
 must be installed and loadable. If telescope is not available at runtime, dadbod-grip falls
 back to the built-in picker silently.
 
 ```lua
 {
   "joryeugene/dadbod-grip.nvim",
-  version = "*",
   dependencies = { "nvim-telescope/telescope.nvim" },
   opts = { picker = "telescope" },
 }
@@ -46,27 +45,27 @@ as telescope: if snacks.nvim is not available, the built-in picker takes over.
 ```lua
 {
   "joryeugene/dadbod-grip.nvim",
-  version = "*",
   dependencies = { "folke/snacks.nvim" },
   opts = { picker = "snacks" },
 }
 ```
 
-## Surfaces that use the picker
+## Picker ownership
 
-All of these surfaces respect your `picker` setting:
+The configured backend handles simple list selection. Pickers with Dadbod Grip-specific actions stay built-in because telescope.nvim and snacks.nvim do not expose those actions.
 
-| Keymap | Surface | What it picks |
-|--------|---------|---------------|
-| `gT` / `gt` | Grid, Sidebar, Query Pad | Table (with column preview) |
-| `gC` / `<C-g>` | All surfaces | Database connection |
-| `gh` | All surfaces | Query history (timestamp + SQL preview) |
-| `gn` | Grid, Sidebar, Query Pad | Notebook file (.md / .sql) |
-| `gq` | All surfaces | Saved query |
-| `gp` | Grid | Saved filter preset |
-| `gE` | Grid | Export format |
-| `gH` | Grid | Column visibility |
-| `<C-p>` | All surfaces | Command palette (searchable action list) |
+| Keymap | Surface | What it picks | Interface |
+|--------|---------|---------------|-----------|
+| `gT` / `gt` | Grid, Sidebar, Query Pad | A table with a column preview. | Configured backend. |
+| `gh` | All surfaces | Query history with SQL previews. | Configured backend. |
+| `<C-p>` | All surfaces | The command palette. | Configured backend. |
+| `gm` | Grid | A referencing table when more than one table points at the row. | Configured backend. |
+| `gC` / `<C-g>` | All surfaces | A database connection and its management actions. | Built-in. |
+| `gn` | Grid, Sidebar, Query Pad | A notebook file. | Built-in. |
+| `gq` | All surfaces | A saved query and its management actions. | Built-in. |
+| `gp` | Grid | A saved filter preset. | Built-in. |
+
+Exports use Neovim's selection and input prompts. Column visibility uses its own multi-select float, so neither surface changes with `picker`.
 
 ## Fallback behavior
 

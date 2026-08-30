@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting
-description: Common setup failures and how to fix them.
+description: This guide explains how to fix common Dadbod Grip setup failures.
 ---
 
 # Troubleshooting
@@ -19,8 +19,9 @@ dadbod-grip shells out to the database's own CLI tool to run queries. Each adapt
 | MySQL / MariaDB | `mysql` | `which mysql` |
 | SQLite | `sqlite3` | `which sqlite3` |
 | DuckDB | `duckdb` | `which duckdb` |
+| SQL Server | `sqlcmd` | `which sqlcmd` |
 
-The plugin checks on startup. If a tool is missing you will see:
+The adapter reports a missing client when it tries to run a command. For example:
 
 ```
 Grip: psql not found. Install postgresql-client.
@@ -52,7 +53,7 @@ brew install duckdb
 
 Or download the binary from [duckdb.org/docs/installation](https://duckdb.org/docs/installation) and place it anywhere on your `$PATH`.
 
-Run `:GripHealth` from inside Neovim to see a checklist of what is installed.
+Run `:checkhealth dadbod-grip` inside Neovim to see a checklist of installed database clients. An installed `ollama` executable also satisfies the optional AI-provider check without a cloud API key.
 
 ---
 
@@ -63,25 +64,31 @@ The format varies by database. The most common mistakes:
 **PostgreSQL** uses a connection URI, not a DSN keyword string:
 
 ```
-postgresql://user:password@host:5432/dbname
+postgresql://user:${DB_PASSWORD}@host:5432/dbname
 ```
 
-Not `host=localhost dbname=mydb`. Test the string directly:
+Not `host=localhost dbname=mydb`. Test the same endpoint with the client, but keep the password out of the command arguments:
 
 ```sh
-psql "postgresql://user:password@host:5432/dbname" -c "SELECT 1"
+psql -h host -p 5432 -U user -d dbname -c "SELECT 1"
 ```
+
+Let `psql` read the password from `.pgpass` or `PGPASSWORD`; do not paste a credential-bearing URL into `argv` or shell history.
 
 **MySQL** uses `mysql://` as the scheme:
 
 ```
-mysql://user:password@host:3306/dbname
+mysql://user:${DB_PASSWORD}@host:3306/dbname
 ```
 
-If the server requires SSL, append `?ssl-mode=REQUIRED`:
+Dadbod Grip passes the host, port, user, and database to `mysql`. Configure TLS through the
+client's normal option files; the adapter does not translate URL query parameters into
+`mysql` flags.
+
+MariaDB also accepts the explicit `mariadb://` scheme while using the compatible `mysql` client:
 
 ```
-mysql://user:password@host:3306/dbname?ssl-mode=REQUIRED
+mariadb://user:${DB_PASSWORD}@host:3306/dbname
 ```
 
 **SQLite** takes a file path, absolute or `~`-expanded:
@@ -94,22 +101,30 @@ sqlite:~/.local/share/myapp.db
 **DuckDB** in-memory:
 
 ```
-duckdb://
+duckdb::memory:
 ```
 
 Persistent file:
 
 ```
-duckdb:///path/to/file.db
+duckdb:/path/to/file.db
 ```
 
-**Store connections** in `connections.json` so you don't retype them. Run `:GripConnect`, then press `<C-e>` to open the file for editing.
+**SQL Server** accepts `sqlserver://` and `mssql://` URLs:
+
+```
+sqlserver://user:${DB_PASSWORD}@host:1433/dbname
+```
+
+Server-certificate validation is enabled by default. Use `encrypt=optional`, `encrypt=mandatory`, or `encrypt=strict` to select an encryption mode. `trust_server_certificate=true` is an explicit development escape hatch. Use `server_certificate=<url-encoded-path>` to pin a certificate path; it requires mandatory or strict encryption and cannot be combined with `trust_server_certificate=true`.
+
+**Store connections** in `connections.json` so you do not retype them. Run `:GripConnect` and choose `+ New connection`; keep credentials in environment placeholders rather than literal URLs.
 
 ---
 
 ## DuckDB extension auto-install fails
 
-DuckDB auto-installs extensions (`httpfs`, `postgres_scanner`, `mysql_scanner`, `sqlite_scanner`) the first time you use a feature that needs them. In network-restricted or offline environments this silently fails.
+DuckDB installs extensions such as `httpfs`, `postgres_scanner`, `mysql_scanner`, and `sqlite_scanner` the first time a feature needs them. A network-restricted or offline environment can prevent that download.
 
 **Check what is installed:**
 
@@ -119,21 +134,16 @@ SELECT * FROM duckdb_extensions() WHERE installed = true;
 
 Run this in the query pad (`q` to open, `<C-CR>` to execute).
 
-**Pre-install extensions manually** from a machine with internet access:
+**Pre-install extensions manually** in the DuckDB prompt from a machine with internet access:
 
-```sh
-duckdb -c "INSTALL httpfs; INSTALL postgres_scanner; INSTALL sqlite_scanner;"
+```sql
+INSTALL httpfs;
+INSTALL postgres_scanner;
+INSTALL mysql_scanner;
+INSTALL sqlite_scanner;
 ```
 
 The extension files land in `~/.duckdb/extensions/`. Copy that directory to the offline machine.
-
-**Force a specific extension directory** in your grip setup:
-
-```lua
-require("dadbod-grip").setup({
-  duckdb_extensions_dir = "/path/to/offline/extensions"
-})
-```
 
 ---
 
@@ -141,13 +151,13 @@ require("dadbod-grip").setup({
 
 **Check for conflicts first.** Run `:verbose nmap gl` from the buffer where grip is open. If another plugin owns `gl`, its mapping will show at the top.
 
-**Remap any conflicting key** via `setup()`. The example below moves the live SQL preview from `gl` to `gL` and binds apply to `<leader>a`:
+**Remap any conflicting key** via `setup()`. The example below moves the live SQL preview from `gl` to `<leader>ls` and binds apply to `<leader>a`:
 
 ```lua
 require("dadbod-grip").setup({
   keymaps = {
     grid = {
-      live_sql = "gL",
+      live_sql = "<leader>ls",
       apply    = "<leader>a",
     }
   }
@@ -174,13 +184,9 @@ require("dadbod-grip").setup({
 
 If `<C-p>` (command palette), `gT` (table picker), or `gh` (query history) do nothing, the picker backend may not have loaded.
 
-**What grip tries in order:**
+Dadbod Grip uses `picker = "builtin"` by default. Set it to `"telescope"` or `"snacks"` to delegate supported simple pickers. If the configured backend is unavailable, the same invocation falls back to the built-in picker. Connections, saved queries, notebooks, filter presets, and other pickers with Dadbod Grip-specific actions always use the built-in interface.
 
-1. `snacks.nvim` (if installed and loaded)
-2. `telescope.nvim` (if installed and loaded)
-3. Built-in floating picker (always available, no dependencies)
-
-If neither third-party picker is available, grip falls back to the built-in automatically. If you see a blank float or nothing at all, force the built-in explicitly:
+To rule out a third-party load problem, force the built-in picker explicitly:
 
 ```lua
 require("dadbod-grip").setup({
@@ -188,6 +194,6 @@ require("dadbod-grip").setup({
 })
 ```
 
-**Telescope not loading?** Make sure it is in your plugin spec and `require("telescope").setup({})` runs before grip tries to use it. Lazy-loading telescope without the right event trigger is the most common cause.
+**Telescope not loading?** Make sure it is in your plugin spec and `require("telescope").setup({})` runs before Dadbod Grip opens a delegated picker.
 
-**Snacks not loading?** Check that `snacks.nvim` is not lazy-loaded on `VeryLazy` while grip loads on `BufEnter`. A load-order mismatch makes snacks unavailable when grip first checks for it. Set `priority = 1000` on the snacks spec or add it as a dependency.
+**Snacks not loading?** Make sure `snacks.nvim` is loadable before Dadbod Grip opens a delegated picker. Adding it as a dependency of the Dadbod Grip plugin spec gives Lazy the required ordering without a global priority override.

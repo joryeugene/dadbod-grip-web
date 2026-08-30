@@ -1,13 +1,15 @@
 ---
 title: Cross-Database Federation
-description: Use DuckDB as a hub to JOIN across Postgres, MySQL, SQLite, remote files, and S3.
+description: Dadbod Grip uses DuckDB to join PostgreSQL, MySQL, SQLite, remote files, and S3 sources.
 ---
 
 # Cross-Database Federation
 
-dadbod-grip uses DuckDB as a federation hub. Attach any combination of Postgres, MySQL,
+dadbod-grip uses DuckDB as a federation hub. Attach any combination of PostgreSQL, MySQL,
 SQLite, and MotherDuck databases alongside local files, remote URLs, and S3 paths.
 Query all of them in a single SQL statement.
+
+Every DuckDB statement is sent through standard input, so SQL, DSNs, attachment declarations, and secret bodies stay out of process arguments. Credentialed PostgreSQL and MySQL attachments use temporary, invocation-scoped DuckDB secrets. Dadbod Grip never creates persistent DuckDB secrets.
 
 ## How it works
 
@@ -15,6 +17,7 @@ Start with a DuckDB connection (file or memory), then attach external sources:
 
 ```vim
 :GripAttach postgres:dbname=production host=db.internal user=app  prod
+:GripAttach mysql:database=warehouse host=mysql.internal user=app  warehouse
 :GripAttach sqlite:archive.db  archive
 :GripAttach md:analytics  cloud
 ```
@@ -32,7 +35,7 @@ JOIN cloud.segments ON cloud.segments.customer_id = prod.customers.id
 WHERE prod.customers.plan = 'enterprise'
 ```
 
-Execute from the query pad with `<C-CR>`. Results open as an editable grip grid.
+Execute from the query pad with `<C-CR>`. Results open in a grid. Joined result sets remain read-only because they do not map back to one editable table.
 
 ## Required extensions
 
@@ -41,10 +44,13 @@ DuckDB installs the necessary scanner extension automatically when you attach:
 | Attachment prefix | Extension installed |
 |-------------------|---------------------|
 | `postgres:` | `postgres_scanner` |
+| `mysql:` | `mysql_scanner` |
 | `sqlite:` | `sqlite_scanner` |
 | `md:` | MotherDuck cloud client |
 
 You do not need to run `INSTALL` or `LOAD` manually.
+
+Use `${VAR}` placeholders for credentials in persisted attachment URLs. Dadbod Grip resolves them only when the command is dispatched.
 
 ## File attachments in federation
 

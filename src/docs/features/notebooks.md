@@ -1,12 +1,12 @@
 ---
 title: SQL Notebooks
-description: Open Markdown and SQL files as runnable notebooks. Execute individual SQL blocks with C-CR.
+description: Dadbod Grip opens Markdown and SQL files as notebooks and executes individual SQL blocks with Ctrl-Enter.
 ---
 
 # SQL Notebooks
 
 The query pad understands SQL fence blocks inside Markdown and plain SQL files.
-Place your cursor inside any block and press `C-CR` to run only that block. The
+Place your cursor inside any block and press `<C-CR>` to run only that block. The
 result appears in the grid below without touching anything else in the file.
 
 ## Opening a notebook
@@ -35,14 +35,14 @@ LIMIT 10
 What to notice in the result.
 ````
 
-Press `C-CR` with the cursor on any line inside the block (or on the opening fence
+Press `<C-CR>` with the cursor on any line inside the block (or on the opening fence
 line). That block's SQL executes. The surrounding narrative is untouched.
 
 ## Block vs buffer execution
 
-The same `C-CR` key does two different things depending on context:
+The same `<C-CR>` key does two different things depending on context:
 
-| Context | `C-CR` behavior |
+| Context | `<C-CR>` behavior |
 |---------|----------------|
 | Cursor inside a ` ```sql ``` ` block | Runs that block only |
 | Cursor outside any block | Runs the full buffer as SQL |
@@ -76,14 +76,14 @@ Open it with `gn` from any session to reload it.
 ## Plain SQL files
 
 `.sql` files also load into the query pad via `gn`. A plain SQL file has no Markdown
-fences, so `C-CR` always runs the full buffer unless you use a visual selection. Use
+fences, so `<C-CR>` always runs the full buffer unless you use a visual selection. Use
 `gq` (load saved query) for the query history workflow; use `gn` for named SQL files
 you want to keep on disk as part of a project.
 
 ## Saving the current pad content
 
-Press `C-s` in the query pad to save the current content as a named query in
-`.grip/saved_queries.json`. Use `gq` to load saved queries back.
+Press `<C-s>` in the query pad to save the current content as a named SQL file in
+`.grip/queries/`. Use `gq` to load saved queries back.
 
 To save a notebook as a file on disk, use a normal `:w` write:
 
