@@ -19,8 +19,10 @@ The demo opens as a SQL notebook in the query pad. Place your cursor inside any
 :GripStart
 ```
 
-This seeds a local SQLite database and opens the Softrear Inc. notebook in the
-query pad automatically. Seventeen tables appear in the schema sidebar.
+This creates a local DuckDB database when the `duckdb` client is available and
+falls back to SQLite through `sqlite3`. The main notebook requires either client,
+and its supplier federation section requires both. Dadbod Grip opens the Softrear
+Inc. notebook automatically, and seventeen tables appear in the schema sidebar.
 
 ## The investigation
 

@@ -20,7 +20,8 @@ stage multiple changes, preview the generated SQL, and send them as one `BEGIN`/
 If the client reports an apply error, inspect the database before retrying because an earlier
 statement may already have committed.
 
-The demo database ships as SQLite. Run `:GripStart` to open it.
+Run `:GripStart` to open the bundled demo. Dadbod Grip uses SQLite when the `duckdb`
+client is unavailable.
 
 ## Attach to DuckDB
 

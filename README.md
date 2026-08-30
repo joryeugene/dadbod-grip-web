@@ -4,6 +4,8 @@ This repository builds the documentation site for [dadbod-grip.nvim](https://git
 
 ## Local development
 
+Node.js 24 is required. The `.node-version` file keeps compatible version managers and CI on the same release line.
+
 ```sh
 npm ci
 npm run dev
@@ -20,4 +22,4 @@ Documentation pages live in `src/docs`, the homepage lives in `src/routes/+page.
 
 ## Publishing
 
-Pushing `main` triggers the GitHub Pages workflow. Review the generated site and coordinate Dadbod Grip release timing before pushing documentation for an unreleased version.
+Merging a pull request into `main` triggers the GitHub Pages workflow. Review the generated site and coordinate Dadbod Grip release timing before merging documentation for an unreleased version.
