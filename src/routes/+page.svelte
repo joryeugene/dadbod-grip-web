@@ -156,7 +156,15 @@
 <div use:copyCode>
 <!-- Hero -->
 <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-16 flex flex-col items-center text-center">
-	<img src="{base}/mascot.gif" alt="Chonk, the dadbod-grip mascot" class="w-32 h-auto mb-8" />
+	<img src="{base}/mascot.gif" alt="Chonk, the dadbod-grip mascot" class="w-32 h-auto mb-8 shrink-0" />
+
+	<img
+		src="{base}/brand/dadbod-grip-wordmark.png"
+		alt="Dadbod Grip"
+		width="908"
+		height="345"
+		class="block w-full max-w-[520px] h-auto mb-10"
+	/>
 
 	<h1 class="font-sans text-4xl sm:text-5xl font-bold text-dark-text mb-4 leading-tight">
 		Edit database tables<br class="hidden sm:block" />
@@ -428,12 +436,12 @@
 		<div use:scrollReveal>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Editing</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Visual mode stages one edit across selected rows.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> The staging buffer supports multi-level undo, and applied batches produce best-effort compensating SQL.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> DDL actions rename, add, and drop columns and tables after showing the statement.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gA</code> or <code>:GripFill</code> sends the active schema to the configured provider and stages its returned rows for review.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>:GripToggle</code> closes or restores the Dadbod Grip windows.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Conditional formatting marks negative numbers, booleans, dates, and URLs without changing their values.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">Visual mode stages one edit across selected rows.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">The staging buffer supports multi-level undo, and applied batches produce best-effort compensating SQL.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">DDL actions rename, add, and drop columns and tables after showing the statement.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gA</code> or <code>:GripFill</code> sends the active schema to the configured provider and stages its returned rows for review.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>:GripToggle</code> closes or restores the Dadbod Grip windows.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">Conditional formatting marks negative numbers, booleans, dates, and URLs without changing their values.</span></div>
 			</div>
 		</div>
 
@@ -441,11 +449,11 @@
 		<div use:scrollReveal={{ delay: 80 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Navigation</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gf</code> follows an outgoing foreign key, <code>gm</code> follows incoming references, and <code>&lt;C-o&gt;</code> returns.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> The schema sidebar marks primary and foreign keys and opens table-depth views with keys <code>1</code> through <code>9</code>.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>&lt;C-p&gt;</code> searches the actions available on the current surface.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>K</code> turns the current row into a vertical key-value record.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gG</code> opens an ER map of the tables and their foreign-key relationships.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gf</code> follows an outgoing foreign key, <code>gm</code> follows incoming references, and <code>&lt;C-o&gt;</code> returns.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">The schema sidebar marks primary and foreign keys and opens table-depth views with keys <code>1</code> through <code>9</code>.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>&lt;C-p&gt;</code> searches the actions available on the current surface.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>K</code> turns the current row into a vertical key-value record.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gG</code> opens an ER map of the tables and their foreign-key relationships.</span></div>
 			</div>
 		</div>
 
@@ -453,13 +461,13 @@
 		<div use:scrollReveal={{ delay: 160 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Analysis</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gR</code> profiles distributions, completeness, and cardinality across the table.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gQ</code> turns an <code>EXPLAIN</code> plan into cost bars and heuristic index suggestions.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gD</code> compares two tables by primary key.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>s</code> changes the primary sort, while <code>S</code> adds another sort tier.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gF</code> builds filters for equality, ranges, patterns, sets, and null values.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gP</code> saves the active filters, and <code>gp</code> restores a preset.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gx</code> opens an HTTP, HTTPS, or FTP URL from the current cell.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gR</code> profiles distributions, completeness, and cardinality across the table.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gQ</code> turns an <code>EXPLAIN</code> plan into cost bars and heuristic index suggestions.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gD</code> compares two tables by primary key.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>s</code> changes the primary sort, while <code>S</code> adds another sort tier.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gF</code> builds filters for equality, ranges, patterns, sets, and null values.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gP</code> saves the active filters, and <code>gp</code> restores a preset.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gx</code> opens an HTTP, HTTPS, or FTP URL from the current cell.</span></div>
 			</div>
 		</div>
 
@@ -467,11 +475,11 @@
 		<div use:scrollReveal={{ delay: 240 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Integration</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Built-in SQL completion includes tables, columns, aliases, and attached schemas.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> The <code>picker</code> option delegates supported lists to Telescope or snacks.nvim.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> blink.cmp and nvim-cmp can consume Dadbod Grip's completion source.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gn</code> opens a SQL notebook, and <code>&lt;C-CR&gt;</code> runs the block under the cursor.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> Saved queries bind to opaque connection IDs instead of copied database URLs.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">Built-in SQL completion includes tables, columns, aliases, and attached schemas.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">The <code>picker</code> option delegates supported lists to Telescope or snacks.nvim.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">blink.cmp and nvim-cmp can consume Dadbod Grip's completion source.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gn</code> opens a SQL notebook, and <code>&lt;C-CR&gt;</code> runs the block under the cursor.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">Saved queries bind to opaque connection IDs instead of copied database URLs.</span></div>
 			</div>
 		</div>
 
@@ -479,10 +487,10 @@
 		<div use:scrollReveal={{ delay: 320 }}>
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">I/O</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gE</code> and <code>gX</code> export the current page or every filtered and sorted row.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>:GripOpen</code> reads Parquet, CSV, JSON, Excel, ORC, Arrow, IPC, HTTPS, and S3 sources through DuckDB.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>gW</code> reruns a file query on a timer while no edits are staged.</div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span> <code>g!</code> enables write mode for supported local files.</div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gE</code> and <code>gX</code> export the current page or every filtered and sorted row.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>:GripOpen</code> reads Parquet, CSV, JSON, Excel, ORC, Arrow, IPC, HTTPS, and S3 sources through DuckDB.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gW</code> reruns a file query on a timer while no edits are staged.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>g!</code> enables write mode for supported local files.</span></div>
 			</div>
 		</div>
 	</div>
