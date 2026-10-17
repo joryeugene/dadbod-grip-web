@@ -5,7 +5,7 @@ description: This guide explains how to install Dadbod Grip and connect to your 
 
 # Getting Started
 
-Dadbod Grip turns database tables into editable Vim buffers. It stages each change, shows the SQL it will run, and sends the batch between `BEGIN` and `COMMIT`.
+Dadbod Grip turns database tables into editable Vim buffers. It stages grid row edits, shows the SQL it will run, and sends the batch between `BEGIN` and `COMMIT`.
 
 ## Requirements
 
@@ -101,12 +101,30 @@ require("dadbod-grip").setup({
   cell_split = "horizontal",
   sticky_header = true,
   open_sidebar = true,
+  show_running_time = true,
+  show_result_time = true,
+  show_hints = true,
+  engine_timing = false,
 })
 ```
 
 Set `open_sidebar = false` to connect directly into the main workspace without opening the sidebar. The schema sidebar remains available through `:GripSchema` or `gb`.
 
 `timeout` applies to database CLI calls. DuckDB work that may download an extension or read a remote URL receives a 60-second minimum for that network step, while connection health checks use five seconds.
+
+### Timing display
+
+The loading indicator starts counting elapsed time after half a second. It measures the whole operation, including nested steps, rather than database progress. Set `show_running_time = false` to hide the number while keeping the loading indicator and operation label.
+
+After a successful query, the result footer shows its client round-trip as `Query: 17ms client`. This measures the database-client call and result parsing. Metadata lookups, row counts, and rendering fall outside that duration, so it can be shorter than the running clock. After a successful write and reload, `Write` keeps the write's client duration separately from the refreshed SELECT's `Query` duration.
+
+Set `show_result_time = false` to hide retained Query, Write, and action durations. Completed action text, row counts, pagination, and errors remain visible. Both timing options default to `true` and control display only; collection and history durations continue. Set `engine_timing = true` to collect separate [DuckDB profiler latency](databases/duckdb#engine-timing).
+
+### Zen display
+
+Set `show_hints = false` to hide automatic shortcut hints in results, the SQL pad, the schema sidebar, and Welcome. Run `:GripZen` to toggle this setting for the current session. Existing panes update without changing SQL text, keymaps, split layout, zoom, or either timing option. There is no default key binding for the command.
+
+Column labels, staged changes, result status, filters, pagination, loading, and errors remain visible. Explicit help remains available through `?` or your configured binding. Narrow result panes may use extra status rows to keep that information readable.
 
 ## What opens automatically
 
@@ -122,4 +140,4 @@ The digits depend on the pane. For example, `2` from schema or results opens SQL
 
 Press `gb` to focus schema and `<Esc>` there to close it. Use `h`/`l` to fold or expand groups, `/` to find hidden objects, and `F` to clear the search. Native `<C-w>` window navigation still works. Press `gz` in Welcome, SQL, schema, or results to zoom the pane; press it again to restore the split layout. Opening SQL from another zoomed pane also restores the splits.
 
-Result shortcut hints fit into two rows at the current window width and stay visible during horizontal table scrolling. Narrow panes prioritize help and core actions. Named queries and history persist; an unsaved pad and active result layout do not automatically return after Neovim exits.
+With `show_hints = true`, result shortcut hints fit into two rows at the current window width and stay visible during horizontal table scrolling. Narrow panes prioritize help and core actions. Named queries and history persist; an unsaved pad and active result layout do not automatically return after Neovim exits.

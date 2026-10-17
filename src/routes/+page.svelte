@@ -227,7 +227,7 @@
 	<div class="text-center mb-12" use:scrollReveal>
 		<h2 class="font-sans text-2xl font-bold text-dark-text mb-3">Review the write before it runs.</h2>
 		<p class="text-dark-muted max-w-xl mx-auto text-sm">
-			Every change stages before it touches the database. Review the SQL. Commit or cancel.
+			Grid row edits stage before they touch the database. Review the SQL. Commit or cancel.
 			The grid keeps investigation fast and makes the write visible before it runs.
 		</p>
 	</div>
