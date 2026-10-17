@@ -1,8 +1,8 @@
 <script lang="ts">
 	import '../app.css';
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { afterNavigate } from '$app/navigation';
-	import Toast from '$lib/components/Toast.svelte';
+	import Toast from '#lib/components/Toast.svelte';
 
 	let { children } = $props();
 
@@ -11,15 +11,15 @@
 	afterNavigate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
 
 	const navLinks = [
-		{ label: 'Docs', href: `${base}/docs/getting-started` },
-		{ label: 'Keymaps', href: `${base}/keymaps` },
-		{ label: 'Demo', href: `${base}/docs/demo` }
+		{ label: 'Docs', href: resolve('docs/getting-started') },
+		{ label: 'Keymaps', href: resolve('/keymaps') },
+		{ label: 'Demo', href: resolve('docs/demo') }
 	];
 </script>
 
-<header class="sticky top-0 z-50 border-b border-dark-border bg-dark-bg/90 backdrop-blur-sm">
+<header class="sticky top-0 z-50 border-b border-dark-border bg-dark-bg/90 backdrop-blur-xs">
 	<nav class="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-		<a href={base || '/'} class="flex items-center gap-2 font-mono font-bold text-dark-text hover:text-grip-400 transition-colors">
+		<a href={resolve('/')} class="flex items-center gap-2 font-mono font-bold text-dark-text hover:text-grip-400 transition-colors">
 			<span class="text-grip-400">dadbod-grip</span><span class="text-dark-muted">.nvim</span>
 		</a>
 
@@ -76,8 +76,8 @@
 
 <footer class="border-t border-dark-border mt-24 py-10 text-center text-dark-muted text-sm space-y-3">
 	<div class="flex justify-center gap-6">
-		<a href="{base}/docs/getting-started" class="hover:text-grip-400 transition-colors">Docs</a>
-		<a href="{base}/keymaps" class="hover:text-grip-400 transition-colors">Keymaps</a>
+		<a href={resolve('docs/getting-started')} class="hover:text-grip-400 transition-colors">Docs</a>
+		<a href={resolve('/keymaps')} class="hover:text-grip-400 transition-colors">Keymaps</a>
 		<a href="https://github.com/joryeugene/dadbod-grip.nvim" target="_blank" rel="noopener noreferrer" class="hover:text-grip-400 transition-colors">GitHub</a>
 	</div>
 	<p>

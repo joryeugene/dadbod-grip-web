@@ -4,7 +4,7 @@ description: This reference lists configurable Dadbod Grip mappings for Welcome,
 ---
 
 <script lang="ts">
-  import KeymapReference from '$lib/components/KeymapReference.svelte';
+  import KeymapReference from '#lib/components/KeymapReference.svelte';
 </script>
 
 # Keymaps Reference
