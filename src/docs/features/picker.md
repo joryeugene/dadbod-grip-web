@@ -21,7 +21,9 @@ Set `picker` to `"builtin"` (default), `"telescope"`, or `"snacks"`.
 ## Built-in picker
 
 The default. No extra plugins needed. The built-in picker renders a floating window with
-fuzzy matching, preview panes for table columns, and keyboard navigation.
+filtering, preview panes for table columns, and keyboard navigation. Press `/` or `gp`
+to enter a filter, then confirm. Press `F` to clear it. Direct typing does not activate
+the default picker's filter.
 
 ## Telescope
 

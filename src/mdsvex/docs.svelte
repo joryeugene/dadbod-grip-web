@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { copyCode } from '$lib/actions/copy-code';
-	import DocsNav from '$lib/components/DocsNav.svelte';
+	import { copyCode } from '#lib/actions/copy-code.ts';
+	import DocsNav from '#lib/components/DocsNav.svelte';
 
 	let { children, title = '', description = '' } = $props();
 </script>

@@ -24,9 +24,9 @@ require('dadbod-grip').setup({
 Set your API key in your shell environment:
 
 ```bash
-export ANTHROPIC_API_KEY=...   -- for Anthropic
-export OPENAI_API_KEY=...      -- for OpenAI
-export GEMINI_API_KEY=...      -- for Gemini
+export ANTHROPIC_API_KEY=...   # for Anthropic
+export OPENAI_API_KEY=...      # for OpenAI
+export GEMINI_API_KEY=...      # for Gemini
 ```
 
 Ollama runs locally with no API key needed. Make sure Ollama is running before connecting.
@@ -128,8 +128,9 @@ For bulk generation, use the command form:
 :GripFill 10
 ```
 
-This stages 10 AI-generated rows at once. The rows respect unique constraints and produce
-varied, plausible values rather than repeating patterns.
+This stages 10 AI-generated rows for review. The provider proposes values from the
+table schema; the database remains the authority on unique constraints and other
+requirements when you apply the batch.
 
 Note: `gA` behaves differently depending on the surface. From the **query pad**, it modifies
 existing SQL. From the **grid**, it generates staged rows.

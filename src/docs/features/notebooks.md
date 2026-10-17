@@ -1,94 +1,79 @@
 ---
 title: SQL Notebooks
-description: Dadbod Grip opens Markdown and SQL files as notebooks and executes individual SQL blocks with Ctrl-Enter.
+description: Dadbod Grip loads Markdown and SQL files into the query pad and executes individual SQL blocks with Ctrl-Enter.
 ---
 
 # SQL Notebooks
 
-The query pad understands SQL fence blocks inside Markdown and plain SQL files.
-Place your cursor inside any block and press `<C-CR>` to run only that block. The
-result appears in the grid below without touching anything else in the file.
+The query pad understands SQL fence blocks in Markdown and SQL paragraphs in plain
+SQL. Place your cursor in a SQL block and press `<C-CR>` to run it. Results appear
+in the grid below.
 
 ## Opening a notebook
 
-Press `gn` from the query pad or schema sidebar to open the notebook picker.
-It scans for `.md` and `.sql` files in your project directory and shows a preview
-of each file's contents.
+Press `gn` from the query pad or schema sidebar. The built-in picker previews
+Markdown files in `demo/` and `notebooks/`, plus Markdown and SQL files at the
+project root. Discovery is not recursive, and SQL files nested under `notebooks/`
+are not included.
 
-Selecting a file loads it into the query pad. The file content appears as-is,
-with the query pad in a read-friendly layout and SQL blocks highlighted normally.
+Selecting a file copies its contents into the scratch query pad. Editing that pad
+does not modify the original notebook file.
 
 ## Running a block
 
-In a Markdown file, blocks are delimited with triple-backtick SQL fences:
+Write SQL between triple-backtick fences:
 
 ````markdown
-Some narrative text explaining what we are about to ask.
+Find the products with the lowest softness scores.
 
 ```sql
-SELECT sku, product_name, softness_score
+SELECT sku, ply, softness_score
 FROM rolls
 ORDER BY softness_score ASC
 LIMIT 10
 ```
 
-What to notice in the result.
+Inspect the first row before following its relationships.
 ````
 
-Press `<C-CR>` with the cursor on any line inside the block (or on the opening fence
-line). That block's SQL executes. The surrounding narrative is untouched.
+Press `<C-CR>` inside the block or on its opening fence. The fenced SQL runs without
+the surrounding narrative.
 
-## Block vs buffer execution
-
-The same `<C-CR>` key does two different things depending on context:
+## What Ctrl-Enter runs
 
 | Context | `<C-CR>` behavior |
 |---------|----------------|
-| Cursor inside a ` ```sql ``` ` block | Runs that block only |
-| Cursor outside any block | Runs the full buffer as SQL |
-| Visual selection active | Runs the selected text |
+| Visual selection | It runs the selected text. |
+| Cursor in a SQL fence | It runs that fenced block. |
+| Cursor in plain SQL | It runs the surrounding blank-line-delimited SQL paragraph. |
+| No statement found | It falls back to the full pad contents. |
 
-This lets you use the same key whether you are working with a notebook or a plain
-SQL buffer. The block-aware path takes priority when a block is detected.
+Keep the cursor inside a SQL block when working in a Markdown notebook. Outside
+a fence, narrative can be treated as a paragraph to execute. In plain SQL, separate
+independent statements with blank lines when you want to run them individually.
 
-## Writing notebooks
+## Writing and saving notebooks
 
-Any Markdown file with ` ```sql ` blocks works as a notebook. There is no special
-file format or frontmatter required. A notebook typically looks like:
+Edit a Markdown notebook in a regular Neovim file buffer and write it there. Reload
+it with `gn` when you want a fresh copy in the query pad. Each SQL block should work
+against the current connection without relying on temporary objects from another
+query invocation.
 
-- A brief introduction stating the question
-- One or more SQL blocks, each preceded by a sentence explaining what it asks
-- A sentence after the result describing what to look for
+In the pad, `<C-s>`, `:GripSave`, and `:w` use the named-query save flow. They save the
+entire pad as SQL under the project's `.grip/queries/`; `:w notebooks/analysis.md`
+is not a way to write the scratch pad back to a Markdown notebook. Replace the pad
+with just the SQL you want to reuse before saving. Use `gq` to load a named query
+and `gh` for query history.
 
-The SQL blocks should be self-contained. Each one should run independently against
-the current connection without depending on side effects from previous blocks.
+Named queries and history persist across Neovim restarts. An unsaved pad and its
+active result layout do not automatically restore after exit.
 
 ## The demo notebook
 
-`:GripStart` loads the Softrear Inc. demo notebook automatically. It covers sixteen
-sections of a data quality investigation: product catalog anomalies, consumer
-incidents, a four-hop supply chain JOIN, intelligence analysis, and a cross-database
-join against an attached supplier database.
-
-The notebook lives at `demo/softrear-internal.md` inside the plugin directory.
-Open it with `gn` from the query pad or schema sidebar to reload it.
-
-## Plain SQL files
-
-`.sql` files also load into the query pad via `gn`. A plain SQL file has no Markdown
-fences, so `<C-CR>` always runs the full buffer unless you use a visual selection. Use
-`gq` (load saved query) for the query history workflow; use `gn` for named SQL files
-you want to keep on disk as part of a project.
-
-## Saving the current pad content
-
-Press `<C-s>` in the query pad to save the current content as a named SQL file in
-`.grip/queries/`. Use `gq` to load saved queries back.
-
-To save a notebook as a file on disk, use a normal `:w` write:
-
-```vim
-:w notebooks/my-analysis.md
-```
-
-The file is plain Markdown. Open it again with `gn` from the query pad or schema sidebar.
+`:GripStart` recreates disposable demo data and opens `demo/softrear-internal.md`
+with the cursor in its first SQL block. It does not execute the block automatically.
+The investigation covers product quality, consumer incidents, a four-hop supply
+chain JOIN, and supplier intelligence. Its **Daily practice** section covers
+finding a view, inspecting and exporting rows, staging an edit, reviewing SQL,
+undoing or applying it, and saving useful SQL. See the [demo guide](../demo) for
+client requirements and the optional PostgreSQL schema lab.

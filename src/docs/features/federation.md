@@ -63,17 +63,21 @@ JOIN read_parquet('s3://my-bucket/enrichment.parquet') remote
   ON remote.customer_id = local.id
 ```
 
-Or open a file as a named connection to keep it persistent:
+Open a file directly as an ephemeral connection:
 
 ```vim
 :GripOpen s3://my-bucket/data.parquet
 ```
 
+To save a named connection, run `:GripConnect`, choose **+ New connection...**, and
+enter its URL and name. `:GripOpen` does not save the connection.
+
 ## Persisted attachments
 
-Attachments persist in `.grip/connections.json` and restore automatically when you
-reconnect to the same DuckDB file. The sidebar shows each attached database as a
-separate section with its own table list.
+Attachments on a saved project connection persist in `.grip/connections.json` and
+restore when you reconnect to that saved DuckDB connection. An ephemeral connection
+does not save its attachments automatically. The sidebar shows each attached database
+as a separate section with its own table list.
 
 ## Sidebar keymaps for federation
 

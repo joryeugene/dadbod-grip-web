@@ -5,17 +5,17 @@ description: Dadbod Grip manages project, global, and shared connection files.
 
 # Connections
 
-dadbod-grip stores connections in two files that merge automatically. Project connections live in `.grip/connections.json` relative to the current working directory. Global connections live in `~/.grip/connections.json` and appear in every project. You never need to configure the merge: opening the connection picker shows both.
+dadbod-grip stores connections in two files that merge automatically. Project connections live in `.grip/connections.json` at the project root. Global connections live in `~/.grip/connections.json` and appear in every project. You never need to configure the merge: opening the connection picker shows both.
 
 ## Project connections
 
-When you save a connection via `:GripConnect`, it writes to `.grip/connections.json` in the current working directory. These connections are scoped to that project. If you open a different project, project connections from the first directory do not appear.
+When you save a connection from the picker, it writes to the project's `.grip/connections.json`. Dadbod Grip walks upward from the current working directory to the nearest `.git` or `.grip` directory, falling back to the current directory when neither exists. These connections are scoped to that project. If you open a different project, project connections from the first directory do not appear.
 
 ```
 .grip/
   connections.json    project-specific connections
   queries/            saved queries
-  filter_presets.json saved filter presets
+  filters.json        saved filter presets
 ```
 
 Check `.grip/connections.json` into version control only when every URL is credential-free or uses a `${VAR}` placeholder. Keep literal passwords out of both project and global files.
@@ -123,9 +123,9 @@ Legacy query files containing `-- grip:url=` remain readable when the URL is tem
 
 ## Backward compatibility
 
-If you use `g:dbs` (vim-dadbod-ui format), dadbod-grip reads those entries automatically and persists them to the global file on first save. Existing vim-dadbod-ui configurations work without changes.
+If you use `g:dbs` (vim-dadbod-ui format), dadbod-grip reads those entries automatically and persists new entries to the global file when it first loads the connection list. Existing vim-dadbod-ui configurations work without changes.
 
-If a `g:dbs` URL contains a literal password, that migration will persist the literal password. Replace it with a `${VAR}` placeholder before the first save.
+If a `g:dbs` URL contains a literal password, that migration will persist the literal password. Replace it with a `${VAR}` placeholder before opening the connection picker or otherwise loading the list.
 
 ```lua
 -- existing vim-dadbod-ui config: works as-is

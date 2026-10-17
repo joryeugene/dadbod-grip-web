@@ -32,7 +32,7 @@ No `CREATE TABLE` or import step needed.
 
 ### Save as a named connection
 
-Press `gc`, choose `+ New connection`, paste the file path or URL, and give it a name.
+Run `:GripConnect` or press `gC`, choose `+ New connection`, paste the file path or URL, and give it a name. The sidebar and welcome screen also offer `gc`; in the grid, `gc` copies staged SQL.
 Named connections appear in the picker every time.
 
 ### File formats
@@ -101,17 +101,13 @@ grid automatically. Useful for monitoring changing files.
 
 ## MotherDuck
 
-Connect to MotherDuck cloud with a `md:` prefix:
+Attach MotherDuck to an active DuckDB connection:
 
-```
-md:my_database
-```
-
-Set your MotherDuck token:
-
-```bash
-export MOTHERDUCK_TOKEN=...
+```vim
+:GripConnect duckdb::memory:
+:GripAttach md:my_database cloud
 ```
 
-MotherDuck connections work as both primary connections and as federation attachments
-to a local DuckDB session.
+Set `MOTHERDUCK_TOKEN` in your shell environment before attaching. Query the attached
+database through the `cloud` alias. A bare `md:` URL is not a supported primary
+connection in Dadbod Grip.
