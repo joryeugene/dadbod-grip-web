@@ -10,7 +10,7 @@
 	const surfaces = Object.keys(SURFACE_LABELS) as Surface[];
 </script>
 
-<p>{keymaps.length} primary mappings are cataloged across four surfaces.</p>
+<p>{keymaps.length} primary mappings are cataloged across {surfaces.length} surfaces.</p>
 
 {#each surfaces as surface}
 	{@const mappings = keymaps.filter((keymap) => keymap.surfaces.includes(surface))}

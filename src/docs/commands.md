@@ -21,10 +21,11 @@ The plugin's Lazy spec registers every public command, so a lazy.nvim configurat
 | `:GripProfile` | It profiles an optional table's column distributions. |
 | `:GripAsk` | It asks the configured AI provider to generate SQL from a question. |
 | `:GripProperties` | It shows columns, indexes, row estimates, and table size for an optional table. |
-| `:GripRename` | It accepts old and new names, then previews and renames the column. |
-| `:GripCreate` | It opens the interactive table designer. |
+| `:GripRename` | It prompts and confirms with an old name; supplying both old and new names renames immediately. |
+| `:GripCreate` | It prompts for a table name and column names/types, then previews the DDL. |
 | `:GripDiff` | It accepts two tables and compares them by primary key. |
 | `:GripDrop` | It previews and drops an optional table after typed confirmation. |
+| `:GripImport` | It previews and stages clipboard rows, or stdout from an explicit `!command`, for an editable table. |
 | `:GripExport` | It exports the current page or all filtered and sorted rows to a file. |
 | `:GripAttach` | It accepts a DSN and alias, then attaches PostgreSQL, MySQL, SQLite, or MotherDuck to DuckDB. |
 | `:GripDetach` | It detaches an optional DuckDB alias. |
@@ -32,6 +33,7 @@ The plugin's Lazy spec registers every public command, so a lazy.nvim configurat
 | `:GripFill` | It asks the configured AI provider for an optional row count and stages the returned values. |
 | `:GripStart` | It recreates and opens the bundled demo database. |
 | `:GripHome` | It returns to the welcome screen. |
-| `:GripToggle` | It closes all Dadbod Grip windows or restores them when they are closed. |
+| `:GripZoom` | It zooms the current pane or restores its split layout. |
+| `:GripToggle` | It closes visible Grip buffers or reconnects when none are visible; it does not restore the previous workspace. |
 
 Press `<C-p>` from the Grid, Query Pad, or Sidebar to search the actions available there. The [keymap explorer](../keymaps) shows the default bindings by surface and mode.

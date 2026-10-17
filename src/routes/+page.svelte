@@ -438,9 +438,9 @@
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">Visual mode stages one edit across selected rows.</span></div>
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">The staging buffer supports multi-level undo, and applied batches produce best-effort compensating SQL.</span></div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">DDL actions rename, add, and drop columns and tables after showing the statement.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">Prompted DDL actions preview the statement; the two-name <code>:GripRename</code> form executes immediately.</span></div>
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gA</code> or <code>:GripFill</code> sends the active schema to the configured provider and stages its returned rows for review.</span></div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>:GripToggle</code> closes or restores the Dadbod Grip windows.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gz</code> zooms a pane and restores its split layout; <code>:GripToggle</code> closes Grip buffers.</span></div>
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">Conditional formatting marks negative numbers, booleans, dates, and URLs without changing their values.</span></div>
 			</div>
 		</div>
@@ -450,10 +450,10 @@
 			<p class="text-xs font-semibold uppercase tracking-wider text-dark-muted mb-3">Navigation</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 text-sm text-dark-muted">
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gf</code> follows an outgoing foreign key, <code>gm</code> follows incoming references, and <code>&lt;C-o&gt;</code> returns.</span></div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">The schema sidebar marks primary and foreign keys and opens table-depth views with keys <code>1</code> through <code>9</code>.</span></div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>&lt;C-p&gt;</code> searches the actions available on the current surface.</span></div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>K</code> turns the current row into a vertical key-value record.</span></div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gG</code> opens an ER map of the tables and their foreign-key relationships.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">The schema sidebar marks primary and foreign keys. Use <code>h</code>/<code>l</code> to fold groups and <code>/</code> to find hidden objects.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>?</code> shows the current pane’s keys. Digits are contextual: <code>2</code> opens SQL from results and history from SQL.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">Welcome offers demo, connection, table, and SQL actions. Select with Tab or <code>j</code>/<code>k</code>, then press Enter.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gG</code> opens the ER map. Result shortcut hints fit two rows and stay visible during horizontal scrolling.</span></div>
 			</div>
 		</div>
 
@@ -478,7 +478,7 @@
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">Built-in SQL completion includes tables, columns, aliases, and attached schemas.</span></div>
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">The <code>picker</code> option delegates supported lists to Telescope or snacks.nvim.</span></div>
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">blink.cmp and nvim-cmp can consume Dadbod Grip's completion source.</span></div>
-				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gn</code> opens a SQL notebook, and <code>&lt;C-CR&gt;</code> runs the block under the cursor.</span></div>
+				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0"><code>gn</code> loads a notebook copy, and <code>&lt;C-CR&gt;</code> runs its SQL fence or the current SQL paragraph.</span></div>
 				<div class="flex gap-2"><span class="text-grip-400 shrink-0">+</span><span class="min-w-0">Saved queries bind to opaque connection IDs instead of copied database URLs.</span></div>
 			</div>
 		</div>
@@ -499,24 +499,24 @@
 <!-- Cross-DB federation code demo -->
 <section class="max-w-6xl mx-auto px-4 sm:px-6 pb-20" use:scrollReveal>
 	<div class="bg-dark-surface border border-grip-600/30 rounded-xl p-8">
-		<h2 class="font-sans text-xl font-bold text-dark-text mb-2">Query three databases in one statement</h2>
+		<h2 class="font-sans text-xl font-bold text-dark-text mb-2">Query databases and a file in one statement</h2>
 		<p class="text-dark-muted text-sm mb-6 max-w-2xl">
-			Attach any combination of databases to a DuckDB session. Every attachment
-			gets a schema prefix. JOIN across them like they are local tables.
+			Attach supported databases to a DuckDB session, then JOIN their prefixed tables
+			with a file read by DuckDB. Private remote files need credentials available to the client.
 		</p>
 		<pre class="bg-dark-bg rounded-lg p-4 text-sm font-mono text-dark-text overflow-x-auto border border-dark-border"><code><span class="text-dark-muted">-- attach your sources</span>
 <span class="text-grip-400">:GripAttach</span> <span class="text-dark-text">postgres:dbname=production host=db.internal user=app  prod</span>
 <span class="text-grip-400">:GripAttach</span> <span class="text-dark-text">sqlite:archive.db  legacy</span>
-<span class="text-grip-400">:GripAttach</span> <span class="text-dark-text">s3://my-bucket/enrichment.parquet  enrichment</span>
+<span class="text-dark-muted">-- read the Parquet source in the JOIN below</span>
 
 <span class="text-dark-muted">-- then JOIN in the query pad (&lt;C-CR&gt; to run)</span>
 <span class="text-grip-400">SELECT</span>
 <span class="text-dark-text">  prod.customers.email,</span>
 <span class="text-dark-text">  legacy.orders.total,</span>
-<span class="text-dark-text">  enrichment.data.segment</span>
+<span class="text-dark-text">  enrichment.segment</span>
 <span class="text-grip-400">FROM</span> <span class="text-dark-text">prod.customers</span>
 <span class="text-grip-400">JOIN</span> <span class="text-dark-text">legacy.orders </span><span class="text-grip-400">ON</span><span class="text-dark-text"> legacy.orders.customer_id = prod.customers.id</span>
-<span class="text-grip-400">JOIN</span> <span class="text-dark-text">enrichment.data </span><span class="text-grip-400">ON</span><span class="text-dark-text"> enrichment.data.email = prod.customers.email</span></code></pre>
+<span class="text-grip-400">JOIN</span> <span class="text-dark-text">read_parquet('s3://my-bucket/enrichment.parquet') AS enrichment </span><span class="text-grip-400">ON</span><span class="text-dark-text"> enrichment.email = prod.customers.email</span></code></pre>
 	</div>
 </section>
 

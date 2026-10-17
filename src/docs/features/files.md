@@ -1,6 +1,6 @@
 ---
 title: Files and Remote Sources
-description: Dadbod Grip opens local files, remote object paths, and MotherDuck databases as live grids.
+description: Dadbod Grip opens local files and remote object paths as grids and attaches MotherDuck databases through DuckDB.
 ---
 
 # Files and Remote Sources
@@ -62,34 +62,29 @@ and query; remote URLs remain read-only.
 :GripOpen s3://my-bucket/logs/2025/*.parquet   " glob: all matching files as one table
 ```
 
-Credentials come from the standard AWS chain: `~/.aws/credentials`, `AWS_ACCESS_KEY_ID` /
-`AWS_SECRET_ACCESS_KEY` env vars, or IAM instance role.
-
-For other S3-compatible stores (Cloudflare R2, MinIO, Backblaze B2):
-
-```sql
--- run in the query pad first to configure the endpoint
-CREATE TEMP SECRET (
-  TYPE s3,
-  ENDPOINT 'your-endpoint.example.com',
-  KEY_ID 'your-key',
-  SECRET 'your-secret'
-);
-```
+Authentication and any custom endpoint must be available to each DuckDB CLI
+invocation. Dadbod Grip does not create an S3 credential-chain secret or replay
+arbitrary setup SQL. Running `CREATE TEMP SECRET` in one query does not configure
+later queries: each query uses a new DuckDB process. Configure your DuckDB client
+for the storage provider before opening a private source.
 
 ## MotherDuck
 
+Attach MotherDuck to an active DuckDB connection:
+
 ```vim
-:GripOpen md:my_database           " open a MotherDuck cloud database
-:GripOpen md:                      " pick from available MotherDuck databases
+:Grip duckdb::memory:
+:GripAttach md:my_database cloud
 ```
 
-Set `MOTHERDUCK_TOKEN` in your shell environment before connecting.
+Set `MOTHERDUCK_TOKEN` in your shell environment before attaching. Then query tables
+with the `cloud` prefix. `:GripOpen md:` does not provide a MotherDuck database picker.
 
 ## Write mode
 
 Write mode makes edits persist back to the source file on disk instead of running DML
-against a database. Supported for Parquet, CSV, JSON, NDJSON, and TSV.
+against a database. Supported formats are Parquet, CSV, TSV, JSON, NDJSON, JSONL,
+Arrow, and IPC.
 
 ```vim
 :Grip data.parquet --write         " open in write mode from the start
@@ -104,22 +99,21 @@ g!                                 " toggle write mode
 A red **WRITE** badge appears in the grid winbar when write mode is active. Press `a`
 to apply staged edits back to the file. The original file is overwritten.
 
-Write mode supports Parquet, CSV, TSV, JSON, NDJSON, JSONL, Arrow, and IPC. XLSX and ORC remain read-only. Dadbod Grip asks before overwriting a local file; remote URLs are always read-only.
+XLSX and ORC remain read-only. Dadbod Grip asks before overwriting a local file;
+remote URLs are always read-only.
 
 ## Combining files in federation
 
-Use `:GripAttach` to bring a file into a DuckDB federation session alongside databases:
-
-```vim
-:GripAttach /path/to/enrichment.parquet  enrichment
-```
-
-Then JOIN in the query pad:
+Use `:GripAttach` for databases. Read a file with a DuckDB table function in the
+same query as the attached tables:
 
 ```sql
 SELECT prod.customers.email, enrichment.segment
 FROM prod.customers
-JOIN enrichment.data ON enrichment.customer_id = prod.customers.id
+JOIN read_parquet('/path/to/enrichment.parquet') AS enrichment
+  ON enrichment.customer_id = prod.customers.id
 ```
 
-See the Federation docs in the sidebar for the full picture.
+The same pattern accepts an accessible HTTPS or S3 Parquet URL. A file path does
+not become an attached database with a `.data` table. See [Federation](federation)
+for database attachment examples.

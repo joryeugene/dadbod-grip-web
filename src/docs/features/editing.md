@@ -117,14 +117,18 @@ client output can prevent an exact reversal, so review the statement before appl
 :GripLoad   -- load a saved query
 ```
 
-Queries persist in `.grip/queries/` relative to the current working directory. They
-appear in the `gq` picker.
+Queries persist in `.grip/queries/` at the project root. Dadbod Grip finds the nearest
+`.git` or `.grip` directory above the current directory, falling back to the current
+directory. Saved queries appear in the `gq` picker; `gh` opens query history.
 
 ## GripToggle
 
-Run `:GripToggle` to close all grip windows (sidebar, query pad, grid) at once. Run it
-again to reopen them in their previous state. This is useful for temporarily reclaiming
-screen space without losing your session context.
+Run `:GripToggle` to close visible Grip buffers. Running it again reconnects to the
+current connection or opens the connection picker. It does not restore the previous
+SQL pad, results, or split layout.
+
+For temporary space, press `gz` or run `:GripZoom` to zoom the current pane. Repeat
+the action to restore its split layout. Native `<C-w>` window navigation still works.
 
 ## Watch mode
 

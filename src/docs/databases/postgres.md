@@ -57,7 +57,7 @@ under the `pg.` prefix.
 Dadbod Grip sends SQL through `psql` standard input. It writes password-free URI options to an invocation-scoped libpq service file, passes the password through `PGPASSWORD`, and removes the service file after the command. Complete connection URLs and SQL do not appear in process arguments.
 
 ```bash
-which psql   -- must return a path
+which psql   # must return a path
 ```
 
 On macOS with Homebrew: `brew install postgresql`. On Debian/Ubuntu: `sudo apt install postgresql-client`.

@@ -115,7 +115,7 @@ for each one.
 Load a saved preset with `gp`. The picker shows all presets for the current table with
 a preview of the filter conditions. Selecting a preset replaces the current filters entirely.
 
-Presets persist in `.grip/filter_presets.json` relative to the current working directory.
+Presets persist in `.grip/filters.json` at the project root, resolved by walking upward from the current directory to the nearest `.git` or `.grip` directory. If neither exists, Dadbod Grip uses the current directory.
 They are scoped to the table name, so presets saved on the `orders` table only appear
 when viewing `orders`.
 

@@ -32,7 +32,7 @@ No `CREATE TABLE` or import step needed.
 
 ### Save as a named connection
 
-Press `gc`, choose `+ New connection`, paste the file path or URL, and give it a name.
+Run `:GripConnect` or press `gC`, choose `+ New connection`, paste the file path or URL, and give it a name. The sidebar and welcome screen also offer `gc`; in the grid, `gc` copies staged SQL.
 Named connections appear in the picker every time.
 
 ### File formats

@@ -17,7 +17,7 @@ real-time dashboards, or any table you want to tail.
 :Grip table_name --watch=30s       " 30-second interval
 ```
 
-The interval suffix is `s` (seconds). The minimum is 1 second.
+The interval suffix is `s` (seconds). Choose a positive interval, such as `3s` or `10s`.
 
 ## Toggle on an open grid
 
@@ -38,8 +38,9 @@ without moving the cursor.
   updated rows reflect their new values.
 - Sort, filter, and page state are preserved across refreshes. If you have filtered
   to `status = 'pending'` and paginated to page 2, that view stays intact.
-- If the underlying table changes schema between ticks, watch mode stops and shows an
-  error in the status bar.
+- Refresh ticks are skipped while mutations are staged. Apply or undo those edits
+  before expecting another refresh. Query failures are reported by the normal
+  refresh path; watch mode does not guarantee an automatic stop on schema changes.
 - Watch mode stops automatically when you close the grid or switch to a different table.
 
 ## Useful patterns
@@ -71,6 +72,6 @@ A single-row aggregate that ticks forward as events are processed.
 
 ## Watch mode and write mode
 
-Watch mode and write mode (`g!`) are mutually exclusive. Watch mode re-fetches from
-the source on each tick. Write mode stages edits to write back to a file. Enabling one
-disables the other.
+Watch mode and local-file write mode (`g!`) can both be enabled. They toggle
+independently: watch re-reads the source, while write mode applies staged edits back
+to the file. Watch skips refreshes while those edits are pending.

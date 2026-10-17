@@ -5,80 +5,75 @@ description: Dadbod Grip completes table names, columns, aliases, and federation
 
 # SQL Completion
 
-The query pad provides SQL completion for table names, column names, aliases, SQL keywords,
-and federation schema prefixes. Completion fires automatically as you type or on demand
-with `<C-Space>`.
+The query pad completes table names, column names, aliases, SQL keywords, and
+federation schema prefixes. Built-in completion is enabled by default and opens
+in supported SQL contexts as you type.
 
 ## Built-in completion
 
-Enabled by default. The built-in completion uses Neovim's omnifunc mechanism (`<C-x><C-o>`)
-and registers itself on the query pad buffer. No configuration needed.
+The query pad installs an omnifunc and its completion mappings. In Insert mode,
+press `<C-Space>` or the native `<C-x><C-o>` to request candidates. While the menu
+is open, `Tab` and `<Down>` move forward, `<S-Tab>` and `<Up>` move backward, and
+`<CR>` accepts the selected item.
 
 ## Using blink.cmp
 
-If you use blink.cmp for completion across Neovim, disable the built-in completion and
-register the `dadbod_grip` source:
+Set `completion = false` so blink owns the popup and its bindings. Define the
+provider module as well as adding its source name to your existing blink setup:
 
 ```lua
-require('dadbod-grip').setup({
-  completion = false,
-})
-```
+require('dadbod-grip').setup({ completion = false })
 
-Then add `dadbod_grip` to your blink.cmp sources:
-
-```lua
 require('blink.cmp').setup({
   sources = {
     default = { 'lsp', 'path', 'buffer', 'dadbod_grip' },
+    providers = {
+      dadbod_grip = {
+        name = 'Grip SQL',
+        module = 'dadbod-grip.completion.blink',
+      },
+    },
   },
 })
 ```
 
-The `dadbod_grip` source name is registered automatically when the plugin loads. You only
-need to add it to your blink.cmp sources list.
+The provider is active when the buffer has a database connection. Dadbod Grip does
+not automatically add this provider definition to blink's configuration.
 
 ## Using nvim-cmp
 
-Same pattern: disable built-in, add the source.
+With `completion = false`, explicitly register Dadbod Grip's source after nvim-cmp
+is available, then add it to your existing source list:
 
 ```lua
-require('dadbod-grip').setup({
-  completion = false,
-})
-```
+require('dadbod-grip').setup({ completion = false })
 
-Then register the source in nvim-cmp:
-
-```lua
 local cmp = require('cmp')
+require('dadbod-grip.completion').register_cmp_source()
 cmp.setup({
   sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
     { name = 'dadbod_grip' },
   }),
 })
 ```
 
+Keep your other configured sources when merging this example. Use nvim-cmp's own
+trigger, navigation, and acceptance bindings.
+
 ## What gets completed
 
 | Context | Candidates |
 |---------|-----------|
-| Bare identifier | Table names from current schema |
-| After `FROM` / `JOIN` | Table names with schema prefix |
-| After `table.` | Column names for that table |
-| After alias `.` | Column names for the aliased table |
-| Federation session | Qualified names: `attached_db.table.column` |
-| SQL keywords | SELECT, FROM, WHERE, JOIN, GROUP BY, etc. |
+| After `FROM` / `JOIN` | Table names, including available schema prefixes. |
+| After `table.` | Column names for that table. |
+| After alias `.` | Column names for the aliased table. |
+| Federation session | Qualified table and column names from registered attachments. |
+| Outside a recognized table or column context | Matching SQL keywords. |
 
-In a DuckDB federation session, completion includes qualified names from all attached
-databases. Type `prod.` to see tables from the `prod` attachment, or `prod.customers.`
-to see columns.
+In a DuckDB federation session, type `prod.` to see tables from the `prod`
+attachment, or `prod.customers.` to see columns.
 
-## Manual trigger
-
-Press `<C-Space>` in the query pad to manually trigger completion at any time. Press
-`<C-x><C-o>` for the standard Vim omnifunc trigger if you prefer. While the completion
-menu is open, `Tab` and `<Down>` move forward, `<S-Tab>` and `<Up>` move backward, and
-`<CR>` accepts the selected item. Setting `completion = false` removes these
-completion-specific mappings from the query pad.
+Setting `completion = false` removes Dadbod Grip's completion mappings and skips
+installing its omnifunc and automatic popup. Your configured engine owns completion
+in that buffer; the built-in `<C-Space>` and `<C-x><C-o>` instructions above apply
+when Dadbod Grip's completion is enabled.

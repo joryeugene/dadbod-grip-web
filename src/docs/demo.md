@@ -6,7 +6,7 @@ description: This walkthrough investigates the Softrear Inc. demo database inclu
 # Demo Walkthrough
 
 Run `:GripStart` to open the Softrear Inc. Analyst Portal. The demo database ships
-with seventeen tables and realistic narrative data about a consumer goods company
+with seventeen base tables and fictional narrative data about a consumer goods company
 with some unusual patterns in the incident records.
 
 The demo opens as a SQL notebook in the query pad. Place your cursor inside any
@@ -22,7 +22,94 @@ The demo opens as a SQL notebook in the query pad. Place your cursor inside any
 This creates a local DuckDB database when the `duckdb` client is available and
 falls back to SQLite through `sqlite3`. The main notebook requires either client,
 and its supplier federation section requires both. Dadbod Grip opens the Softrear
-Inc. notebook automatically, and seventeen tables appear in the schema sidebar.
+Inc. notebook automatically, with seventeen base tables and an incident summary
+view available in the sidebar.
+The cursor starts in the first SQL block; opening the demo does not execute it.
+
+## Daily practice
+
+Search the notebook for `Daily practice` to try this short loop with disposable data:
+
+```text
+find -> inspect -> filter -> edit -> review SQL -> undo / apply
+```
+
+### Find, inspect, and export a view
+
+Press `gb` to focus schema, then `H` to collapse it. Press `/`, enter
+`incident_summary`, and confirm. Search reveals matching objects inside closed
+groups. Enter opens the view. To clear the sidebar search, press `gb`, then `F` to restore
+the previous folds. Press `3` from schema to return to the result.
+Both demo engines provide this aggregate view. Browse and export it rather than
+editing it.
+
+In the result, move to `max_severity` and press `s` to sort. Press `K` to inspect a
+row vertically and `q` to close the float. Press `gX` to export, then choose the
+current page or all matching rows. Shortcut hints fit in two rows and remain visible
+when the table scrolls horizontally; `?` shows the remaining keys.
+
+### Stage one reversible edit
+
+Run `:Grip consumer_incidents`. Press `<C-f>`, enter `id = 1`, and confirm. Move to
+`severity`, press `i`, replace `10` with `9`, and press Enter. This stages the edit;
+the database still contains `10`.
+
+Press `gs` to inspect the `UPDATE`, close the preview with `q`, and press `u` to undo.
+To try a write, repeat the edit, review it with `gs`, and close the preview with `q`.
+Then press `a` and confirm the write.
+Press `r` to refresh. Running `:GripStart` again restores the original demo data.
+
+The notebook's **Stage a new lead from a pipe** section also demonstrates
+`:GripImport !command`: preview stdout as rows, stage the batch, review its `INSERT`
+statements with `gs`, and undo the whole batch with one `u` or apply it with `a`.
+The pipe command runs only when you explicitly provide it.
+
+### Keep useful SQL and results
+
+From results, press `2` to return to SQL. Press `gz` to zoom it and again to restore
+the splits. Inside SQL, `2` opens history; `gh` also opens history from the main
+panes. Pin a result with `gL` and use `gJ` to switch retained results.
+
+To save one query, use `:GripQuery` and replace the pad with just that SQL, then press
+`<C-s>` and name it. Saving captures the entire pad, so do not save the investigation
+when you intend to keep a single query. `gq` loads saved queries. Named queries and
+history persist across restarts; unsaved pad contents and the active result layout
+do not automatically restore.
+
+### Explore engine-specific objects
+
+| Local clients | Available practice |
+| --- | --- |
+| `sqlite3` | The 35-roll investigation, shared summary view, and daily grid tasks. |
+| `duckdb` | The 505-roll investigation, summary view, reporting schema, and SQL macro. |
+| Both clients | DuckDB practice plus the attached supplier database and cross-database joins. |
+
+SQLite's object list is flat. With DuckDB, expand `reporting` using `l` and open
+`reporting.monthly_incidents` under Views. To fold it afterward, press `gb`, move
+to `reporting`, and press `h`. Press `2` from schema to return to SQL and run these
+statements separately:
+
+```sql
+SELECT month, incident_count, highest_priority
+FROM reporting.monthly_incidents
+ORDER BY month
+```
+
+```sql
+SELECT reporting.severity_label(4) AS low_priority,
+       reporting.severity_label(8) AS high_priority
+```
+
+DuckDB macros are callable in SQL; Dadbod Grip does not list them as PostgreSQL
+functions. DuckDB file partitions are not PostgreSQL child-table partitions.
+
+For an optional local PostgreSQL lab, follow the
+[plugin's demo guide](https://github.com/joryeugene/dadbod-grip.nvim/blob/main/demo/README.md#postgresql-schema-lab).
+It requires a local server and `psql`, plus a new disposable database. The lab creates
+a fresh `grip_demo` schema and rejects an existing one. It exercises nested partition
+discovery, the `open_incidents` view, and function-source inspection. Enter on a
+function opens its definition without executing it; call the function explicitly
+from SQL when you want a result.
 
 ## The investigation
 
@@ -34,7 +121,8 @@ Three questions:
 
 ### 1. Product catalog
 
-The catalog has 500+ SKUs. Sort by softness score ascending to see the edges:
+DuckDB loads 505 rolls; the compact SQLite fallback has 35. Both include the
+named evidence used here. Sort by softness score ascending to see the edges:
 
 ```sql
 SELECT sku, ply, softness_score, tensile_strength, discontinued
@@ -106,17 +194,14 @@ authorized to self-certify all SKUs. This is intentional."
 - **FK trail**: a single JOIN query traverses four hops instead of four separate `gf` presses
 - **Grid**: each `<C-CR>` result opens as a sortable and filterable grid below. Press `gO` when a simple single-table result can be reopened for editing.
 
-All of these work the same way against a production database.
+The same controls apply to your own database, subject to its adapter and permissions.
 
 ## Go deeper
 
 The full notebook lives at `demo/softrear-internal.md` inside the plugin directory.
-It covers sixteen sections including the supplier intelligence cross-database join,
+It includes the supplier intelligence cross-database join,
 the BambooKnows investigation, and the pricing arrangement that created the incentive
 to mislabel incoming shipments.
 
-Open it from the query pad or schema sidebar:
-
-```vim
-gn   " notebook picker: navigate to demo/softrear-internal.md
-```
+From a checkout of the plugin, `gn` finds it under `demo/`. In another project,
+`:GripStart` loads the bundled copy directly and recreates the disposable data.
