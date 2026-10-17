@@ -89,6 +89,10 @@ regardless of database backend.
 Press `<C-CR>` from the query pad to preview a mutation before executing. The affected
 rows appear color-coded in the grid. Press `a` to execute, `u` to cancel.
 
+Database reads used by the preview show the loading clock. Local preview staging can
+pause its animation while Neovim is busy; the clock does not report progress through
+the rows.
+
 ## Navigate staged rows
 
 Press `{` to jump to the previous modified row and `}` to jump to the next. Useful when
@@ -99,6 +103,25 @@ you have staged edits scattered across a large table and want to review them bef
 Press `a` to send all staged changes in one `BEGIN`/`COMMIT` batch. A nonzero database-client
 exit leaves the staging layer intact. Do not assume the database rolled back every statement;
 inspect it after an apply error before retrying the unchanged batch.
+
+The loading clock covers the database write, then finishes before the separate SELECT
+reload starts. After a successful reload, the result keeps the two client durations
+distinct: `Write: 1.4s client` measures the write call, including client startup and lock
+waits, while `Query` measures the refreshed SELECT. These are client measurements,
+not server execution time. The Write duration belongs to those refreshed rows and
+does not carry into later unrelated results. Successful apply history also keeps the
+write duration.
+
+Staged apply, imported-row apply, file write-back, transaction undo, and DDL use the
+write clock. Parsing and staging an import, or generating rows with AI, do not write
+to the database. [Timing display settings](../getting-started#timing-display) control
+the running number and retained durations independently.
+
+If a write wait is interrupted or times out, the loading indicator closes, but the
+database may still complete the write. Dadbod Grip reports that the outcome is unknown
+and preserves staging. Refresh and check the database before retrying; an interrupted
+wait does not prove that the write stopped or rolled back. If you navigate or edit
+while the write waits, its completion preserves your newer view and staging.
 
 ## Undo
 

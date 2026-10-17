@@ -34,6 +34,7 @@ The plugin's Lazy spec registers every public command, so a lazy.nvim configurat
 | `:GripStart` | It recreates and opens the bundled demo database. |
 | `:GripHome` | It returns to the welcome screen. |
 | `:GripZoom` | It zooms the current pane or restores its split layout. |
+| `:GripZen` | It toggles automatic shortcut hints for the current session, independently of timing display and layout. |
 | `:GripToggle` | It closes visible Grip buffers or reconnects when none are visible; it does not restore the previous workspace. |
 
 Press `<C-p>` from the Grid, Query Pad, or Sidebar to search the actions available there. The [keymap explorer](../keymaps) shows the default bindings by surface and mode.
