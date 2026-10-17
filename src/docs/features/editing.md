@@ -5,9 +5,10 @@ description: Dadbod Grip edits database rows inline, stages changes, previews SQ
 
 # Editing and Mutations
 
-Every change in dadbod-grip goes through a staging layer before it touches the database.
-Stage one change or fifty, preview the full SQL, then send one `BEGIN`/`COMMIT` batch with
-a single keystroke.
+Grid row edits go through a staging layer before they touch the database. Stage one
+change or fifty, preview the full SQL, then send one `BEGIN`/`COMMIT` batch with a
+single keystroke. Schema operations execute DDL separately; they are not staged row
+edits. See [Schema Operations](schema) for their confirmation and execution behavior.
 
 ## Row color legend
 
@@ -24,7 +25,9 @@ Nothing has touched the database yet. Press `u` to unstage individual edits or `
 ## Edit a cell
 
 Move the cursor to any cell and press `i` or `<CR>`. A popup editor opens with the current
-value. Edit and press `<CR>` to stage, or `<Esc>` to cancel.
+value in insert mode. Edit and press `<CR>` to stage. One `<Esc>` enters normal mode
+for Vim motions; `q` or another `<Esc>` cancels there. `<C-c>` cancels directly from
+insert mode.
 
 The row turns teal in the grid. Press `gl` to toggle the live SQL float: it shows the exact
 DML statement that will run, updating as you stage more changes.
@@ -41,8 +44,8 @@ to unstage the deletion.
 
 ## Insert a new row
 
-Press `o` to insert a new row after the cursor. A blank row opens in the popup editor.
-Fill in each column in sequence. The row turns green when staged.
+Press `o` to stage a blank row after the cursor. The row turns green, and the cursor
+moves to its first cell. Use `i` or `<CR>` to edit cells as needed.
 
 ## Clone a row
 

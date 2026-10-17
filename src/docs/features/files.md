@@ -73,7 +73,7 @@ for the storage provider before opening a private source.
 Attach MotherDuck to an active DuckDB connection:
 
 ```vim
-:Grip duckdb::memory:
+:GripConnect duckdb::memory:
 :GripAttach md:my_database cloud
 ```
 

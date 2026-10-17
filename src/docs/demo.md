@@ -68,7 +68,8 @@ The pipe command runs only when you explicitly provide it.
 
 From results, press `2` to return to SQL. Press `gz` to zoom it and again to restore
 the splits. Inside SQL, `2` opens history; `gh` also opens history from the main
-panes. Pin a result with `gL` and use `gJ` to switch retained results.
+panes. Press `gw` to return to the grid, then pin a result with `gL` and use `gJ`
+to switch retained results.
 
 To save one query, use `:GripQuery` and replace the pad with just that SQL, then press
 `<C-s>` and name it. Saving captures the entire pad, so do not save the investigation
