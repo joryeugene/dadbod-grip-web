@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { toast } from '$lib/toast.svelte';
+	import { toast } from '#lib/toast.svelte.ts';
 </script>
 
 {#if toast.visible}
@@ -15,11 +15,11 @@
 	@keyframes toast-in {
 		from {
 			opacity: 0;
-			transform: translate(-50%, 8px);
+			transform: translateY(8px);
 		}
 		to {
 			opacity: 1;
-			transform: translate(-50%, 0);
+			transform: translateY(0);
 		}
 	}
 	.animate-toast-in {

@@ -5,12 +5,12 @@
 		MODE_LABELS,
 		SURFACE_LABELS,
 		type Surface
-	} from '$lib/keymaps-data';
+	} from '#lib/keymaps-data.ts';
 
 	const surfaces = Object.keys(SURFACE_LABELS) as Surface[];
 </script>
 
-<p>{keymaps.length} primary mappings are cataloged across four surfaces.</p>
+<p>{keymaps.length} primary mappings are cataloged across {surfaces.length} surfaces.</p>
 
 {#each surfaces as surface}
 	{@const mappings = keymaps.filter((keymap) => keymap.surfaces.includes(surface))}
@@ -29,13 +29,13 @@
 				<tbody>
 					{#each mappings as mapping}
 						<tr class="border-b border-dark-border/50 last:border-0">
-							<td class="px-4 py-2"><code class="rounded bg-dark-surface px-1.5 py-0.5 font-mono text-xs text-grip-400">{mapping.key}</code></td>
+							<td class="px-4 py-2"><code class="rounded-sm bg-dark-surface px-1.5 py-0.5 font-mono text-xs text-grip-400">{mapping.key}</code></td>
 							<td class="px-4 py-2"><code class="text-xs text-dark-muted">{mapping.action}</code></td>
 							<td class="px-4 py-2 text-dark-muted">{mapping.description}</td>
 							<td class="px-4 py-2">
 								<div class="flex flex-wrap gap-1">
 									{#each mapping.modes as mode}
-										<span class="rounded border px-1.5 py-0.5 text-[10px] {MODE_COLORS[mode]}">{MODE_LABELS[mode]}</span>
+										<span class="rounded-sm border px-1.5 py-0.5 text-[10px] leading-5 {MODE_COLORS[mode]}">{MODE_LABELS[mode]}</span>
 									{/each}
 								</div>
 							</td>

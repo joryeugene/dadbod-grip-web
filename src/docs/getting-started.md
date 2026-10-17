@@ -77,12 +77,12 @@ Connections saved from the picker go to `.grip/connections.json`. Global connect
 1. Run `:GripConnect` and connect to a database.
 2. Navigate the schema sidebar with `j` and `k`, then press `<CR>` to open a table.
 3. Move to a cell and press `i` or `<CR>` to edit it.
-4. Press `gl` to inspect the staged DML.
+4. Press `gs` to inspect the staged DML, then `q` to close the preview.
 5. Press `a` to send the staged statements as one `BEGIN`/`COMMIT` batch. If the database client reports an error, inspect the database before retrying.
 
 ## Try the built-in demo
 
-Run `:GripStart` to recreate and open the Softrear Inc. demo. Dadbod Grip uses DuckDB when the `duckdb` client is available and falls back to SQLite through `sqlite3`. One of those clients must be on your `PATH`. Each run reseeds the database, so edits from an earlier demo session are discarded. The [walkthrough](demo) explains the investigation.
+Run `:GripStart` to recreate and open the Softrear Inc. demo. Dadbod Grip uses DuckDB when the `duckdb` client is available and falls back to SQLite through `sqlite3`. One of those clients must be on your `PATH`. Each run reseeds the database, so edits from an earlier demo session are discarded. The notebook opens at its first SQL block; press `<C-CR>` to execute it. The [walkthrough](demo) includes a daily practice loop for finding, inspecting, exporting, and editing disposable data.
 
 ## Configuration
 
@@ -104,7 +104,7 @@ require("dadbod-grip").setup({
 })
 ```
 
-Set `open_sidebar = false` to connect directly into the welcome screen and query pad. The schema sidebar remains available through `:GripSchema` or `gb`.
+Set `open_sidebar = false` to connect directly into the main workspace without opening the sidebar. The schema sidebar remains available through `:GripSchema` or `gb`.
 
 `timeout` applies to database CLI calls. DuckDB work that may download an extension or read a remote URL receives a 60-second minimum for that network step, while connection health checks use five seconds.
 
@@ -113,7 +113,13 @@ Set `open_sidebar = false` to connect directly into the welcome screen and query
 With `open_sidebar = true`, a connection opens three surfaces:
 
 - The schema sidebar shows tables, columns, primary keys, foreign keys, and DDL actions.
-- The query pad provides a persistent SQL buffer.
+- The query pad keeps SQL available during the session. Save a named query with `<C-s>` when you want to reuse it after restarting Neovim.
 - The main workspace displays welcome content and result grids.
 
-Press `1`, `2`, or `3` to move among the primary surfaces. Keys `4` through `9` open the ER diagram, column statistics, columns, foreign keys, indexes, and constraints. Press `<C-p>` for the command palette or `?` for the contextual keymap.
+Run `:Grip` or `:GripHome` for Welcome. Its four action rows open the demo, connect a database, browse tables, or open SQL. Select a row with Tab/Shift-Tab or native `j`/`k`, then press Enter. With default keys, Welcome's `1` opens schema, `2` opens SQL, and `3` opens the table picker.
+
+The digits depend on the pane. For example, `2` from schema or results opens SQL, while `2` inside SQL opens history. In schema, `1` opens connections. Keys `4` through `9` provide ER and metadata views when a suitable table is available. Press `?` for the current pane's configured keys and `<C-p>` for the palette in SQL, schema, or results.
+
+Press `gb` to focus schema and `<Esc>` there to close it. Use `h`/`l` to fold or expand groups, `/` to find hidden objects, and `F` to clear the search. Native `<C-w>` window navigation still works. Press `gz` in Welcome, SQL, schema, or results to zoom the pane; press it again to restore the split layout. Opening SQL from another zoomed pane also restores the splits.
+
+Result shortcut hints fit into two rows at the current window width and stay visible during horizontal table scrolling. Narrow panes prioritize help and core actions. Named queries and history persist; an unsaved pad and active result layout do not automatically return after Neovim exits.

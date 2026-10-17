@@ -1,14 +1,19 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
 @layer base {
+	/* Preserve v3 defaults while adopting the supported v4 build pipeline. */
+	*, ::after, ::before, ::backdrop, ::file-selector-button { border-color: #e5e7eb; }
+	input::placeholder, textarea::placeholder { color: #9ca3af; }
+	button, [role="button"] { cursor: pointer; }
+	:disabled { cursor: default; }
+
 	html {
 		scroll-behavior: smooth;
 	}
 
 	code {
-		@apply font-mono text-sm bg-dark-surface px-1.5 py-0.5 rounded text-grip-400;
+		@apply font-mono text-sm bg-dark-surface px-1.5 py-0.5 rounded-sm text-grip-400;
 	}
 
 	pre code {

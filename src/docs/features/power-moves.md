@@ -81,7 +81,7 @@ See: [Editing and Mutations](editing)
 
 ## Ctrl-p: command palette
 
-Press `<C-p>` from the Grid, Query Pad, or Sidebar to open a searchable list of the actions available there. This is faster than remembering a keymap you use once a week. Type a few letters of what you want to do: "export", "explain", "history", or "notebook." The palette filters as you type and shows the bound key next to each action.
+Press `<C-p>` from the Grid, Query Pad, or Sidebar to open a searchable list of the actions available there. This is faster than remembering a keymap you use once a week. With the default built-in picker, press `/`, enter a filter such as "export", "explain", or "history", and confirm. The palette shows the bound key next to each action. A configured Telescope or Snacks picker uses its own filtering controls. Use `gn` from SQL or schema to open a notebook.
 
 See: [Picker Integration](picker)
 

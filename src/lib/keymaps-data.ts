@@ -1,6 +1,6 @@
 import catalog from './keymaps.json';
 
-export type Surface = 'grid' | 'query_pad' | 'sidebar' | 'cell_editor';
+export type Surface = 'grid' | 'query_pad' | 'sidebar' | 'welcome' | 'cell_editor';
 export type Mode = 'normal' | 'insert' | 'visual';
 
 type CatalogMode = 'n' | 'i' | 'x';
@@ -29,6 +29,7 @@ export const SURFACE_LABELS: Record<Surface, string> = {
 	grid: 'Grid',
 	query_pad: 'Query Pad',
 	sidebar: 'Sidebar',
+	welcome: 'Welcome',
 	cell_editor: 'Cell Editor'
 };
 
@@ -36,6 +37,7 @@ export const SURFACE_COLORS: Record<Surface, string> = {
 	grid: 'bg-grip-400/20 text-grip-400 border-grip-400/40',
 	query_pad: 'bg-purple-400/20 text-purple-400 border-purple-400/40',
 	sidebar: 'bg-amber-400/20 text-amber-400 border-amber-400/40',
+	welcome: 'bg-sky-400/20 text-sky-400 border-sky-400/40',
 	cell_editor: 'bg-pink-400/20 text-pink-400 border-pink-400/40'
 };
 

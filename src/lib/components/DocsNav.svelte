@@ -1,49 +1,49 @@
 <script lang="ts">
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 
 	const groups = [
 		{
 			label: 'Getting Started',
 			items: [
-				{ label: 'Installation', href: `${base}/docs/getting-started` },
-				{ label: 'Demo Walkthrough', href: `${base}/docs/demo` },
-				{ label: 'Connections', href: `${base}/docs/features/connections` }
+				{ label: 'Installation', href: resolve('docs/getting-started') },
+				{ label: 'Demo Walkthrough', href: resolve('docs/demo') },
+				{ label: 'Connections', href: resolve('docs/features/connections') }
 			]
 		},
 		{
 			label: 'Features',
 			items: [
-				{ label: 'SQL Notebooks', href: `${base}/docs/features/notebooks` },
-				{ label: 'AI Integration', href: `${base}/docs/features/ai` },
-				{ label: 'Editing & Mutations', href: `${base}/docs/features/editing` },
-				{ label: 'Analysis', href: `${base}/docs/features/analysis` },
-				{ label: 'Federation', href: `${base}/docs/features/federation` },
-				{ label: 'Files & Remote Sources', href: `${base}/docs/features/files` },
-				{ label: 'Watch Mode', href: `${base}/docs/features/watch` },
-				{ label: 'Picker Integration', href: `${base}/docs/features/picker` },
-				{ label: 'Completion', href: `${base}/docs/features/completion` },
-				{ label: 'Schema Operations', href: `${base}/docs/features/schema` },
-				{ label: 'Power Moves', href: `${base}/docs/features/power-moves` }
+				{ label: 'SQL Notebooks', href: resolve('docs/features/notebooks') },
+				{ label: 'AI Integration', href: resolve('docs/features/ai') },
+				{ label: 'Editing & Mutations', href: resolve('docs/features/editing') },
+				{ label: 'Analysis', href: resolve('docs/features/analysis') },
+				{ label: 'Federation', href: resolve('docs/features/federation') },
+				{ label: 'Files & Remote Sources', href: resolve('docs/features/files') },
+				{ label: 'Watch Mode', href: resolve('docs/features/watch') },
+				{ label: 'Picker Integration', href: resolve('docs/features/picker') },
+				{ label: 'Completion', href: resolve('docs/features/completion') },
+				{ label: 'Schema Operations', href: resolve('docs/features/schema') },
+				{ label: 'Power Moves', href: resolve('docs/features/power-moves') }
 			]
 		},
 		{
 			label: 'Databases',
 			items: [
-				{ label: 'PostgreSQL', href: `${base}/docs/databases/postgres` },
-				{ label: 'DuckDB', href: `${base}/docs/databases/duckdb` },
-				{ label: 'SQLite', href: `${base}/docs/databases/sqlite` },
-				{ label: 'MySQL / MariaDB', href: `${base}/docs/databases/mysql` },
-				{ label: 'SQL Server', href: `${base}/docs/databases/sqlserver` }
+				{ label: 'PostgreSQL', href: resolve('docs/databases/postgres') },
+				{ label: 'DuckDB', href: resolve('docs/databases/duckdb') },
+				{ label: 'SQLite', href: resolve('docs/databases/sqlite') },
+				{ label: 'MySQL / MariaDB', href: resolve('docs/databases/mysql') },
+				{ label: 'SQL Server', href: resolve('docs/databases/sqlserver') }
 			]
 		},
 		{
 			label: 'Reference',
 			items: [
-				{ label: 'Commands', href: `${base}/docs/commands` },
-				{ label: 'Keymaps Explorer', href: `${base}/keymaps` },
-				{ label: 'Keymaps Reference', href: `${base}/docs/keymaps` },
-				{ label: 'Troubleshooting', href: `${base}/docs/troubleshooting` }
+				{ label: 'Commands', href: resolve('docs/commands') },
+				{ label: 'Keymaps Explorer', href: resolve('/keymaps') },
+				{ label: 'Keymaps Reference', href: resolve('docs/keymaps') },
+				{ label: 'Troubleshooting', href: resolve('docs/troubleshooting') }
 			]
 		}
 	];
@@ -58,7 +58,7 @@
 					<li>
 						<a
 							href={item.href}
-							class="block text-sm py-0.5 transition-colors {page.url.pathname === item.href ? 'text-grip-400 font-medium border-l-2 border-grip-400 pl-2 -ml-2' : 'text-dark-muted hover:text-grip-400'}"
+							class="block text-sm py-0.5 transition-colors {page.url.pathname === new URL(item.href, page.url.href).pathname ? 'text-grip-400 font-medium border-l-2 border-grip-400 pl-2 -ml-2' : 'text-dark-muted hover:text-grip-400'}"
 						>
 							{item.label}
 						</a>

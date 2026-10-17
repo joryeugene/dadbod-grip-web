@@ -9,7 +9,7 @@ function validate(catalog) {
 	assert.equal(catalog.version, 1, 'unsupported keymap catalog version');
 	assert.ok(Array.isArray(catalog.keymaps), 'catalog.keymaps must be an array');
 	const actions = new Set();
-	const surfaces = new Set(['grid', 'query_pad', 'sidebar', 'cell_editor']);
+	const surfaces = new Set(['grid', 'query_pad', 'sidebar', 'welcome', 'cell_editor']);
 	const modes = new Set(['n', 'i', 'x']);
 	for (const record of catalog.keymaps) {
 		for (const field of ['action', 'default', 'description', 'category']) {

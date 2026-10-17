@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-	import DocsNav from '$lib/components/DocsNav.svelte';
+	import { resolve } from '$app/paths';
+	import DocsNav from '#lib/components/DocsNav.svelte';
 	import {
 		keymaps,
 		SURFACE_LABELS,
@@ -12,7 +12,7 @@
 		type Surface,
 		type Mode,
 		type Keymap
-	} from '$lib/keymaps-data';
+	} from '#lib/keymaps-data.ts';
 
 	// ── State ──
 	let search = $state('');
@@ -451,7 +451,7 @@
 		<div class="bg-dark-surface border border-grip-400/40 rounded-xl p-5 mb-8 flex items-start justify-between">
 			<div>
 				<div class="flex items-center gap-3 mb-2">
-					<code class="text-lg font-mono text-grip-400 bg-dark-bg px-2 py-0.5 rounded">{selectedKeymap.key}</code>
+					<code class="text-lg font-mono text-grip-400 bg-dark-bg px-2 py-0.5 rounded-sm">{selectedKeymap.key}</code>
 					<span class="text-dark-text font-semibold">{selectedKeymap.description}</span>
 				</div>
 				<div class="flex flex-wrap items-center gap-2 text-xs">
@@ -459,11 +459,11 @@
 					<code class="text-dark-muted">{selectedKeymap.action}</code>
 					<span class="text-dark-muted ml-2">Surfaces:</span>
 					{#each selectedKeymap.surfaces as s}
-						<span class="px-1.5 py-0.5 rounded text-[10px] border {SURFACE_COLORS[s]}">{SURFACE_LABELS[s]}</span>
+						<span class="px-1.5 py-0.5 rounded-sm text-[10px] leading-4 border {SURFACE_COLORS[s]}">{SURFACE_LABELS[s]}</span>
 					{/each}
 					<span class="text-dark-muted ml-2">Modes:</span>
 					{#each selectedKeymap.modes as mode}
-						<span class="px-1.5 py-0.5 rounded text-[10px] border {MODE_COLORS[mode]}">{MODE_LABELS[mode]}</span>
+						<span class="px-1.5 py-0.5 rounded-sm text-[10px] leading-4 border {MODE_COLORS[mode]}">{MODE_LABELS[mode]}</span>
 					{/each}
 				</div>
 			</div>
@@ -486,7 +486,7 @@
 				aria-label="Search keymaps"
 				bind:value={search}
 				oninput={() => activeKeyFilter = null}
-				class="w-full bg-dark-surface border border-dark-border rounded-lg px-4 py-2 text-sm text-dark-text placeholder:text-dark-muted/50 focus:outline-none focus:border-grip-400/60"
+				class="w-full bg-dark-surface border border-dark-border rounded-lg px-4 py-2 text-sm text-dark-text placeholder:text-dark-muted/50 focus:outline-hidden focus:border-grip-400/60"
 			/>
 			{#if search}
 				<button
@@ -501,7 +501,7 @@
 			bind:value={activeCategory}
 			aria-label="Category"
 			onchange={() => selectedKeymap = null}
-			class="bg-dark-surface border border-dark-border rounded-lg px-3 py-2 text-sm text-dark-muted focus:outline-none focus:border-grip-400/60"
+			class="bg-dark-surface border border-dark-border rounded-lg px-3 py-2 text-sm text-dark-muted focus:outline-hidden focus:border-grip-400/60"
 		>
 			<option value="all">All categories</option>
 			{#each CATEGORIES as cat}
@@ -512,7 +512,7 @@
 			bind:value={activeMode}
 			aria-label="Mode"
 			onchange={() => selectedKeymap = null}
-			class="bg-dark-surface border border-dark-border rounded-lg px-3 py-2 text-sm text-dark-muted focus:outline-none focus:border-grip-400/60"
+			class="bg-dark-surface border border-dark-border rounded-lg px-3 py-2 text-sm text-dark-muted focus:outline-hidden focus:border-grip-400/60"
 		>
 			<option value="all">All modes</option>
 			{#each Object.entries(MODE_LABELS) as [mode, label]}
@@ -548,21 +548,21 @@
 						onclick={() => selectedKeymap = km}
 					>
 						<td class="px-4 py-2">
-							<code class="font-mono text-grip-400 bg-dark-surface px-1.5 py-0.5 rounded text-xs">{km.key}</code>
+							<code class="font-mono text-grip-400 bg-dark-surface px-1.5 py-0.5 rounded-sm text-xs">{km.key}</code>
 						</td>
 						<td class="px-4 py-2 text-dark-muted">{km.description}</td>
 						<td class="px-4 py-2 text-dark-muted/70 text-xs">{km.category}</td>
 						<td class="px-4 py-2">
 							<div class="flex gap-1 flex-wrap">
 								{#each km.surfaces as s}
-									<span class="px-1.5 py-0.5 rounded text-[10px] border {SURFACE_COLORS[s]}">{SURFACE_LABELS[s]}</span>
+									<span class="px-1.5 py-0.5 rounded-sm text-[10px] leading-5 border {SURFACE_COLORS[s]}">{SURFACE_LABELS[s]}</span>
 								{/each}
 							</div>
 						</td>
 						<td class="px-4 py-2">
 							<div class="flex gap-1 flex-wrap">
 								{#each km.modes as mode}
-									<span class="px-1.5 py-0.5 rounded text-[10px] border {MODE_COLORS[mode]}">{MODE_LABELS[mode]}</span>
+									<span class="px-1.5 py-0.5 rounded-sm text-[10px] leading-5 border {MODE_COLORS[mode]}">{MODE_LABELS[mode]}</span>
 								{/each}
 							</div>
 						</td>
@@ -581,7 +581,7 @@
 
 	<!-- Footer link to markdown reference -->
 	<div class="mt-8 text-center">
-		<a href="{base}/docs/keymaps" class="text-xs text-dark-muted hover:text-grip-400 transition-colors">
+		<a href={resolve('docs/keymaps')} class="text-xs text-dark-muted hover:text-grip-400 transition-colors">
 			Prefer a flat reference? View the markdown keymaps table &rarr;
 		</a>
 	</div>
